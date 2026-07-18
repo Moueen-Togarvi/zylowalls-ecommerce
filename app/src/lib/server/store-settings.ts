@@ -29,7 +29,7 @@ export const defaultStorefrontSettings: SettingValues = {
 	hero_headline_phrases:
 		'Premium Wall Art\n3D Acrylic Calligraphy\nWooden Art Panels\nModern Home Decor\nEid Sale Zylowalls',
 	hero_subheading:
-		'Clean Nida silhouettes with soft movement, refined finishing, and everyday grace.',
+		'Premium 3D acrylic calligraphy, geometric wooden wall art, and custom panels to transform your walls.',
 	hero_primary_label: 'Shop Collection',
 	hero_primary_href: '/shop',
 	hero_secondary_label: 'View Lookbook',
@@ -47,38 +47,38 @@ export const defaultStorefrontSettings: SettingValues = {
 	show_inventory: 'true',
 
 	// Slide 1
-	slide1_title: 'Premium Nida Essentials',
-	slide1_tagline: 'EVERYDAY COMFORT',
+	slide1_title: '3D Acrylic Calligraphy',
+	slide1_tagline: 'LUXURIOUS WALL ART',
 	slide1_description:
-		'Double-stitched durability and flowy silhouettes in authentic premium Nida fabric. Styled for standard modest daily wear.',
-	slide1_link: '/shop?category=nida-essentials',
-	slide1_image: '/acrylic_calligraphy.png',
-	slide1_promo: '40% OFF',
+		'Multi-layered glossy acrylic calligraphy custom-crafted to reflect modern elegance. Perfect for living rooms, entrance halls, and gifting.',
+	slide1_link: '/shop?category=acrylic-calligraphy',
+	slide1_image: '/new-products/IMG-20260718-WA0014.jpg.jpeg',
+	slide1_promo: '20% OFF',
 
 	// Slide 2
-	slide2_title: 'Luxury Occasion Wear',
-	slide2_tagline: 'ELEGANT LAYERS',
+	slide2_title: 'Premium Wood Panels',
+	slide2_tagline: 'MODERN HOME DECOR',
 	slide2_description:
-		'Featuring intricate hand-stitched beadwork and premium drapes on soft premium flowy georgette edits.',
-	slide2_link: '/shop?category=occasion',
-	slide2_image: '/wooden_panels.png',
-	slide2_promo: '50% OFF',
+		'Stunning laser-cut wooden panels designed to elevate your interior style. Hand-finished premium engineered MDF wood with easy-mount tape.',
+	slide2_link: '/shop?category=wooden-wall-art',
+	slide2_image: '/new-products/IMG-20260718-WA0031.jpg.jpeg',
+	slide2_promo: '30% OFF',
 
 	// Slide 3
-	slide3_title: 'Eid Signature Edit',
-	slide3_tagline: 'LIMITED EMBROIDERY',
+	slide3_title: 'Custom Laser Wall Art',
+	slide3_tagline: 'ARTISAN CRAFTSMANSHIP',
 	slide3_description:
-		'Sophisticated dark cuts with delicate gold-lace details, designed to leave a quiet, modest presence.',
-	slide3_link: '/shop?category=eid-edit',
-	slide3_image: '/review_walls_decor.png',
-	slide3_promo: '30% OFF',
+		'Decorate your dining room, bedroom, or workspace with curated geometric & floral designs that add character and depth to any wall.',
+	slide3_link: '/shop?category=3d-wall-panels',
+	slide3_image: '/new-products/IMG-20260718-WA0021.jpg.jpeg',
+	slide3_promo: '15% OFF',
 
 	// Flash Sale
 	flash_sale_enabled: 'true',
 	flash_sale_title: 'FLASH SALE',
 	flash_sale_subtitle: 'Ends Soon!',
 	flash_sale_description: 'UP TO 70% OFF SELECTED ITEMS',
-	flash_sale_image: '/wooden_panels.png',
+	flash_sale_image: '/new-products/IMG-20260718-WA0018.jpg.jpeg',
 	flash_sale_hours: '2',
 	flash_sale_minutes: '14',
 	flash_sale_seconds: '30',

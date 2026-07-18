@@ -6,19 +6,19 @@
 		onAddToCart?: (product: any) => void;
 	}>();
 
-	let selectedColor = $state('Midnight');
-	let selectedSize = $state('M (54)');
+	let selectedColor = $state('Gold');
+	let selectedSize = $state('18x24"');
 
-	// Try to find Ayat-ul-Kursi 3D Acrylic Calligraphy or Geometric Floral Wooden Panel Set in products
+	// Try to find Ayat-ul-Kursi Royal or Bismillah Leaf in products
 	let spotlightProduct = $derived(
-		products.find((p: any) => p.slug.includes('haya') || p.slug.includes('emerald')) ||
+		products.find((p: any) => p.slug.includes('ayat-ul-kursi') || p.slug.includes('bismillah')) ||
 			products[0] || {
 				id: 'default-spotlight',
-				name: 'Ayat-ul-Kursi 3D Acrylic Calligraphy',
-				price: 7200,
+				name: 'Ayat-ul-Kursi Royal – Circle Acrylic Art',
+				price: 2149,
 				salePrice: null,
-				description: 'Clean silhouette in deep midnight black, featuring a soft graceful fall.',
-				images: [{ url: '/acrylic_calligraphy.png' }]
+				description: 'A majestic circular wall hanging displaying the sacred Ayat-ul-Kursi. Crafted from high-gloss premium acrylic.',
+				images: [{ url: '/new-products/IMG-20260718-WA0018.jpg.jpeg' }]
 			}
 	);
 
@@ -84,7 +84,7 @@
 								>Color: <span class="font-black text-[#14352d]">{selectedColor}</span></span
 							>
 							<div class="flex justify-center gap-2.5 md:justify-start">
-								{#each ['Midnight', 'Sage', 'Mocha'] as color}
+								{#each ['Gold', 'Black', 'Silver'] as color}
 									<button
 										onclick={() => (selectedColor = color)}
 										class="relative flex h-6.5 w-6.5 items-center justify-center rounded-full border transition-all duration-300 {selectedColor === color ? 'border-[#e4b43d] ring-2 ring-[#e4b43d]/30' : 'border-gray-200'}"
@@ -92,11 +92,11 @@
 									>
 										<span
 											class="h-4.5 w-4.5 rounded-full shadow-sm"
-											style="background-color: {color === 'Midnight'
-												? '#101411'
-												: color === 'Sage'
-													? '#8fa99a'
-													: '#7b5142'};"
+											style="background-color: {color === 'Gold'
+												? '#c5a880'
+												: color === 'Black'
+													? '#101411'
+													: '#d1d5db'};"
 										></span>
 									</button>
 								{/each}
@@ -110,12 +110,12 @@
 								>Size: <span class="font-black text-[#14352d]">{selectedSize}</span></span
 							>
 							<div class="flex justify-center gap-2 md:justify-start">
-								{#each ['S (52)', 'M (54)', 'L (56)'] as size}
+								{#each ['12x18\"', '18x24\"', '24x36\"'] as size}
 									<button
 										onclick={() => (selectedSize = size)}
 										class="rounded-xl border px-3.5 py-1.5 text-[0.62rem] font-black transition-all duration-300 {selectedSize === size ? 'border-[#14352d] bg-[#14352d] text-white' : 'border-gray-200 bg-[#fbf9f2] text-[#596c62] hover:border-gray-400'}"
 									>
-										{size.split(' ')[0]}
+										{size}
 									</button>
 								{/each}
 							</div>
@@ -175,9 +175,9 @@
 
 			<!-- COLUMN 2: EDITORIAL CATEGORY CARDS (5 Cols) -->
 			<div class="flex flex-col justify-between gap-4 lg:col-span-5">
-				<!-- CARD 1: CHIFFON HIJABS -->
+				<!-- CARD 1: ACRYLIC CALLIGRAPHY -->
 				<a
-					href="/shop?q=hijab"
+					href="/shop?category=acrylic-calligraphy"
 					class="group flex flex-1 items-center justify-between overflow-hidden rounded-2xl border border-[#14352d]/6 bg-white p-4.5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#e4b43d]/30 hover:shadow-md"
 				>
 					<div class="flex items-center gap-4 pr-2">
@@ -186,8 +186,8 @@
 							class="h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-[#14352d]/6 bg-[#e4eee9] sm:h-24 sm:w-24 relative shadow-inner"
 						>
 							<img
-								src="/ChatGPT Image May 25, 2026, 06_25_13 PM.png"
-								alt="Premium Hijabs"
+								src="/new-products/IMG-20260718-WA0014.jpg.jpeg"
+								alt="Acrylic Calligraphy"
 								class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
 							/>
 						</div>
@@ -198,12 +198,12 @@
 								Essential Match
 							</span>
 							<h4 class="font-serif text-sm sm:text-base font-black text-[#14352d] uppercase">
-								Premium Hijabs
+								Acrylic Calligraphy
 							</h4>
 							<p class="mt-0.5 text-[0.68rem] font-medium text-[#596c62] leading-tight">
-								Soft Georgette & Chiffon, 12 colors.
+								Luxurious 3D multi-layered acrylic script wall art.
 							</p>
-							<span class="mt-2 block text-xs font-black text-[#8a7444]">From {formatMoney(1490)}</span>
+							<span class="mt-2 block text-xs font-black text-[#8a7444]">From {formatMoney(1299)}</span>
 						</div>
 					</div>
 					<div
@@ -220,9 +220,9 @@
 					</div>
 				</a>
 
-				<!-- CARD 2: EVERYDAY CREPE -->
+				<!-- CARD 2: WOODEN WALL ART -->
 				<a
-					href="/shop?category=daily-wear"
+					href="/shop?category=wooden-wall-art"
 					class="group flex flex-1 items-center justify-between overflow-hidden rounded-2xl border border-[#14352d]/6 bg-white p-4.5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#e4b43d]/30 hover:shadow-md"
 				>
 					<div class="flex items-center gap-4 pr-2">
@@ -231,8 +231,8 @@
 							class="h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-[#14352d]/6 bg-[#e4eee9] sm:h-24 sm:w-24 relative shadow-inner"
 						>
 							<img
-								src="/acrylic_calligraphy.png"
-								alt="Everyday wear"
+								src="/new-products/IMG-20260718-WA0031.jpg.jpeg"
+								alt="Wooden Wall Art"
 								class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
 							/>
 						</div>
@@ -243,12 +243,12 @@
 								Free Shipping
 							</span>
 							<h4 class="font-serif text-sm sm:text-base font-black text-[#14352d] uppercase">
-								Daily Crepe Cuts
+								Wooden Wall Art
 							</h4>
 							<p class="mt-0.5 text-[0.68rem] font-medium text-[#596c62] leading-tight">
-								Minimalist cuts for all-day comfort.
+								Precision laser-cut wooden panels and mandalas.
 							</p>
-							<span class="mt-2 block text-xs font-black text-[#8a7444]">From {formatMoney(4990)}</span>
+							<span class="mt-2 block text-xs font-black text-[#8a7444]">From {formatMoney(1799)}</span>
 						</div>
 					</div>
 					<div
@@ -265,9 +265,9 @@
 					</div>
 				</a>
 
-				<!-- CARD 3: LUXURY EMBROIDERY -->
+				<!-- CARD 3: 3D WALL PANELS -->
 				<a
-					href="/shop?category=occasion"
+					href="/shop?category=3d-wall-panels"
 					class="group flex flex-1 items-center justify-between overflow-hidden rounded-2xl border border-[#14352d]/6 bg-white p-4.5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#e4b43d]/30 hover:shadow-md"
 				>
 					<div class="flex items-center gap-4 pr-2">
@@ -276,8 +276,8 @@
 							class="h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-[#14352d]/6 bg-[#e4eee9] sm:h-24 sm:w-24 relative shadow-inner"
 						>
 							<img
-								src="/wooden_panels.png"
-								alt="Luxe stonework"
+								src="/new-products/IMG-20260718-WA0021.jpg.jpeg"
+								alt="3D Wall Panels"
 								class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
 							/>
 						</div>
@@ -285,15 +285,15 @@
 							<span
 								class="mb-1 inline-flex rounded-full border border-[#14352d]/10 bg-[#14352d]/5 px-2.5 py-0.5 text-[0.52rem] font-bold tracking-wide text-[#14352d] uppercase"
 							>
-								Limited Edition
+								Premium Choice
 							</span>
 							<h4 class="font-serif text-sm sm:text-base font-black text-[#14352d] uppercase">
-								Luxe Stonework
+								3D Wall Panels
 							</h4>
 							<p class="mt-0.5 text-[0.68rem] font-medium text-[#596c62] leading-tight">
-								Intricate hand-stitched sleeve detailing.
+								Sleek geometric interlocking accent panels.
 							</p>
-							<span class="mt-2 block text-xs font-black text-[#8a7444]">From {formatMoney(7490)}</span>
+							<span class="mt-2 block text-xs font-black text-[#8a7444]">From {formatMoney(2699)}</span>
 						</div>
 					</div>
 					<div

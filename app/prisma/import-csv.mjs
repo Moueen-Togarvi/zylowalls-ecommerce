@@ -52,6 +52,35 @@ function parseCSV(text) {
 	return result;
 }
 
+function stripHtml(html) {
+	if (!html) return '';
+	let text = html
+		.replace(/<br\s*\/?>/gi, '\n')
+		.replace(/<\/p>/gi, '\n\n')
+		.replace(/<\/div>/gi, '\n')
+		.replace(/<\/li>/gi, '\n')
+		.replace(/<\/h[1-6]>/gi, '\n\n');
+	text = text.replace(/<[^>]*>/g, '');
+	text = text
+		.replace(/&nbsp;/g, ' ')
+		.replace(/&amp;/g, '&')
+		.replace(/&quot;/g, '"')
+		.replace(/&lt;/g, '<')
+		.replace(/&gt;/g, '>')
+		.replace(/&#39;/g, "'")
+		.replace(/&rsquo;/g, "'")
+		.replace(/&lsquo;/g, "'")
+		.replace(/&ldquo;/g, '"')
+		.replace(/&rdquo;/g, '"');
+	text = text
+		.split('\n')
+		.map(line => line.trim())
+		.join('\n')
+		.replace(/\n{3,}/g, '\n\n')
+		.trim();
+	return text;
+}
+
 const getCollections = (title, tagsStr) => {
 	const titleLower = title.toLowerCase();
 	const tagsLower = (tagsStr || '').toLowerCase();
@@ -153,7 +182,7 @@ async function main() {
 			data: {
 				name: title,
 				slug: handle,
-				description: bodyHtml,
+				description: stripHtml(bodyHtml),
 				price: price,
 				salePrice: salePrice,
 				isActive: isActive,

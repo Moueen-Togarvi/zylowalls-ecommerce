@@ -164,19 +164,26 @@
 				{product.name}
 			</a>
 
-			<!-- Animating Discount Marquee and Color Dots -->
+			<!-- Animated Star Rating Bar and Color Dots -->
 			<div class="flex items-center justify-between gap-3 pt-1 pb-1">
-				<!-- Marquee Strap -->
-				<div class="relative flex-1 overflow-hidden {discountPercent > 0 ? 'bg-red-50 text-red-600 border border-red-100/50' : 'bg-[#e4eee9] text-[#14352d] border border-[#14352d]/6'} py-0.5 px-2 text-[0.48rem] sm:text-[0.55rem] font-extrabold uppercase tracking-wider rounded-md flex items-center h-[18px] sm:h-[22px]">
-					<div class="animate-marquee-custom flex items-center gap-4 whitespace-nowrap">
-						<span class="shrink-0 whitespace-nowrap">{marqueeText}</span>
-						<span class="shrink-0">•</span>
-						<span class="shrink-0 whitespace-nowrap">{marqueeText}</span>
-						<span class="shrink-0">•</span>
-						<span class="shrink-0 whitespace-nowrap">{marqueeText}</span>
-						<span class="shrink-0">•</span>
-						<span class="shrink-0 whitespace-nowrap">{marqueeText}</span>
-					</div>
+				<!-- Star Bar -->
+				<div class="flex items-center justify-center gap-0.5 sm:gap-1 py-0.5 px-2 bg-[#fbf9f2] rounded-md border border-[#14352d]/6 text-center select-none flex-1 h-[18px] sm:h-[22px]">
+					<svg class="h-2.5 w-2.5 sm:h-3 sm:w-3 text-[#e4b43d] fill-current animate-star-1" viewBox="0 0 20 20">
+						<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+					</svg>
+					<svg class="h-2.5 w-2.5 sm:h-3 sm:w-3 text-[#e4b43d] fill-current animate-star-2" viewBox="0 0 20 20">
+						<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+					</svg>
+					<svg class="h-2.5 w-2.5 sm:h-3 sm:w-3 text-[#e4b43d] fill-current animate-star-3" viewBox="0 0 20 20">
+						<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+					</svg>
+					<svg class="h-2.5 w-2.5 sm:h-3 sm:w-3 text-[#e4b43d] fill-current animate-star-4" viewBox="0 0 20 20">
+						<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+					</svg>
+					<svg class="h-2.5 w-2.5 sm:h-3 sm:w-3 text-[#e4b43d] fill-current animate-star-5" viewBox="0 0 20 20">
+						<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+					</svg>
+					<span class="text-[0.55rem] sm:text-[0.62rem] font-black text-[#14352d]/60 ml-0.5 leading-none">(5.0)</span>
 				</div>
 
 				<!-- Color dots -->
@@ -238,17 +245,35 @@
 </article>
 
 <style>
-	@keyframes marquee {
-		0% {
-			transform: translateX(0%);
+	@keyframes star-pulse-glow {
+		0%, 100% {
+			transform: scale(1);
+			opacity: 0.85;
 		}
-		100% {
-			transform: translateX(-50%);
+		50% {
+			transform: scale(1.22);
+			opacity: 1;
+			filter: drop-shadow(0 0 3px rgba(228, 180, 61, 0.8));
 		}
 	}
-	.animate-marquee-custom {
-		display: flex;
-		width: max-content;
-		animation: marquee 10s linear infinite;
+	.animate-star-1 {
+		animation: star-pulse-glow 2s infinite ease-in-out;
+		animation-delay: 0s;
+	}
+	.animate-star-2 {
+		animation: star-pulse-glow 2s infinite ease-in-out;
+		animation-delay: 0.25s;
+	}
+	.animate-star-3 {
+		animation: star-pulse-glow 2s infinite ease-in-out;
+		animation-delay: 0.5s;
+	}
+	.animate-star-4 {
+		animation: star-pulse-glow 2s infinite ease-in-out;
+		animation-delay: 0.75s;
+	}
+	.animate-star-5 {
+		animation: star-pulse-glow 2s infinite ease-in-out;
+		animation-delay: 1s;
 	}
 </style>

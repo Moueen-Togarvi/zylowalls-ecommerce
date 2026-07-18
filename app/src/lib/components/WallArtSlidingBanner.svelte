@@ -13,7 +13,7 @@
 			description:
 				'Multi-layered glossy acrylic calligraphy custom-crafted to reflect modern elegance. Perfect for living rooms, entrance halls, and gifting.',
 			link: '/shop?category=acrylic-calligraphy',
-			image: '/acrylic_calligraphy.png',
+			image: '/new-products/IMG-20260718-WA0014.jpg.jpeg',
 			bgClass: 'bg-gradient-to-br from-[#1c1a17] via-[#2d2822] to-[#161412]', // Elegant dark warm wood/bronze gradient
 			accentText: 'text-[#e4b43d]',
 			badge: 'Bestseller Edit',
@@ -30,7 +30,7 @@
 			description:
 				'Stunning laser-cut wooden panels designed to elevate your interior style. Hand-finished premium engineered MDF wood with easy-mount tape.',
 			link: '/shop?category=wooden-wall-art',
-			image: '/wooden_panels.png',
+			image: '/new-products/IMG-20260718-WA0031.jpg.jpeg',
 			bgClass: 'bg-gradient-to-br from-[#121110] via-[#23201a] to-[#0e0e0d]',
 			accentText: 'text-[#e4b43d]',
 			badge: 'New Season',
@@ -47,7 +47,7 @@
 			description:
 				'Decorate your dining room, bedroom, or workspace with curated geometric & floral designs that add character and depth to any wall.',
 			link: '/shop?category=3d-wall-panels',
-			image: '/review_walls_decor.png',
+			image: '/new-products/IMG-20260718-WA0021.jpg.jpeg',
 			bgClass: 'bg-gradient-to-br from-[#1d1e22] via-[#2a2c35] to-[#15161b]',
 			accentText: 'text-[#c5a880]',
 			badge: 'Zylowalls Special',
@@ -170,14 +170,13 @@
 								<!-- Spotlight beam overlay -->
 								<div class="absolute -top-12 left-1/2 -translate-x-1/2 w-[260px] h-[260px] bg-[radial-gradient(circle_at_center,rgba(228,180,61,0.12),transparent_60%)] pointer-events-none blur-xl z-0"></div>
 
-								<!-- Frame SVG Mock representation -->
-								<div class="relative z-10 h-[190px] sm:h-[250px] md:h-[300px] w-[150px] sm:w-[200px] border-[6px] border-[#e4b43d] bg-neutral-900 rounded shadow-2xl flex items-center justify-center text-center p-3 transform transition-transform duration-[1500ms] ease-out" style="transform: scale({activeSlide === index ? '1.04' : '1.01'});">
-									<div class="text-white">
-										<p class="font-serif text-[10px] sm:text-xs tracking-widest text-[#e4b43d] uppercase">{item.tagline}</p>
-										<h4 class="font-serif text-sm sm:text-base font-bold mt-1 text-white uppercase">{item.title}</h4>
-										<div class="w-8 h-[1px] bg-white/20 mx-auto my-2"></div>
-										<p class="text-[8px] text-white/50 leading-relaxed max-w-[150px] mx-auto hidden sm:block">Zylowalls Premium Wall Art</p>
-									</div>
+								<!-- Premium Framed Product Image -->
+								<div class="relative z-10 h-[190px] sm:h-[250px] md:h-[300px] w-[150px] sm:w-[200px] border-[6px] border-[#e4b43d] bg-neutral-950 rounded shadow-2xl overflow-hidden transform transition-transform duration-[1500ms] ease-out" style="transform: scale({activeSlide === index ? '1.04' : '1.01'});">
+									<img
+										src={item.image}
+										alt={item.title}
+										class="h-full w-full object-cover object-center transition-transform duration-700 ease-out"
+									/>
 								</div>
 							</div>
 

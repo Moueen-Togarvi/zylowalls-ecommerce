@@ -20,52 +20,15 @@
 	let storefrontSettings = $derived((data.storefrontSettings || {}) as Record<string, any>);
 
 	let heroRoot: HTMLElement;
-	let heroSlideIndex = $state(0);
-	let previousHeroSlideIndex = $state<number | null>(null);
-	let heroSlideDirection = $state<'next' | 'previous'>('next');
-	let previousHeroSlideTimer: ReturnType<typeof setTimeout> | undefined;
 
-	let heroHeadlinePhrases = $derived(
-		(storefrontSettings.heroHeadlinePhrases?.length
-			? storefrontSettings.heroHeadlinePhrases
-			: [
-					'Premium\nWall Art',
-					'3D Acrylic\nCalligraphy',
-					'Wooden\nArt Panels',
-					'Modern\nHome Decor',
-					'Zylo\nWalls'
-				]) as string[]
-	);
-	let heroHeadlineText = $state(storefrontSettings.heroHeadlinePhrases?.[0] || 'Premium\nWall Art');
-
-	const heroSlides = [
-		{
-			src: '/acrylic_calligraphy.png',
-			alt: 'Zylowalls premium 3D acrylic calligraphy slide'
-		},
-		{
-			src: '/wooden_panels.png',
-			alt: 'Zylowalls geometric wooden panels slide'
-		},
-		{
-			src: '/review_walls_decor.png',
-			alt: 'Zylowalls 3D wood wall panels slide'
-		}
+	let activeWordIndex = $state(0);
+	let activeBgIndex = $state(0);
+	const bgSlides = [
+		'/hero_wall_art_black_bg.png',
+		'/hero_wall_art_bg_2.png',
+		'/hero_wall_art_bg.png',
+		'/hero_wall_art_bg_3.png'
 	];
-
-	function showHeroSlide(direction: 'next' | 'previous') {
-		previousHeroSlideIndex = heroSlideIndex;
-		heroSlideDirection = direction;
-		heroSlideIndex =
-			direction === 'next'
-				? (heroSlideIndex + 1) % heroSlides.length
-				: (heroSlideIndex - 1 + heroSlides.length) % heroSlides.length;
-
-		if (previousHeroSlideTimer) clearTimeout(previousHeroSlideTimer);
-		previousHeroSlideTimer = setTimeout(() => {
-			previousHeroSlideIndex = null;
-		}, 950);
-	}
 
 	function homeSection(key: string, homepageLimit: number) {
 		return (
@@ -182,50 +145,14 @@
 	onMount(() => {
 		let active = true;
 		let destroyAnimation: (() => void) | undefined;
-		let typewriterTimer: ReturnType<typeof setTimeout> | undefined;
-		const slideTimer = setInterval(() => {
-			showHeroSlide('next');
+
+		const swapTimer = setInterval(() => {
+			activeWordIndex = (activeWordIndex + 1) % 4;
 		}, 3000);
 
-		let phraseIndex = 0;
-		let charIndex = 0;
-		let isDeleting = false;
-		heroHeadlineText = '';
-
-		const typeHeadline = () => {
-			if (!heroHeadlinePhrases.length) {
-				typewriterTimer = setTimeout(typeHeadline, 1000);
-				return;
-			}
-			if (phraseIndex >= heroHeadlinePhrases.length) {
-				phraseIndex = 0;
-			}
-			const phrase = heroHeadlinePhrases[phraseIndex];
-			let delay = isDeleting ? 85 : 130;
-
-			if (isDeleting) {
-				charIndex = Math.max(0, charIndex - 1);
-				heroHeadlineText = phrase.slice(0, charIndex);
-
-				if (charIndex === 0) {
-					isDeleting = false;
-					phraseIndex = (phraseIndex + 1) % heroHeadlinePhrases.length;
-					delay = 260;
-				}
-			} else {
-				charIndex = Math.min(phrase.length, charIndex + 1);
-				heroHeadlineText = phrase.slice(0, charIndex);
-
-				if (charIndex === phrase.length) {
-					isDeleting = true;
-					delay = 1200;
-				}
-			}
-
-			typewriterTimer = setTimeout(typeHeadline, delay);
-		};
-
-		typewriterTimer = setTimeout(typeHeadline, 120);
+		const bgTimer = setInterval(() => {
+			activeBgIndex = (activeBgIndex + 1) % bgSlides.length;
+		}, 5500);
 
 		import('gsap').then(({ gsap }) => {
 			if (!active || !heroRoot) return;
@@ -239,28 +166,18 @@
 					(context) => {
 						const reduceMotion = Boolean(context.conditions?.reduceMotion);
 						const revealItems = gsap.utils.toArray<HTMLElement>('.hero-reveal');
-						const bgImage = heroRoot.querySelector('.hero-bg');
 
 						gsap.set(revealItems, { willChange: 'transform, opacity' });
 
 						if (reduceMotion) {
-							gsap.set([revealItems, bgImage].flat().filter(Boolean), {
+							gsap.set(revealItems, {
 								autoAlpha: 1,
-								clearProps: 'transform,filter,willChange'
+								clearProps: 'transform,willChange'
 							});
 							return () => {};
 						}
 
 						const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-
-						if (bgImage) {
-							tl.fromTo(
-								bgImage,
-								{ filter: 'blur(4px)' },
-								{ filter: 'blur(0px)', duration: 1.3, ease: 'power2.out' },
-								0
-							);
-						}
 
 						tl.fromTo(
 							revealItems,
@@ -289,9 +206,8 @@
 
 		return () => {
 			active = false;
-			clearInterval(slideTimer);
-			if (typewriterTimer) clearTimeout(typewriterTimer);
-			if (previousHeroSlideTimer) clearTimeout(previousHeroSlideTimer);
+			clearInterval(swapTimer);
+			clearInterval(bgTimer);
 			destroyAnimation?.();
 		};
 	});
@@ -314,124 +230,89 @@
 
 <section
 	bind:this={heroRoot}
-	class="hero-cinematic relative isolate -mt-[4.25rem] overflow-hidden bg-[#e4eee9] text-[#1b1918] md:-mt-[4.75rem]"
+	class="relative isolate -mt-[4.25rem] overflow-hidden bg-[#fbf9f2] pt-32 pb-24 md:-mt-[4.75rem] md:pt-40 md:pb-36"
 >
-	<div
-		class="hero-bg absolute inset-0 -z-30"
-		class:hero-bg--previous={heroSlideDirection === 'previous'}
-		data-depth="0"
-	>
-		{#each heroSlides as slide, index}
+	<!-- Aesthetic Background Image Slideshow & Concentric Rings -->
+	<div class="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center overflow-hidden bg-[#fbf9f2]">
+		{#each bgSlides as slide, index}
 			<img
-				src={slide.src}
-				alt={slide.alt}
-				width="1672"
-				height="941"
-				fetchpriority={index === 0 ? 'high' : 'auto'}
-				aria-hidden={index !== heroSlideIndex}
-				class="hero-bg__slide h-full w-full bg-[#eadac8] object-cover object-center"
-				class:hero-bg__slide--active={index === heroSlideIndex}
-				class:hero-bg__slide--previous-next={index === previousHeroSlideIndex &&
-					heroSlideDirection === 'next'}
-				class:hero-bg__slide--previous-previous={index === previousHeroSlideIndex &&
-					heroSlideDirection === 'previous'}
+				src={slide}
+				alt="Wall Art Interior Background"
+				class="absolute inset-0 h-full w-full object-cover transition-opacity duration-[1200ms] ease-in-out mix-blend-multiply"
+				style="opacity: {activeBgIndex === index ? '0.72' : '0'};"
 			/>
 		{/each}
+
+		<!-- Soft white/beige backdrop overlay to ensure contrast and readability of the dark text -->
+		<div class="absolute inset-0 bg-[#fbf9f2]/58 backdrop-blur-[1px] z-0"></div>
+
+		<!-- Bottom Gradient Blend Overlay -->
+		<div class="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#fbf9f2] via-[#fbf9f2]/60 to-transparent z-10"></div>
+
+		<div class="absolute w-[360px] h-[360px] rounded-full border border-[#1b1918]/[0.02] z-0"></div>
+		<div class="absolute w-[600px] h-[600px] rounded-full border border-[#1b1918]/[0.02] z-0"></div>
+		<div class="absolute w-[840px] h-[840px] rounded-full border border-[#1b1918]/[0.015] z-0"></div>
+		<div class="absolute w-[1080px] h-[1080px] rounded-full border border-[#1b1918]/[0.015] z-0"></div>
+		<div class="absolute w-[1320px] h-[1320px] rounded-full border border-[#1b1918]/[0.01] z-0"></div>
+		<div class="absolute w-[1560px] h-[1560px] rounded-full border border-[#1b1918]/[0.008] z-0"></div>
 	</div>
 
-	<div class="absolute inset-0 -z-20 bg-black/12"></div>
+	<!-- Content Container -->
+	<div class="mx-auto max-w-4xl px-4 text-center">
+		<!-- Top Badge -->
+		<div class="hero-reveal mb-8 inline-flex items-center justify-center rounded-full border border-[#1b1918]/8 bg-white/70 px-4 py-1.5 backdrop-blur-sm shadow-[0_4px_12px_rgba(27,25,24,0.02)]">
+			<span class="mr-2 rounded-full bg-[#1b1918] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-white">3-IN-1</span>
+			<a href="/shop" class="text-xs font-semibold tracking-wide text-gray-700 hover:text-black transition-colors flex items-center">
+				Calligraphy. Wood panels. Wall art.
+				<svg class="ml-1 h-3 w-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+				</svg>
+			</a>
+		</div>
 
-	<div
-		class="pointer-events-none absolute inset-x-3 top-1/2 z-30 flex -translate-y-1/2 items-center justify-between sm:inset-x-6"
-	>
-		<button
-			type="button"
-			class="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/50 bg-white/78 text-[#1b1918] shadow-[0_14px_32px_rgba(27,25,24,0.20)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#1b1918] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-			aria-label="Previous hero image"
-			onclick={() => showHeroSlide('previous')}
-		>
-			<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					stroke-width="2.2"
-					d="M15 19l-7-7 7-7"
-				/>
-			</svg>
-		</button>
-		<button
-			type="button"
-			class="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/50 bg-white/78 text-[#1b1918] shadow-[0_14px_32px_rgba(27,25,24,0.20)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#1b1918] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-			aria-label="Next hero image"
-			onclick={() => showHeroSlide('next')}
-		>
-			<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 5l7 7-7 7" />
-			</svg>
-		</button>
-	</div>
-
-	<div
-		class="relative z-20 mx-auto flex min-h-[min(560px,100svh)] max-w-7xl items-end px-4 pt-24 pb-6 sm:min-h-0 sm:items-start sm:px-6 sm:pt-10 sm:pb-10 md:items-center md:pt-28 md:pb-16 lg:px-8"
-	>
-		<div
-			class="mt-0 ml-0 max-w-[15.5rem] pb-2 text-black drop-shadow-[0_4px_18px_rgba(255,255,255,0.45)] sm:mt-16 sm:ml-10 sm:max-w-[32rem] md:mt-20 md:ml-16 md:pb-0"
-		>
-			<p
-				class="hero-reveal text-[0.58rem] font-bold tracking-[0.16em] text-black/70 uppercase sm:text-[0.68rem]"
-			>
-				New Season Edit
-			</p>
-			<h1
-				class="hero-reveal mt-1.5 ml-[11px] min-h-[2.95rem] max-w-[8.5ch] font-serif text-2xl leading-[0.95] whitespace-pre-line text-black uppercase sm:mt-3 sm:ml-[7px] sm:min-h-[5.9rem] sm:text-5xl md:min-h-[6.9rem] md:text-6xl"
-			>
-				<span class="hero-typewriter">
-					{#each textWithBrand(heroHeadlineText) as part}
-						{#if isBrandText(part)}
-							<ZylowallsWordmark class="align-baseline" />
-						{:else}
-							{part}
-						{/if}
-					{/each}
+		<!-- Main Heading -->
+		<h1 class="hero-reveal font-serif text-4xl leading-[1.2] tracking-tight text-[#1b1918] sm:text-6xl md:text-[5.5rem] md:leading-[1.15]">
+			Design. Decorate.<br />
+			<div class="flex items-center justify-center gap-2 sm:gap-3 md:gap-4 flex-wrap mt-2">
+				<span>and</span>
+				<!-- Logo Card inline (fixed position, non-shifting, original styled) -->
+				<span class="inline-flex items-center justify-center align-middle transform -rotate-12 hover:rotate-0 transition-transform duration-300 shadow-[0_12px_24px_rgba(0,0,0,0.12)] border border-black/5 rounded-2xl bg-white p-2.5 w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 shrink-0">
+					<img src="/final logo bhai shb.png" alt="Zylowalls Logo" class="w-full h-full object-contain" />
 				</span>
-			</h1>
-			<p
-				class="hero-reveal mt-2 max-w-[14.5rem] text-[0.66rem] leading-4 font-semibold text-black/82 sm:mt-4 sm:max-w-sm sm:text-base sm:leading-6"
-			>
-				Clean Nida silhouettes with soft movement, refined finishing, and everyday grace.
-			</p>
-
-			<div class="hero-reveal mt-3 flex flex-row flex-nowrap gap-1.5 sm:mt-8 sm:gap-2">
-				<a
-					href="/shop"
-					class="inline-flex min-h-7 items-center justify-center gap-1 rounded-full bg-[#1b1918] px-2 text-[0.56rem] font-bold whitespace-nowrap text-white shadow-[0_16px_34px_rgba(27,25,24,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#c5a880] hover:text-[#1b1918] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1b1918] sm:min-h-12 sm:gap-2 sm:px-7 sm:text-sm"
-				>
-					Shop Collection
-					<span
-						class="inline-flex h-3 w-3 items-center justify-center rounded-full bg-white/92 text-[#1b1918] sm:h-5 sm:w-5"
-					>
-						<svg
-							class="h-2 w-2 sm:h-3 sm:w-3"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2.4"
-								d="M7 17L17 7M9 7h8v8"
-							/>
-						</svg>
+				<!-- Sliding Word Container (fixed width, non-shifting, resized & aligned) -->
+				<span class="inline-block overflow-hidden h-[1.25em] w-[140px] sm:w-[225px] md:w-[325px] text-left relative align-middle shrink-0 text-[0.78em] sm:text-[0.8em] md:text-[0.82em]">
+					<span class="absolute left-0 top-0 flex flex-col transition-transform duration-700 ease-in-out text-[#7b6a3d] italic font-sans font-extrabold tracking-normal leading-[1.25]" style="transform: translateY(-{activeWordIndex * 25}%);">
+						<span class="h-[1.25em] flex items-center">Elevate.</span>
+						<span class="h-[1.25em] flex items-center">Decorate.</span>
+						<span class="h-[1.25em] flex items-center">Inspire.</span>
+						<span class="h-[1.25em] flex items-center">Wall Art.</span>
 					</span>
-				</a>
-				<a
-					href="/lookbook"
-					class="inline-flex min-h-7 items-center justify-center rounded-full border border-[#1b1918]/20 bg-white/72 px-2 text-[0.56rem] font-bold whitespace-nowrap text-[#1b1918] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1b1918] sm:min-h-12 sm:px-7 sm:text-sm"
-				>
-					View Lookbook
-				</a>
+				</span>
 			</div>
+		</h1>
+
+		<!-- Subtitle -->
+		<p class="hero-reveal mx-auto mt-8 max-w-2xl font-serif text-lg italic text-[#596c62] sm:text-xl md:text-2xl">
+			Handcrafted 3D acrylic calligraphy, geometric wooden wall art, and premium panels to transform your walls.
+		</p>
+
+		<!-- Call to Action Buttons -->
+		<div class="hero-reveal mt-10 flex flex-col sm:flex-row justify-center items-center gap-4">
+			<a
+				href="/collections"
+				class="w-full sm:w-auto inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#1b1918] px-8 text-sm font-black tracking-wider text-white shadow-[0_16px_34px_rgba(27,25,24,0.2)] hover:bg-[#7b6a3d] transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1b1918]"
+			>
+				Explore Collections
+				<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+				</svg>
+			</a>
+			<a
+				href="/shop"
+				class="w-full sm:w-auto inline-flex min-h-12 items-center justify-center rounded-full border border-[#1b1918]/12 bg-white px-8 text-sm font-black tracking-wider text-[#1b1918] shadow-[0_12px_28px_rgba(27,25,24,0.06)] hover:bg-gray-50 transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1b1918]"
+			>
+				All Products
+			</a>
 		</div>
 	</div>
 </section>
@@ -695,61 +576,7 @@
 {/if}
 
 <style>
-	.hero-bg {
-		overflow: hidden;
-	}
-
-	.hero-bg__slide {
-		position: absolute;
-		inset: 0;
-		z-index: 0;
-		visibility: hidden;
-		transform: translateX(-100%);
-		transition: transform 950ms cubic-bezier(0.72, 0, 0.2, 1);
-		will-change: transform;
-	}
-
-	.hero-bg--previous .hero-bg__slide {
-		transform: translateX(100%);
-	}
-
-	.hero-bg__slide--active {
-		z-index: 2;
-		visibility: visible;
-		transform: translateX(0);
-	}
-
-	.hero-bg__slide--previous-next {
-		z-index: 1;
-		visibility: visible;
-		transform: translateX(100%);
-	}
-
-	.hero-bg__slide--previous-previous {
-		z-index: 1;
-		visibility: visible;
-		transform: translateX(-100%);
-	}
-
-	.hero-typewriter {
-		display: inline-block;
-		min-width: 8.5ch;
-	}
-
-	.hero-typewriter::after {
-		content: '';
-		display: inline-block;
-		height: 0.78em;
-		margin-left: 0.08em;
-		border-right: 0.055em solid currentColor;
-		animation: hero-caret-blink 0.78s steps(1) infinite;
-	}
-
-	@keyframes hero-caret-blink {
-		50% {
-			opacity: 0;
-		}
-	}
+	/* Hero section styles are handled with Tailwind CSS */
 
 	.sale-tape-stage {
 		position: relative;
@@ -907,6 +734,8 @@
 			transform: translateX(-50%);
 		}
 	}
+
+	/* Typewriter cursor style removed */
 
 	@media (prefers-reduced-motion: reduce) {
 		.hero-bg__slide {

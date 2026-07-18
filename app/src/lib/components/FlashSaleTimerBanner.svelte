@@ -122,59 +122,56 @@
 					</span>
 
 					<div
-						class="flex items-center justify-center gap-2 rounded-xl border border-white/5 bg-[#173f35]/60 p-2.5 shadow-inner backdrop-blur sm:p-3.5"
+						class="flex items-center justify-center gap-4 sm:gap-6 mt-2"
 					>
 						<!-- Hours -->
-						<div class="flex flex-col items-center gap-1">
-							<div class="flex gap-0.5 sm:gap-1">
-								{#each pad(hours) as digit}
-									<div
-										class="flex h-8 w-6 items-center justify-center rounded-md bg-[#fffaf0] text-sm font-black text-[#14352d] shadow-md sm:h-13 sm:w-10 sm:text-xl"
-									>
-										{digit}
-									</div>
-								{/each}
+						<div class="flex flex-col items-center">
+							<div
+								class="relative flex h-14 w-14 sm:h-20 sm:w-20 items-center justify-center rounded-full border-2 border-[#e4b43d]/30 bg-black/25 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.15)] transition-all duration-300 hover:border-[#e4b43d] hover:scale-105 group"
+							>
+								<div class="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(228,180,61,0.06),transparent_70%)]"></div>
+								<span class="text-base sm:text-2xl font-black tracking-tight text-white font-mono">
+									{String(hours).padStart(2, '0')}
+								</span>
 							</div>
 							<span
-								class="mt-1 text-[0.48rem] font-semibold tracking-[0.12em] text-white/50 uppercase sm:text-[0.58rem]"
+								class="mt-1.5 text-[0.48rem] sm:text-[0.58rem] font-bold tracking-[0.12em] text-[#fffaf0]/60 uppercase"
 								>Hours</span
 							>
 						</div>
 
-						<div class="pb-4 text-sm font-bold text-[#e4b43d] sm:pb-5 sm:text-lg">:</div>
+						<div class="text-sm font-bold text-[#e4b43d] sm:text-xl -mt-5 animate-pulse">:</div>
 
 						<!-- Minutes -->
-						<div class="flex flex-col items-center gap-1">
-							<div class="flex gap-0.5 sm:gap-1">
-								{#each pad(minutes) as digit}
-									<div
-										class="flex h-8 w-6 items-center justify-center rounded-md bg-[#fffaf0] text-sm font-black text-[#14352d] shadow-md sm:h-13 sm:w-10 sm:text-xl"
-									>
-										{digit}
-									</div>
-								{/each}
+						<div class="flex flex-col items-center">
+							<div
+								class="relative flex h-14 w-14 sm:h-20 sm:w-20 items-center justify-center rounded-full border-2 border-[#e4b43d]/30 bg-black/25 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.15)] transition-all duration-300 hover:border-[#e4b43d] hover:scale-105 group"
+							>
+								<div class="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(228,180,61,0.06),transparent_70%)]"></div>
+								<span class="text-base sm:text-2xl font-black tracking-tight text-white font-mono">
+									{String(minutes).padStart(2, '0')}
+								</span>
 							</div>
 							<span
-								class="mt-1 text-[0.48rem] font-semibold tracking-[0.12em] text-white/50 uppercase sm:text-[0.58rem]"
+								class="mt-1.5 text-[0.48rem] sm:text-[0.58rem] font-bold tracking-[0.12em] text-[#fffaf0]/60 uppercase"
 								>Mins</span
 							>
 						</div>
 
-						<div class="pb-4 text-sm font-bold text-[#e4b43d] sm:pb-5 sm:text-lg">:</div>
+						<div class="text-sm font-bold text-[#e4b43d] sm:text-xl -mt-5 animate-pulse">:</div>
 
 						<!-- Seconds -->
-						<div class="flex flex-col items-center gap-1">
-							<div class="flex gap-0.5 sm:gap-1">
-								{#each pad(seconds) as digit}
-									<div
-										class="flex h-8 w-6 items-center justify-center rounded-md bg-[#fffaf0] text-sm font-black text-[#14352d] shadow-md sm:h-13 sm:w-10 sm:text-xl"
-									>
-										{digit}
-									</div>
-								{/each}
+						<div class="flex flex-col items-center">
+							<div
+								class="relative flex h-14 w-14 sm:h-20 sm:w-20 items-center justify-center rounded-full border-2 border-[#e4b43d]/30 bg-black/25 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.15)] transition-all duration-300 hover:border-[#e4b43d] hover:scale-105 group"
+							>
+								<div class="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(228,180,61,0.06),transparent_70%)]"></div>
+								<span class="text-base sm:text-2xl font-black tracking-tight text-white font-mono">
+									{String(seconds).padStart(2, '0')}
+								</span>
 							</div>
 							<span
-								class="mt-1 text-[0.48rem] font-semibold tracking-[0.12em] text-white/50 uppercase sm:text-[0.58rem]"
+								class="mt-1.5 text-[0.48rem] sm:text-[0.58rem] font-bold tracking-[0.12em] text-[#fffaf0]/60 uppercase"
 								>Secs</span
 							>
 						</div>
