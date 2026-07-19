@@ -117,27 +117,33 @@ export const deleteImageFromCloudinary = async (url: string) => {
 	const publicId = publicIdFromUrl(url);
 	if (!publicId) return false;
 
-	const timestamp = Math.floor(Date.now() / 1000);
-	const params = {
-		public_id: publicId,
-		timestamp
-	};
+	try {
+		const timestamp = Math.floor(Date.now() / 1000);
+		const params = {
+			public_id: publicId,
+			timestamp
+		};
 
-	const body = new FormData();
-	body.set('public_id', publicId);
-	body.set('api_key', apiKey() || '');
-	body.set('timestamp', String(timestamp));
-	body.set('signature', signParams(params));
+		const body = new FormData();
+		body.set('public_id', publicId);
+		body.set('api_key', apiKey() || '');
+		body.set('timestamp', String(timestamp));
+		body.set('signature', signParams(params));
 
-	const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName()}/image/destroy`, {
-		method: 'POST',
-		body
-	});
-	const json = (await response.json()) as CloudinaryDestroyResponse;
+		const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName()}/image/destroy`, {
+			method: 'POST',
+			body
+		});
+		const json = (await response.json()) as CloudinaryDestroyResponse;
 
-	if (!response.ok) {
-		throw new Error(json.error?.message || 'Cloudinary delete failed.');
+		if (!response.ok) {
+			console.error('Cloudinary destroy response not OK:', json.error?.message || 'Unknown error');
+			return false;
+		}
+
+		return true;
+	} catch (error) {
+		console.error('Failed to delete image from Cloudinary:', error);
+		return false;
 	}
-
-	return true;
 };

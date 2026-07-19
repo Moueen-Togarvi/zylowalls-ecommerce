@@ -7,12 +7,14 @@
 		help = '',
 		required = false,
 		class: klass = '',
+		children,
 		...rest
 	}: {
 		label?: string;
 		help?: string;
 		required?: boolean;
 		class?: string;
+		children?: import('svelte').Snippet;
 	} & HTMLSelectAttributes = $props();
 
 	const generatedId = `sel-${Math.random().toString(36).slice(2, 9)}`;
@@ -24,5 +26,9 @@
 		id={id}
 		{...rest}
 		class="block w-full rounded-lg border border-admin-border bg-white px-3 py-2 text-sm text-gray-900 shadow-sm transition-colors focus:border-admin-primary focus:ring-2 focus:ring-admin-primary/20 focus:outline-none"
-	></select>
+	>
+		{#if children}
+			{@render children()}
+		{/if}
+	</select>
 </Field>
