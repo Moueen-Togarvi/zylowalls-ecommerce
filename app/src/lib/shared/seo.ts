@@ -6,8 +6,8 @@ export const SITE_KEYWORDS =
 	'wall art, wood calligraphy, acrylic wall art, 3D calligraphy, laser-cut wall panels, home decoration, islamic wall art, Zylowalls';
 export const SITE_IMAGE = '/image.png';
 export const TIKTOK_URL = 'https://www.tiktok.com/@zylowalls';
-export const PRIMARY_WHATSAPP_URL = 'https://wa.me/923116857822';
-export const SECONDARY_WHATSAPP_URL = 'https://wa.me/923346657779';
+export const PRIMARY_WHATSAPP_URL = 'https://wa.me/923703772463';
+export const SECONDARY_WHATSAPP_URL = 'https://wa.me/923703772463';
 
 
 export function cleanOrigin(origin: string) {

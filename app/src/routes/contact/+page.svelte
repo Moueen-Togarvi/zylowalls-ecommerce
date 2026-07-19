@@ -99,9 +99,9 @@
 						<div>
 							<h3 class="mb-1 text-sm font-bold tracking-widest text-black uppercase">Email</h3>
 							<a
-								href="mailto:support@zylowalls.com"
+								href="mailto:Zylowalls@gmail.com"
 								class="text-sm font-light text-gray-500 transition-colors hover:text-black"
-								>support@zylowalls.com</a
+								>Zylowalls@gmail.com</a
 							>
 							<p class="mt-1 text-xs text-gray-400">Response time: 24-48 hours</p>
 						</div>
@@ -117,18 +117,11 @@
 							<h3 class="mb-1 text-sm font-bold tracking-widest text-black uppercase">WhatsApp</h3>
 							<div class="space-y-1">
 								<a
-									href="https://wa.me/923116857822"
+									href="https://wa.me/923703772463"
 									target="_blank"
 									rel="noreferrer"
 									class="block text-sm font-light text-gray-500 transition-colors hover:text-black"
-									>+92 311 685 7822</a
-								>
-								<a
-									href="https://wa.me/923346657779"
-									target="_blank"
-									rel="noreferrer"
-									class="block text-sm font-light text-gray-500 transition-colors hover:text-black"
-									>+92 334 665 7779</a
+									>+92 370 377 2463</a
 								>
 							</div>
 							<p class="mt-1 text-xs text-gray-400">Available for catalog and order support</p>

@@ -150,7 +150,7 @@
 				>Contact Us</a
 			>
 			<a
-				href="https://wa.me/923116857822"
+				href="https://wa.me/923703772463"
 				target="_blank"
 				rel="noreferrer"
 				class="flex items-center justify-center gap-2 bg-[#25D366] px-8 py-3 text-sm tracking-widest text-white uppercase transition-opacity hover:opacity-90"
