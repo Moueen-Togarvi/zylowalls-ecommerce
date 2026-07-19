@@ -67,9 +67,10 @@ export const actions: Actions = {
 					imageUrl
 				}
 			});
-		} catch {
+		} catch (error: any) {
+			console.error('Failed to create category error:', error);
 			return fail(500, {
-				createError: 'Failed to create category. Check the image file and try again.'
+				createError: `Failed to create category: ${error?.message || 'Check the image file and try again.'}`
 			});
 		}
 
@@ -119,9 +120,10 @@ export const actions: Actions = {
 			if ((uploadedImageUrl || removeImage) && currentCategory?.imageUrl) {
 				await deleteCategoryImageFiles([currentCategory.imageUrl]);
 			}
-		} catch {
+		} catch (error: any) {
+			console.error('Failed to update category error:', error);
 			return fail(500, {
-				updateError: 'Failed to update category. Check the image file and try again.'
+				updateError: `Failed to update category: ${error?.message || 'Check the image file and try again.'}`
 			});
 		}
 
@@ -150,9 +152,10 @@ export const actions: Actions = {
 			if (category?.imageUrl) {
 				await deleteCategoryImageFiles([category.imageUrl]);
 			}
-		} catch {
+		} catch (error: any) {
+			console.error('Failed to delete category error:', error);
 			return fail(500, {
-				deleteError: 'Failed to delete category.'
+				deleteError: `Failed to delete category: ${error?.message || 'Unknown error.'}`
 			});
 		}
 
