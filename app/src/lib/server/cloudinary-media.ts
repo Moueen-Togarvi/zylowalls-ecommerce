@@ -20,7 +20,7 @@ type CloudinaryDestroyResponse = {
 };
 
 const cloudinaryUrlConfig = () => {
-	const raw = env.CLOUDINARY_URL?.trim();
+	const raw = cleanValue(env.CLOUDINARY_URL);
 	if (!raw) return null;
 
 	try {
@@ -35,10 +35,22 @@ const cloudinaryUrlConfig = () => {
 	}
 };
 
-const cloudName = () => env.CLOUDINARY_CLOUD_NAME?.trim() || cloudinaryUrlConfig()?.cloudName;
-const apiKey = () => env.CLOUDINARY_API_KEY?.trim() || cloudinaryUrlConfig()?.apiKey;
-const apiSecret = () => env.CLOUDINARY_API_SECRET?.trim() || cloudinaryUrlConfig()?.apiSecret;
-const baseFolder = () => env.CLOUDINARY_FOLDER?.trim() || 'zylowalls';
+const cleanValue = (val: string | undefined | null) => {
+	if (!val) return '';
+	const trimmed = val.trim();
+	if (trimmed.startsWith('"') && trimmed.endsWith('"')) {
+		return trimmed.slice(1, -1);
+	}
+	if (trimmed.startsWith("'") && trimmed.endsWith("'")) {
+		return trimmed.slice(1, -1);
+	}
+	return trimmed;
+};
+
+const cloudName = () => cleanValue(env.CLOUDINARY_CLOUD_NAME) || cleanValue(cloudinaryUrlConfig()?.cloudName);
+const apiKey = () => cleanValue(env.CLOUDINARY_API_KEY) || cleanValue(cloudinaryUrlConfig()?.apiKey);
+const apiSecret = () => cleanValue(env.CLOUDINARY_API_SECRET) || cleanValue(cloudinaryUrlConfig()?.apiSecret);
+const baseFolder = () => cleanValue(env.CLOUDINARY_FOLDER) || 'zylowalls';
 
 export const isCloudinaryConfigured = () => Boolean(cloudName() && apiKey() && apiSecret());
 
