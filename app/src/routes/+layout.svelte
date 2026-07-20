@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { navigating, page } from '$app/state';
+	import { env } from '$env/dynamic/public';
 	import './layout.css';
 	import ZylowallsLoader from '$lib/components/ZylowallsLoader.svelte';
 	import ZylowallsWordmark from '$lib/components/ZylowallsWordmark.svelte';
@@ -115,6 +116,24 @@
 
 		return canonical.toString();
 	}
+
+	// ── Tracking Pixel IDs (set PUBLIC_TIKTOK_PIXEL_ID / PUBLIC_META_PIXEL_ID in .env) ──
+	const tiktokPixelId = env.PUBLIC_TIKTOK_PIXEL_ID || '';
+	const metaPixelId = env.PUBLIC_META_PIXEL_ID || '';
+
+	// Fire PageView on every client-side navigation
+	$effect(() => {
+		// Trigger reactivity on pathname change
+		const _path = page.url.pathname;
+		if (isAdminRoute) return;
+
+		if (tiktokPixelId && typeof window !== 'undefined' && (window as any).ttq) {
+			(window as any).ttq.page();
+		}
+		if (metaPixelId && typeof window !== 'undefined' && (window as any).fbq) {
+			(window as any).fbq('track', 'PageView');
+		}
+	});
 </script>
 
 <svelte:window bind:scrollY />
@@ -149,6 +168,17 @@
 	<!-- JSON-LD Structured Data -->
 	{@html siteJsonLd}
 	{@html localBizJsonLd}
+
+	<!-- ── TikTok Pixel ─────────────────────────────────────────────────────── -->
+	{#if tiktokPixelId && !isAdminRoute}
+		<!-- svelte-ignore element_invalid_self_closing_tag -->
+		{@html '<script>!function(w,d,t){w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script");n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};ttq.load("' + tiktokPixelId + '");ttq.page();}(window,document,"ttq");<\/script>'}
+	{/if}
+
+	<!-- ── Meta (Facebook) Pixel ────────────────────────────────────────────── -->
+	{#if metaPixelId && !isAdminRoute}
+		{@html '<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init","' + metaPixelId + '");fbq("track","PageView");<\/script><noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=' + metaPixelId + '&ev=PageView&noscript=1"/><\/noscript>'}
+	{/if}
 </svelte:head>
 
 <div
