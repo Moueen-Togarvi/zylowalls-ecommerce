@@ -300,7 +300,7 @@
 		<div class="hero-reveal mt-10 flex flex-col sm:flex-row justify-center items-center gap-4">
 			<a
 				href="/collections"
-				class="w-full sm:w-auto inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#1b1918] px-8 text-sm font-black tracking-wider text-white shadow-[0_16px_34px_rgba(27,25,24,0.2)] hover:bg-[#7b6a3d] transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1b1918]"
+				class="w-64 sm:w-auto inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#1b1918] px-8 text-sm font-black tracking-wider text-white shadow-[0_16px_34px_rgba(27,25,24,0.2)] hover:bg-[#7b6a3d] transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1b1918]"
 			>
 				Explore Collections
 				<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -309,7 +309,7 @@
 			</a>
 			<a
 				href="/shop"
-				class="w-full sm:w-auto inline-flex min-h-12 items-center justify-center rounded-full border border-[#1b1918]/12 bg-white px-8 text-sm font-black tracking-wider text-[#1b1918] shadow-[0_12px_28px_rgba(27,25,24,0.06)] hover:bg-gray-50 transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1b1918]"
+				class="w-64 sm:w-auto inline-flex min-h-12 items-center justify-center rounded-full border border-[#1b1918]/12 bg-white px-8 text-sm font-black tracking-wider text-[#1b1918] shadow-[0_12px_28px_rgba(27,25,24,0.06)] hover:bg-gray-50 transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1b1918]"
 			>
 				All Products
 			</a>
