@@ -2,7 +2,7 @@
 	import { page } from '$app/state';
 	import { cart } from '$lib/client/cart.svelte';
 	import { formatMoney } from '$lib/shared/money';
-	import { SITE_NAME, absoluteUrl, jsonLdScript, metaDescription } from '$lib/shared/seo';
+	import { SITE_IMAGE, SITE_NAME, absoluteUrl, jsonLdScript, metaDescription } from '$lib/shared/seo';
 	import ProductCard from '$lib/components/ProductCard.svelte';
 
 	let { data } = $props();
@@ -22,6 +22,7 @@
 	let selectedSize = $state('');
 	let sectionTitle = $derived(`${section.title} | ${SITE_NAME}`);
 	let sectionDescription = $derived(metaDescription(section.description));
+	let sectionSocialImage = $derived(absoluteUrl(SITE_IMAGE, page.url.origin));
 	let sectionJsonLd = $derived(
 		jsonLdScript([
 			{
@@ -140,8 +141,10 @@
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content={sectionTitle} />
 	<meta property="og:description" content={sectionDescription} />
+	<meta property="og:image" content={sectionSocialImage} />
 	<meta name="twitter:title" content={sectionTitle} />
 	<meta name="twitter:description" content={sectionDescription} />
+	<meta name="twitter:image" content={sectionSocialImage} />
 	{@html sectionJsonLd}
 </svelte:head>
 

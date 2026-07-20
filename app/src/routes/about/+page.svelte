@@ -1,9 +1,26 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import ZylowallsWordmark from '$lib/components/ZylowallsWordmark.svelte';
-	import { SITE_NAME } from '$lib/shared/seo';
+	import { SITE_IMAGE, SITE_NAME, absoluteUrl, breadcrumbJsonLd, jsonLdScript } from '$lib/shared/seo';
 
 	const aboutDescription =
 		'The story of Zylowalls, started by university friends Chand Baloch and Mubashir Ali to bring premium handcrafted wood and acrylic wall art to modern homes.';
+	let aboutSocialImage = $derived(absoluteUrl(SITE_IMAGE, page.url.origin));
+	let aboutJsonLd = $derived(
+		jsonLdScript({
+			'@context': 'https://schema.org',
+			'@type': 'AboutPage',
+			name: `About ${SITE_NAME}`,
+			description: aboutDescription,
+			url: absoluteUrl('/about', page.url.origin)
+		})
+	);
+	let aboutBreadcrumbJsonLd = $derived(
+		breadcrumbJsonLd(
+			[{ name: 'Home', url: '/' }, { name: 'About', url: '/about' }],
+			page.url.origin
+		)
+	);
 </script>
 
 <svelte:head>
@@ -12,8 +29,12 @@
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content={`About ${SITE_NAME} | Our Story`} />
 	<meta property="og:description" content={aboutDescription} />
+	<meta property="og:image" content={aboutSocialImage} />
 	<meta name="twitter:title" content={`About ${SITE_NAME} | Our Story`} />
 	<meta name="twitter:description" content={aboutDescription} />
+	<meta name="twitter:image" content={aboutSocialImage} />
+	{@html aboutJsonLd}
+	{@html aboutBreadcrumbJsonLd}
 </svelte:head>
 
 <section

@@ -1,8 +1,38 @@
 <script lang="ts">
-	import { SITE_NAME } from '$lib/shared/seo';
+	import { page } from '$app/state';
+	import { SITE_IMAGE, SITE_NAME, absoluteUrl, breadcrumbJsonLd, faqJsonLd } from '$lib/shared/seo';
 
 	const sizeGuideDescription =
 		'Choose the perfect size for your wood or acrylic wall art with the Zylowalls sizing guide. Find ideal dimensions for your living room, bedroom, or entryway.';
+	let sizeGuideSocialImage = $derived(absoluteUrl(SITE_IMAGE, page.url.origin));
+	let sizeGuideFaqJsonLd = faqJsonLd([
+		{
+			question: 'What size wall art is best for a living room?',
+			answer:
+				'For a living room, we recommend a Large (60×80cm or 80×100cm) or Extra Large (100×120cm) piece as the main focal point. Group smaller pieces for a gallery wall effect.'
+		},
+		{
+			question: 'What size is suitable for a bedroom?',
+			answer:
+				'A Medium (40×60cm) or Large (60×80cm) piece above the headboard works beautifully. For smaller walls, a Small (30×40cm) piece is a refined accent.'
+		},
+		{
+			question: 'Can I order a custom size?',
+			answer:
+				'Yes! Zylowalls specializes in custom sizes. Contact us via WhatsApp and share your wall dimensions for a tailored quote.'
+		},
+		{
+			question: 'How do I measure my wall before ordering?',
+			answer:
+				'Use a tape measure to find the width and height of the wall space. Leave at least 10-15cm on each side for visual breathing room. Our team can advise on the best fit.'
+		}
+	]);
+	let sizeGuideBreadcrumbJsonLd = $derived(
+		breadcrumbJsonLd(
+			[{ name: 'Home', url: '/' }, { name: 'Size Guide', url: '/size-guide' }],
+			page.url.origin
+		)
+	);
 </script>
 
 <svelte:head>
@@ -11,8 +41,12 @@
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content={`Wall Art Size Guide | ${SITE_NAME}`} />
 	<meta property="og:description" content={sizeGuideDescription} />
+	<meta property="og:image" content={sizeGuideSocialImage} />
 	<meta name="twitter:title" content={`Wall Art Size Guide | ${SITE_NAME}`} />
 	<meta name="twitter:description" content={sizeGuideDescription} />
+	<meta name="twitter:image" content={sizeGuideSocialImage} />
+	{@html sizeGuideFaqJsonLd}
+	{@html sizeGuideBreadcrumbJsonLd}
 </svelte:head>
 
 <div class="mx-auto max-w-5xl px-4 py-12 sm:px-6 md:py-20 lg:px-8">

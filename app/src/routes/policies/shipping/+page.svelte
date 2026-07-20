@@ -4,6 +4,19 @@
 		name="description"
 		content="Read Zylowalls shipping options, delivery timelines, domestic and international shipping details, and free delivery rules."
 	/>
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="Shipping Information | Zylowalls" />
+	<meta
+		property="og:description"
+		content="Read Zylowalls shipping options, delivery timelines, domestic and international shipping details, and free delivery rules."
+	/>
+	<meta property="og:image" content="/image.png" />
+	<meta name="twitter:title" content="Shipping Information | Zylowalls" />
+	<meta
+		name="twitter:description"
+		content="Read Zylowalls shipping options, delivery timelines, domestic and international shipping details, and free delivery rules."
+	/>
+	<meta name="twitter:image" content="/image.png" />
 </svelte:head>
 
 <div class="mx-auto max-w-3xl px-4 py-12 sm:px-6 md:py-20 lg:px-8">

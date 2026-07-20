@@ -6,14 +6,21 @@
 	import { cart } from '$lib/client/cart.svelte';
 	import { wishlist } from '$lib/client/wishlist.svelte';
 	import {
+		GEO_REGION,
+		GEO_PLACENAME,
+		GEO_POSITION,
+		ICBM,
 		PRIMARY_WHATSAPP_URL,
 		SECONDARY_WHATSAPP_URL,
 		SITE_BRAND,
 		SITE_IMAGE,
 		SITE_NAME,
+		SITE_TWITTER,
+		THEME_COLOR,
 		TIKTOK_URL,
 		absoluteUrl,
-		jsonLdScript
+		jsonLdScript,
+		localBusinessJsonLd
 	} from '$lib/shared/seo';
 
 	let { children } = $props();
@@ -77,6 +84,7 @@
 			}
 		])
 	);
+	let localBizJsonLd = $derived(localBusinessJsonLd(page.url.origin));
 
 	function shouldNoindex(url: URL) {
 		const noindexPrefixes = [
@@ -112,14 +120,35 @@
 <svelte:window bind:scrollY />
 
 <svelte:head>
+	<!-- Core SEO -->
 	<meta name="robots" content={robotsMeta} />
+	<meta name="author" content={SITE_NAME} />
+	<meta name="theme-color" content={THEME_COLOR} />
 	<link rel="canonical" href={canonicalHref} />
+
+	<!-- Open Graph -->
 	<meta property="og:site_name" content={SITE_NAME} />
 	<meta property="og:url" content={canonicalHref} />
 	<meta property="og:image" content={socialImage} />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta property="og:image:alt" content="{SITE_NAME} — Premium Wall Art & Decor" />
+	<meta property="og:locale" content="en_PK" />
+
+	<!-- Twitter / X -->
 	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:site" content={SITE_TWITTER} />
 	<meta name="twitter:image" content={socialImage} />
+
+	<!-- Geo Targeting (Pakistan) -->
+	<meta name="geo.region" content={GEO_REGION} />
+	<meta name="geo.placename" content={GEO_PLACENAME} />
+	<meta name="geo.position" content={GEO_POSITION} />
+	<meta name="ICBM" content={ICBM} />
+
+	<!-- JSON-LD Structured Data -->
 	{@html siteJsonLd}
+	{@html localBizJsonLd}
 </svelte:head>
 
 <div

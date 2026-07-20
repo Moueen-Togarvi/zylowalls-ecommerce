@@ -1,8 +1,18 @@
 <script lang="ts">
+	import { page } from '$app/state';
+	import { SITE_IMAGE, SITE_NAME, absoluteUrl, breadcrumbJsonLd } from '$lib/shared/seo';
+
 	let { data } = $props();
 	let products = $derived((data.products || []) as Array<any>);
 	const lookbookDescription =
 		'Explore the Zylowalls lookbook for premium wooden calligraphy, 3D acrylic wall art, and laser-cut wood panel layouts.';
+	let lookbookSocialImage = $derived(absoluteUrl(SITE_IMAGE, page.url.origin));
+	let lookbookBreadcrumbJsonLd = $derived(
+		breadcrumbJsonLd(
+			[{ name: 'Home', url: '/' }, { name: 'Lookbook', url: '/lookbook' }],
+			page.url.origin
+		)
+	);
 
 	function productImage(product: any) {
 		return product.images?.[0]?.url || '/image.png';
@@ -13,10 +23,13 @@
 	<title>Lookbook | Zylowalls</title>
 	<meta name="description" content={lookbookDescription} />
 	<meta property="og:type" content="website" />
-	<meta property="og:title" content="Lookbook | Zylowalls" />
+	<meta property="og:title" content={`Lookbook | ${SITE_NAME}`} />
 	<meta property="og:description" content={lookbookDescription} />
-	<meta name="twitter:title" content="Lookbook | Zylowalls" />
+	<meta property="og:image" content={lookbookSocialImage} />
+	<meta name="twitter:title" content={`Lookbook | ${SITE_NAME}`} />
 	<meta name="twitter:description" content={lookbookDescription} />
+	<meta name="twitter:image" content={lookbookSocialImage} />
+	{@html lookbookBreadcrumbJsonLd}
 </svelte:head>
 
 <section

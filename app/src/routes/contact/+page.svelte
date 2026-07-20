@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { SITE_NAME, absoluteUrl, jsonLdScript } from '$lib/shared/seo';
+	import { SITE_IMAGE, SITE_NAME, absoluteUrl, breadcrumbJsonLd, jsonLdScript } from '$lib/shared/seo';
 
 	let openFaq = $state(0);
 	const contactDescription =
@@ -52,6 +52,13 @@
 			}
 		])
 	);
+	let contactSocialImage = $derived(absoluteUrl(SITE_IMAGE, page.url.origin));
+	let contactBreadcrumbJsonLd = $derived(
+		breadcrumbJsonLd(
+			[{ name: 'Home', url: '/' }, { name: 'Contact', url: '/contact' }],
+			page.url.origin
+		)
+	);
 </script>
 
 <svelte:head>
@@ -60,9 +67,12 @@
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content={`Contact Us | ${SITE_NAME}`} />
 	<meta property="og:description" content={contactDescription} />
+	<meta property="og:image" content={contactSocialImage} />
 	<meta name="twitter:title" content={`Contact Us | ${SITE_NAME}`} />
 	<meta name="twitter:description" content={contactDescription} />
+	<meta name="twitter:image" content={contactSocialImage} />
 	{@html contactJsonLd}
+	{@html contactBreadcrumbJsonLd}
 </svelte:head>
 
 <!-- Header -->

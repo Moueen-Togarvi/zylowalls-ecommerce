@@ -10,7 +10,7 @@
 	import ProductCard from '$lib/components/ProductCard.svelte';
 
 	import { formatMoney } from '$lib/shared/money';
-	import { SITE_DESCRIPTION, SITE_IMAGE, SITE_NAME, absoluteUrl } from '$lib/shared/seo';
+	import { SITE_DESCRIPTION, SITE_IMAGE, SITE_KEYWORDS, SITE_NAME, absoluteUrl, breadcrumbJsonLd } from '$lib/shared/seo';
 
 	let { data } = $props();
 	let products = $derived((data.products || []) as Array<any>);
@@ -77,6 +77,9 @@
 	let saleTapeLoop = $derived(Array.from({ length: 8 }, () => saleTapeItems).flat());
 	let saleTapeEnabled = $derived(storefrontSettings.saleTapeEnabled !== false);
 	let homeSocialImage = $derived(absoluteUrl(SITE_IMAGE, page.url.origin));
+	let homeBreadcrumbJsonLd = $derived(
+		breadcrumbJsonLd([{ name: 'Home', url: '/' }], page.url.origin)
+	);
 	const brandPattern = /^(Zylowalls|ZYLOWALLS)$/;
 
 	function textWithBrand(value: string) {
@@ -216,16 +219,14 @@
 <svelte:head>
 	<title>Zylowalls | Premium Wall Art & Decor</title>
 	<meta name="description" content={SITE_DESCRIPTION} />
-	<meta
-		name="keywords"
-		content="wall art, wood calligraphy, acrylic calligraphy, home decor, laser-cut wall panels"
-	/>
+	<meta name="keywords" content={SITE_KEYWORDS} />
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content={`${SITE_NAME} | Premium Wall Art & Decor`} />
 	<meta property="og:description" content={SITE_DESCRIPTION} />
 	<meta property="og:image" content={homeSocialImage} />
 	<meta name="twitter:title" content={`${SITE_NAME} | Premium Wall Art & Decor`} />
 	<meta name="twitter:description" content={SITE_DESCRIPTION} />
+	{@html homeBreadcrumbJsonLd}
 </svelte:head>
 
 <section

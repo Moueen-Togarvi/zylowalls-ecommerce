@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { SITE_NAME, absoluteUrl, jsonLdScript } from '$lib/shared/seo';
+	import { SITE_IMAGE, SITE_NAME, absoluteUrl, breadcrumbJsonLd, jsonLdScript } from '$lib/shared/seo';
 
 	let { data } = $props();
 	let collections = $derived((data.collections || []) as Array<any>);
@@ -24,6 +24,13 @@
 				}))
 			}
 		})
+	);
+	let collectionsSocialImage = $derived(absoluteUrl(SITE_IMAGE, page.url.origin));
+	let collectionsBreadcrumbJsonLd = $derived(
+		breadcrumbJsonLd(
+			[{ name: 'Home', url: '/' }, { name: 'Collections', url: '/collections' }],
+			page.url.origin
+		)
 	);
 
 	const fallbackImages = [
@@ -73,9 +80,12 @@
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content={`Collections | ${SITE_NAME}`} />
 	<meta property="og:description" content={collectionsDescription} />
+	<meta property="og:image" content={collectionsSocialImage} />
 	<meta name="twitter:title" content={`Collections | ${SITE_NAME}`} />
 	<meta name="twitter:description" content={collectionsDescription} />
+	<meta name="twitter:image" content={collectionsSocialImage} />
 	{@html collectionsJsonLd}
+	{@html collectionsBreadcrumbJsonLd}
 </svelte:head>
 
 <section class="bg-[#fbf9f2] px-4 py-10 text-[#14352d] sm:px-6 lg:px-8">

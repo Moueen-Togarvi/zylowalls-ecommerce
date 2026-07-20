@@ -4,6 +4,19 @@
 		name="description"
 		content="Read Zylowalls terms of service for product orders, pricing, payment, intellectual property, and customer responsibilities."
 	/>
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="Terms of Service | Zylowalls" />
+	<meta
+		property="og:description"
+		content="Read Zylowalls terms of service for product orders, pricing, payment, intellectual property, and customer responsibilities."
+	/>
+	<meta property="og:image" content="/image.png" />
+	<meta name="twitter:title" content="Terms of Service | Zylowalls" />
+	<meta
+		name="twitter:description"
+		content="Read Zylowalls terms of service for product orders, pricing, payment, intellectual property, and customer responsibilities."
+	/>
+	<meta name="twitter:image" content="/image.png" />
 </svelte:head>
 
 <div class="mx-auto max-w-3xl px-4 py-12 sm:px-6 md:py-20 lg:px-8">

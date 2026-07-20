@@ -1,9 +1,22 @@
 <svelte:head>
-	<title>Returns & Exchanges | Zylowalls</title>
+	<title>Returns &amp; Exchanges | Zylowalls</title>
 	<meta
 		name="description"
 		content="Learn Zylowalls return and exchange rules, eligibility, timelines, and how to request help for your wall art order."
 	/>
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="Returns & Exchanges | Zylowalls" />
+	<meta
+		property="og:description"
+		content="Learn Zylowalls return and exchange rules, eligibility, timelines, and how to request help for your wall art order."
+	/>
+	<meta property="og:image" content="/image.png" />
+	<meta name="twitter:title" content="Returns & Exchanges | Zylowalls" />
+	<meta
+		name="twitter:description"
+		content="Learn Zylowalls return and exchange rules, eligibility, timelines, and how to request help for your wall art order."
+	/>
+	<meta name="twitter:image" content="/image.png" />
 </svelte:head>
 
 <div class="mx-auto max-w-3xl px-4 py-12 sm:px-6 md:py-20 lg:px-8">

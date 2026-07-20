@@ -114,9 +114,36 @@ async function productEntries(origin: string): Promise<SitemapEntry[]> {
 	}
 }
 
+async function collectionEntries(): Promise<SitemapEntry[]> {
+	try {
+		const collections = await prisma.collection.findMany({
+			select: {
+				slug: true,
+				name: true,
+				updatedAt: true
+			},
+			orderBy: { name: 'asc' }
+		});
+
+		return collections.map((collection) => ({
+			loc: `/shop?collection=${collection.slug}`,
+			lastmod: collection.updatedAt,
+			changefreq: 'weekly' as const,
+			priority: '0.85'
+		}));
+	} catch (error) {
+		// Collections are optional in sitemap — silently skip on DB error
+		return [];
+	}
+}
+
 export const GET: RequestHandler = async ({ url }) => {
 	const origin = siteOrigin(url.origin);
-	const entries = [...staticEntries, ...(await productEntries(origin))];
+	const [productEntriesList, collectionEntriesList] = await Promise.all([
+		productEntries(origin),
+		collectionEntries()
+	]);
+	const entries = [...staticEntries, ...productEntriesList, ...collectionEntriesList];
 	const body = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${entries.map((entry) => renderUrl(entry, origin)).join('\n')}

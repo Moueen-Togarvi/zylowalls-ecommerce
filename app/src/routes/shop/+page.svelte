@@ -1,7 +1,8 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import { cart } from '$lib/client/cart.svelte';
 	import { formatMoney } from '$lib/shared/money';
-	import { SITE_NAME } from '$lib/shared/seo';
+	import { SITE_IMAGE, SITE_KEYWORDS, SITE_NAME, absoluteUrl, breadcrumbJsonLd } from '$lib/shared/seo';
 	import ProductCard from '$lib/components/ProductCard.svelte';
 
 	type Pagination = {
@@ -50,6 +51,13 @@
 	let selectedSize = $state('');
 	const shopDescription =
 		'Shop Zylowalls premium wooden calligraphy, 3D acrylic wall art, and laser-cut wood panels.';
+	let shopSocialImage = $derived(absoluteUrl(SITE_IMAGE, page.url.origin));
+	let shopBreadcrumbJsonLd = $derived(
+		breadcrumbJsonLd(
+			[{ name: 'Home', url: '/' }, { name: 'Shop', url: '/shop' }],
+			page.url.origin
+		)
+	);
 
 	$effect(() => {
 		searchQuery = filters.q || '';
@@ -142,17 +150,17 @@
 </script>
 
 <svelte:head>
-	<title>Shop All | Zylowalls</title>
+	<title>Shop All Wall Art | Zylowalls</title>
 	<meta name="description" content={shopDescription} />
-	<meta
-		name="keywords"
-		content="wall art, wood calligraphy, acrylic calligraphy, home decor, modest dresses"
-	/>
+	<meta name="keywords" content={SITE_KEYWORDS} />
 	<meta property="og:type" content="website" />
-	<meta property="og:title" content={`Shop All | ${SITE_NAME}`} />
+	<meta property="og:title" content={`Shop All Wall Art | ${SITE_NAME}`} />
 	<meta property="og:description" content={shopDescription} />
-	<meta name="twitter:title" content={`Shop All | ${SITE_NAME}`} />
+	<meta property="og:image" content={shopSocialImage} />
+	<meta name="twitter:title" content={`Shop All Wall Art | ${SITE_NAME}`} />
 	<meta name="twitter:description" content={shopDescription} />
+	<meta name="twitter:image" content={shopSocialImage} />
+	{@html shopBreadcrumbJsonLd}
 </svelte:head>
 
 <section class="bg-[#fbf9f2] px-4 py-10 text-[#14352d] sm:px-6 lg:px-8">

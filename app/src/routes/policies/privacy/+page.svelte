@@ -4,6 +4,19 @@
 		name="description"
 		content="Review the Zylowalls privacy policy covering customer data, order information, website usage, and contact details."
 	/>
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="Privacy Policy | Zylowalls" />
+	<meta
+		property="og:description"
+		content="Review the Zylowalls privacy policy covering customer data, order information, website usage, and contact details."
+	/>
+	<meta property="og:image" content="/image.png" />
+	<meta name="twitter:title" content="Privacy Policy | Zylowalls" />
+	<meta
+		name="twitter:description"
+		content="Review the Zylowalls privacy policy covering customer data, order information, website usage, and contact details."
+	/>
+	<meta name="twitter:image" content="/image.png" />
 </svelte:head>
 
 <div class="mx-auto max-w-3xl px-4 py-12 sm:px-6 md:py-20 lg:px-8">
