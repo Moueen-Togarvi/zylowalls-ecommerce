@@ -128,7 +128,7 @@
 >
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div
-			class="relative my-6 h-[440px] sm:h-[360px] md:h-[390px] w-full overflow-hidden rounded-2xl border border-[#354238]/10 shadow-[0_20px_50px_rgba(53,66,56,0.05)]"
+			class="relative my-6 h-[480px] sm:h-[430px] md:h-[450px] w-full overflow-hidden rounded-2xl border border-[#354238]/10 shadow-[0_20px_50px_rgba(53,66,56,0.05)]"
 		>
 			{#each sliderItems as item, index}
 				<!-- GPU Accelerated Horizontal sliding container -->
@@ -141,7 +141,7 @@
 					<div class="pointer-events-none absolute top-0 right-0 z-0 h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(228,180,61,0.08),transparent_45%)]"></div>
 
 					<!-- Content Container -->
-					<div class="relative z-10 flex flex-col justify-between w-full h-full p-5 sm:p-7 md:p-8">
+					<div class="relative z-10 flex flex-col justify-between w-full h-full p-5 sm:p-6 md:p-7">
 						<!-- Main Slide Content: Grid Layout -->
 						<div class="grid grid-cols-1 gap-6 sm:grid-cols-12 items-center flex-1 w-full">
 							
@@ -171,7 +171,7 @@
 								<div class="absolute -top-12 left-1/2 -translate-x-1/2 w-[260px] h-[260px] bg-[radial-gradient(circle_at_center,rgba(228,180,61,0.12),transparent_60%)] pointer-events-none blur-xl z-0"></div>
 
 								<!-- Premium Framed Product Image -->
-								<div class="relative z-10 h-[190px] sm:h-[250px] md:h-[300px] w-[150px] sm:w-[200px] border-[6px] border-[#e4b43d] bg-neutral-950 rounded shadow-2xl overflow-hidden transform transition-transform duration-[1500ms] ease-out" style="transform: scale({activeSlide === index ? '1.04' : '1.01'});">
+								<div class="relative z-10 h-[190px] sm:h-[240px] md:h-[280px] w-[150px] sm:w-[190px] md:w-[210px] border-[6px] border-[#e4b43d] bg-neutral-950 rounded shadow-2xl overflow-hidden transform transition-transform duration-[1500ms] ease-out" style="transform: scale({activeSlide === index ? '1.04' : '1.01'});">
 									<img
 										src={item.image}
 										alt={item.title}
@@ -226,7 +226,7 @@
 						</div>
 
 						<!-- Bottom Row: Information Details Row -->
-						<div class="hidden sm:flex items-center justify-between border-t border-white/10 pt-4.5 mt-4 text-white/60 text-[0.62rem] sm:text-[0.68rem] tracking-wider uppercase font-bold transform transition-all duration-700 ease-out {activeSlide === index ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'} delay-[350ms]">
+						<div class="hidden sm:flex items-center justify-between border-t border-white/10 pt-3 pb-1 mt-2 text-white/70 text-[0.62rem] sm:text-[0.68rem] tracking-wider uppercase font-bold transform transition-all duration-700 ease-out {activeSlide === index ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'} delay-[350ms]">
 							<div class="flex items-center gap-1.5">
 								<svg class="h-4 w-4 text-[#e4b43d]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -243,7 +243,7 @@
 								<svg class="h-4 w-4 text-[#e4b43d]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
 								</svg>
-								Free Shipping in Pakistan
+								Rs. 200 Delivery in Pakistan
 							</div>
 						</div>
 					</div>

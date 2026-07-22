@@ -7,13 +7,30 @@
 		product,
 		layout = 'grid',
 		aspectRatio = 'aspect-[3/4]',
+		isMostLoved = false,
 		class: className = ''
 	} = $props<{
 		product: any;
 		layout?: 'grid' | 'list';
 		aspectRatio?: string;
+		isMostLoved?: boolean;
 		class?: string;
 	}>();
+
+	function computeRating(prod: any, mostLoved: boolean): number {
+		if (mostLoved) return 5.0;
+		if (prod?.rating) return Number(prod.rating);
+		const name = String(prod?.id || prod?.name || 'product');
+		let hash = 0;
+		for (let i = 0; i < name.length; i++) {
+			hash = (hash << 5) - hash + name.charCodeAt(i);
+			hash |= 0;
+		}
+		const ratingPool = [4.5, 4.0, 4.8, 3.5, 4.5, 4.8, 4.0, 3.5, 4.5, 4.8];
+		return ratingPool[Math.abs(hash) % ratingPool.length];
+	}
+
+	let ratingValue = $derived(computeRating(product, isMostLoved));
 
 	let href = $derived(`/shop/${product.slug}`);
 
@@ -168,22 +185,25 @@
 			<div class="flex items-center justify-between gap-3 pt-1 pb-1">
 				<!-- Star Bar -->
 				<div class="flex items-center justify-center gap-0.5 sm:gap-1 py-0.5 px-2 bg-[#fbf9f2] rounded-md border border-[#14352d]/6 text-center select-none flex-1 h-[18px] sm:h-[22px]">
-					<svg class="h-2.5 w-2.5 sm:h-3 sm:w-3 text-[#e4b43d] fill-current animate-star-1" viewBox="0 0 20 20">
-						<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-					</svg>
-					<svg class="h-2.5 w-2.5 sm:h-3 sm:w-3 text-[#e4b43d] fill-current animate-star-2" viewBox="0 0 20 20">
-						<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-					</svg>
-					<svg class="h-2.5 w-2.5 sm:h-3 sm:w-3 text-[#e4b43d] fill-current animate-star-3" viewBox="0 0 20 20">
-						<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-					</svg>
-					<svg class="h-2.5 w-2.5 sm:h-3 sm:w-3 text-[#e4b43d] fill-current animate-star-4" viewBox="0 0 20 20">
-						<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-					</svg>
-					<svg class="h-2.5 w-2.5 sm:h-3 sm:w-3 text-[#e4b43d] fill-current animate-star-5" viewBox="0 0 20 20">
-						<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-					</svg>
-					<span class="text-[0.55rem] sm:text-[0.62rem] font-black text-[#14352d]/60 ml-0.5 leading-none">(5.0)</span>
+					{#each [1, 2, 3, 4, 5] as starIndex}
+						{#if starIndex <= Math.floor(ratingValue)}
+							<!-- Full Star -->
+							<svg class="h-2.5 w-2.5 sm:h-3 sm:w-3 text-[#e4b43d] fill-current" viewBox="0 0 20 20">
+								<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+							</svg>
+						{:else if starIndex - 0.5 <= ratingValue}
+							<!-- Half Star -->
+							<svg class="h-2.5 w-2.5 sm:h-3 sm:w-3 text-[#e4b43d] fill-current opacity-70" viewBox="0 0 20 20">
+								<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+							</svg>
+						{:else}
+							<!-- Empty Star -->
+							<svg class="h-2.5 w-2.5 sm:h-3 sm:w-3 text-gray-300 fill-current" viewBox="0 0 20 20">
+								<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+							</svg>
+						{/if}
+					{/each}
+					<span class="text-[0.55rem] sm:text-[0.62rem] font-black text-[#14352d]/60 ml-0.5 leading-none">({ratingValue.toFixed(1)})</span>
 				</div>
 
 				<!-- Color dots -->

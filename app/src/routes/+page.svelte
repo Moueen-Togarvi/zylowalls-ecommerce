@@ -5,7 +5,6 @@
 	import ZylowallsWordmark from '$lib/components/ZylowallsWordmark.svelte';
 	import WallArtSlidingBanner from '$lib/components/WallArtSlidingBanner.svelte';
 	import ProOfferGrid from '$lib/components/ProOfferGrid.svelte';
-	import FlashSaleTimerBanner from '$lib/components/FlashSaleTimerBanner.svelte';
 	import CategoryCircleCards from '$lib/components/CategoryCircleCards.svelte';
 	import ProductCard from '$lib/components/ProductCard.svelte';
 
@@ -63,7 +62,11 @@
 		bestsellers.slice(0, 4),
 		bestsellers.slice(4, 8).length ? bestsellers.slice(4, 8) : [...bestsellers].reverse()
 	]);
-	let bestsellerCategoryTags = $derived(collections.map((collection) => collection.name));
+	let bestsellerCategoryTags = $derived(
+		collections
+			.map((collection) => collection.name)
+			.filter((name) => !/geometric|3d wall panel/i.test(name))
+	);
 	let shouldAnimateReviewPhotos = $derived(reviewPhotos.length > 2);
 	let reviewPhotoLoop = $derived(
 		shouldAnimateReviewPhotos ? [...reviewPhotos, ...reviewPhotos] : reviewPhotos
@@ -72,7 +75,7 @@
 	let saleTapeItems = $derived(
 		(storefrontSettings.saleTapeItems?.length
 			? storefrontSettings.saleTapeItems
-			: ['EID SALE', '30% OFF', 'ZYLOWALLS']) as string[]
+			: ['AZADI SALE', '30% OFF', 'ZYLOWALLS', 'CASH ON DELIVERY', 'CUSTOMIZED PRODUCTS']) as string[]
 	);
 	let saleTapeLoop = $derived(Array.from({ length: 8 }, () => saleTapeItems).flat());
 	let saleTapeEnabled = $derived(storefrontSettings.saleTapeEnabled !== false);
@@ -407,7 +410,7 @@
 						</svg>
 					</div>
 					<div class="text-left leading-tight">
-						<span class="block text-xs font-black text-[#1b1918] uppercase">Free Shipping</span>
+						<span class="block text-xs font-black text-[#1b1918] uppercase">Rs. 200 Shipping</span>
 						<span class="block text-[0.62rem] text-gray-500 font-medium">Nationwide Delivery</span>
 					</div>
 				</div>
@@ -442,13 +445,12 @@
 				<div class="flex items-center gap-3">
 					<div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#1b1918]/5 text-[#1b1918]">
 						<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4.8 8h14.4L12 20 4.8 8z" />
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4L4.8 8 12 12 19.2 8 12 4z" />
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
 						</svg>
 					</div>
 					<div class="text-left leading-tight">
-						<span class="block text-xs font-black text-[#1b1918] uppercase">100% Authentic</span>
-						<span class="block text-[0.62rem] text-gray-500 font-medium">Original Designs</span>
+						<span class="block text-xs font-black text-[#1b1918] uppercase">Cash On Delivery</span>
+						<span class="block text-[0.62rem] text-gray-500 font-medium">Pay at your Doorstep</span>
 					</div>
 				</div>
 			</div>
@@ -485,10 +487,6 @@
 	</div>
 </section>
 
-{#if storefrontSettings.flashSaleEnabled}
-	<!-- Flash Sale Timer Offer Banner -->
-	<FlashSaleTimerBanner settings={storefrontSettings} />
-{/if}
 
 <!-- Bestsellers -->
 <section class="overflow-hidden bg-cream py-14">
@@ -501,11 +499,12 @@
 			<div class="category-ribbon" aria-label="Bestseller categories">
 				<div class="category-ribbon__track">
 					{#each bestsellerCategoryTags as tag}
-						<span
-							class="inline-flex min-h-8 shrink-0 items-center justify-center rounded-full border border-[#1b1918]/10 bg-[#fffaf0] px-4 text-[0.68rem] font-black tracking-[0.12em] text-[#1b1918] uppercase shadow-[0_10px_22px_rgba(27,25,24,0.08)]"
+						<a
+							href="/collections"
+							class="inline-flex min-h-8 shrink-0 items-center justify-center rounded-full border border-[#1b1918]/10 bg-[#fffaf0] px-4 text-[0.68rem] font-black tracking-[0.12em] text-[#1b1918] uppercase shadow-[0_10px_22px_rgba(27,25,24,0.08)] transition-all hover:bg-[#1b1918] hover:text-white"
 						>
 							{tag}
-						</span>
+						</a>
 					{/each}
 				</div>
 			</div>
@@ -522,7 +521,7 @@
 							<div
 								class={`product-loop__item min-w-0 sm:w-[17.5rem] sm:shrink-0 lg:w-[18.25rem] ${itemIndex >= row.length ? 'product-loop__item--duplicate' : ''}`}
 							>
-								<ProductCard product={item} aspectRatio="aspect-[5/6]" />
+								<ProductCard product={item} aspectRatio="aspect-[5/6]" isMostLoved={true} />
 							</div>
 						{/each}
 					</div>

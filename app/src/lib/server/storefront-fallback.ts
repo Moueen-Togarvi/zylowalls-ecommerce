@@ -72,9 +72,9 @@ const fallbackCollectionSeed: StorefrontCollectionBase[] = [
 		displayOrder: 1
 	},
 	{
-		id: 'fallback-collection-3d-wall-panels',
-		name: '3D Wall Panels',
-		slug: '3d-wall-panels',
+		id: 'fallback-collection-islamic-art-decor',
+		name: 'Islamic Art Decor',
+		slug: 'islamic-art-decor',
 		description: null,
 		imageUrl: '/review_walls_decor.png',
 		isVisible: true,

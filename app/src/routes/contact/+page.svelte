@@ -109,11 +109,13 @@
 						<div>
 							<h3 class="mb-1 text-sm font-bold tracking-widest text-black uppercase">Email</h3>
 							<a
-								href="mailto:Zylowalls@gmail.com"
+								href="https://mail.google.com/mail/?view=cm&fs=1&to=Zylowalls@gmail.com"
+								target="_blank"
+								rel="noreferrer"
 								class="text-sm font-light text-gray-500 transition-colors hover:text-black"
 								>Zylowalls@gmail.com</a
 							>
-							<p class="mt-1 text-xs text-gray-400">Response time: 24-48 hours</p>
+							<p class="mt-1 text-xs text-gray-400">Opens directly in Gmail (Response time: 24-48 hours)</p>
 						</div>
 					</div>
 
@@ -124,14 +126,19 @@
 							/></svg
 						>
 						<div>
-							<h3 class="mb-1 text-sm font-bold tracking-widest text-black uppercase">WhatsApp</h3>
+							<h3 class="mb-1 text-sm font-bold tracking-widest text-black uppercase">Call & WhatsApp</h3>
 							<div class="space-y-1">
+								<a
+									href="tel:+923703772463"
+									class="block text-sm font-medium text-black transition-colors hover:text-gold"
+									>📞 Call: +92 370 3772463</a
+								>
 								<a
 									href="https://wa.me/923703772463"
 									target="_blank"
 									rel="noreferrer"
 									class="block text-sm font-light text-gray-500 transition-colors hover:text-black"
-									>+92 370 377 2463</a
+									>💬 WhatsApp: +92 370 3772463</a
 								>
 							</div>
 							<p class="mt-1 text-xs text-gray-400">Available for catalog and order support</p>

@@ -2,7 +2,7 @@
 	import { cart } from '$lib/client/cart.svelte';
 	import { formatMoney } from '$lib/shared/money';
 
-	let shipping = 300;
+	let shipping = 200;
 	let giftWrapPrice = 500;
 	let freeShippingThreshold = 15000;
 	let isGift = $state(false);

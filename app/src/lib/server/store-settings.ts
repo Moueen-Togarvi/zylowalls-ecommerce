@@ -37,7 +37,7 @@ export const defaultStorefrontSettings: SettingValues = {
 	hero_images:
 		'/ChatGPT%20Image%20May%2025,%202026,%2006_25_42%20PM.png\n/ChatGPT%20Image%20May%2025,%202026,%2006_25_51%20PM.png\n/ChatGPT%20Image%20May%2025,%202026,%2006_25_13%20PM.png\n/ChatGPT%20Image%20May%2025,%202026,%2006_07_28%20PM.png\n/ChatGPT%20Image%20May%2025,%202026,%2006_25_25%20PM.png',
 	sale_tape_enabled: 'true',
-	sale_tape_items: 'EID SALE\n30% OFF\nZYLOWALLS',
+	sale_tape_items: 'AZADI SALE\n30% OFF\nZYLOWALLS\nCASH ON DELIVERY\nCUSTOMIZED PRODUCTS',
 	sale_tape_speed: '18',
 	show_featured_collections: 'true',
 	show_ethos: 'true',

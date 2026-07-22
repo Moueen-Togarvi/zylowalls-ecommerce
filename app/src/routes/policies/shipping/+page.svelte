@@ -46,7 +46,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						{#each [{ method: 'Standard Shipping', time: '5-7 Business Days', cost: 'Rs. 300 (Free over Rs. 15,000)' }, { method: 'DHL Express', time: '2-3 Business Days', cost: 'Rs. 1,200' }, { method: 'Overnight (Domestic)', time: '1 Business Day', cost: 'Confirmed on WhatsApp' }, { method: 'International Standard', time: '10–15 Business Days', cost: 'Calculated at checkout' }, { method: 'International Express', time: '5–7 Business Days', cost: 'Calculated at checkout' }] as row, i}
+						{#each [{ method: 'Standard Shipping', time: '3-5 Business Days', cost: 'Rs. 200 (Standard Delivery)' }, { method: 'DHL Express', time: '2-3 Business Days', cost: 'Rs. 1,200' }, { method: 'Overnight (Domestic)', time: '1 Business Day', cost: 'Confirmed on WhatsApp' }, { method: 'International Standard', time: '10–15 Business Days', cost: 'Calculated at checkout' }, { method: 'International Express', time: '5–7 Business Days', cost: 'Calculated at checkout' }] as row, i}
 							<tr class="{i % 2 === 0 ? 'bg-white' : 'bg-gray-50'} border-b border-gray-100">
 								<td class="px-5 py-4 font-medium text-black">{row.method}</td>
 								<td class="px-5 py-4 text-gray-600">{row.time}</td>

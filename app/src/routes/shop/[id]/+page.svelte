@@ -399,18 +399,19 @@
 				</div>
 			</div>
 
-			<div class="mb-10 flex items-start space-x-4 border border-gray-100 bg-gray-50 p-4">
+			<div class="mb-10 flex items-center justify-between border border-gray-100 bg-gray-50 p-4 rounded-xl">
 				<div>
-					<p class="mb-1 text-sm font-medium">WhatsApp catalog source</p>
-					<a
-						href={`https://wa.me/923703772463?text=${encodeURIComponent(`I want to ask about ${product.name}`)}`}
-						target="_blank"
-						rel="noreferrer"
-						class="text-xs font-semibold text-green-700 underline"
-					>
-						Chat with Zylowalls on WhatsApp
-					</a>
+					<p class="mb-0.5 text-xs font-bold text-gray-900 uppercase">💵 Cash on Delivery Available</p>
+					<p class="text-xs font-light text-gray-500">Pay at your doorstep with Rs. 200 standard shipping</p>
 				</div>
+				<a
+					href={`https://wa.me/923703772463?text=${encodeURIComponent(`Hi, I am interested in ordering: ${product.name}`)}`}
+					target="_blank"
+					rel="noreferrer"
+					class="inline-flex shrink-0 items-center justify-center rounded-lg bg-[#25D366] px-3 py-2 text-xs font-bold text-white transition-colors hover:bg-green-600"
+				>
+					WhatsApp Us
+				</a>
 			</div>
 
 			<div class="border-t border-gray-200">

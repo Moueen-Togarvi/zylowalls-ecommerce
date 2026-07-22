@@ -240,7 +240,7 @@
 							<span
 								class="mb-1 inline-flex rounded-full border border-red-200 bg-red-50 px-2.5 py-0.5 text-[0.52rem] font-bold tracking-wide text-red-600 uppercase"
 							>
-								Free Shipping
+								Rs. 200 Delivery
 							</span>
 							<h4 class="font-serif text-sm sm:text-base font-black text-[#14352d] uppercase">
 								Wooden Wall Art
@@ -265,9 +265,9 @@
 					</div>
 				</a>
 
-				<!-- CARD 3: 3D WALL PANELS -->
+				<!-- CARD 3: ISLAMIC ART DECOR -->
 				<a
-					href="/shop?category=3d-wall-panels"
+					href="/collections"
 					class="group flex flex-1 items-center justify-between overflow-hidden rounded-2xl border border-[#14352d]/6 bg-white p-4.5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#e4b43d]/30 hover:shadow-md"
 				>
 					<div class="flex items-center gap-4 pr-2">
@@ -276,8 +276,8 @@
 							class="h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-[#14352d]/6 bg-[#e4eee9] sm:h-24 sm:w-24 relative shadow-inner"
 						>
 							<img
-								src="/new-products/IMG-20260718-WA0021.jpg.jpeg"
-								alt="3D Wall Panels"
+								src="/acrylic_calligraphy.png"
+								alt="Islamic Art Decor"
 								class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
 							/>
 						</div>
@@ -288,12 +288,12 @@
 								Premium Choice
 							</span>
 							<h4 class="font-serif text-sm sm:text-base font-black text-[#14352d] uppercase">
-								3D Wall Panels
+								Islamic Art Decor
 							</h4>
 							<p class="mt-0.5 text-[0.68rem] font-medium text-[#596c62] leading-tight">
-								Sleek geometric interlocking accent panels.
+								Elegant spiritual calligraphy and sacred motifs.
 							</p>
-							<span class="mt-2 block text-xs font-black text-[#8a7444]">From {formatMoney(2699)}</span>
+							<span class="mt-2 block text-xs font-black text-[#8a7444]">From {formatMoney(1999)}</span>
 						</div>
 					</div>
 					<div
