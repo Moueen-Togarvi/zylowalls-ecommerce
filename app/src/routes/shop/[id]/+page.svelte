@@ -253,7 +253,7 @@
 						<img
 							src={image}
 							alt={`${product.name} ${index + 1}`}
-							class="h-full w-full object-contain object-center"
+							class="h-full w-full object-cover object-center"
 						/>
 					</button>
 				{/each}
