@@ -320,10 +320,6 @@
 					</div>
 				</div>
 
-				<div class="mb-5 flex gap-2">
-					<span class="rounded-[4px] bg-[#84cc16] px-3.5 py-1.5 text-[0.8rem] font-medium text-black">Warranty: 1 year</span>
-					<span class="rounded-[4px] bg-[#84cc16] px-3.5 py-1.5 text-[0.8rem] font-medium text-black">Size: 16x16 inches</span>
-				</div>
 
 				<div class="text-sm leading-relaxed text-gray-700 text-justify">
 					{product.description}
