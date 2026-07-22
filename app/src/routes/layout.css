@@ -99,9 +99,21 @@
 		will-change: transform, filter;
 	}
 
+	.animate-heartbeat {
+		animation: heartbeat 2s ease-in-out infinite;
+	}
+
 	.hero-reveal {
 		will-change: transform, opacity;
 	}
+}
+
+@keyframes heartbeat {
+	0%, 100% { transform: scale(1); }
+	15% { transform: scale(1.03); }
+	30% { transform: scale(1); }
+	45% { transform: scale(1.03); }
+	60% { transform: scale(1); }
 }
 
 @media (max-width: 640px) {

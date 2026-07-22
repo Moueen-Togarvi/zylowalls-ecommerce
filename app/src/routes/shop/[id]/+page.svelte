@@ -608,22 +608,7 @@
 	</div>
 </div>
 
-<style>
-	/* Hide scrollbar for Chrome, Safari and Opera */
-	div::-webkit-scrollbar {
-		display: none;
-	}
-	@keyframes heartbeat {
-		0%, 100% { transform: scale(1); }
-		15% { transform: scale(1.03); }
-		30% { transform: scale(1); }
-		45% { transform: scale(1.03); }
-		60% { transform: scale(1); }
-	}
-	.animate-heartbeat {
-		animation: heartbeat 2s ease-in-out infinite;
-	}
-</style>
+
 
 {#if relatedProducts.length}
 	<div class="border-t border-gray-100 bg-white py-20">
