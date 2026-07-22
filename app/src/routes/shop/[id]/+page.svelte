@@ -14,6 +14,17 @@
 	let quantity = $state(1);
 	let activeTab = $state('details');
 
+	const fakeReviews = [
+		{ name: 'Fahad hussain', text: 'very good quality.', image: 'https://res.cloudinary.com/dwyge1qce/image/upload/v1/uploads/products/u71a1i4s.jpg?v=1729092470631' },
+		{ name: 'Sabeela', title: 'Very good', text: 'Nice clock this is my 3rd order 2 orders was not good but this time this is reqully nice machiner...', image: 'https://res.cloudinary.com/dwyge1qce/image/upload/v1/uploads/products/d12s02v3.jpg?v=1727878841499' },
+		{ name: 'Alisha Batool', title: 'Panda lamp', text: 'This is actually very cute and I loved it. Light bhi bht zbrdast', image: 'https://res.cloudinary.com/dwyge1qce/image/upload/v1/uploads/products/g83n7v5s.jpg?v=1727885472851' },
+		{ name: 'Hamza Ali', text: 'Excellent product, totally worth the price. Will order again.', image: 'https://res.cloudinary.com/dwyge1qce/image/upload/v1/uploads/products/y58u2m9q.jpg?v=1727878841499' },
+		{ name: 'Ayesha Khan', text: 'The finishing is really premium, highly recommended.', image: 'https://res.cloudinary.com/dwyge1qce/image/upload/v1/uploads/products/q27w9b4x.jpg?v=1729092470631' },
+		{ name: 'Usman Ghani', text: 'Delivered on time and packaging was great.', image: 'https://res.cloudinary.com/dwyge1qce/image/upload/v1/uploads/products/p41n6k3z.jpg?v=1727885472851' },
+		{ name: 'Zara', title: 'Amazing', text: 'Looks beautiful in my living room.', image: 'https://res.cloudinary.com/dwyge1qce/image/upload/v1/uploads/products/l62m1c5d.jpg?v=1729092470631' },
+		{ name: 'Bilal', text: 'Good customer service and nice wall art.', image: 'https://res.cloudinary.com/dwyge1qce/image/upload/v1/uploads/products/d12s02v3.jpg?v=1727878841499' }
+	];
+
 	let images = $derived(product.images?.map((image: any) => image.url) || []);
 	let colors = $derived(
 		Array.from(
@@ -222,7 +233,7 @@
 						<img
 							src={image}
 							alt={`${product.name} ${index + 1}`}
-							class="h-full w-full object-cover object-top"
+							class="h-full w-full object-contain object-center"
 						/>
 					</button>
 				{/each}
@@ -246,7 +257,7 @@
 				<img
 					src={images[activeImage] || productImage(product)}
 					alt={product.name}
-					class="h-full w-full object-cover object-top"
+					class="h-full w-full object-contain object-center mix-blend-multiply"
 				/>
 			</div>
 		</div>
@@ -267,9 +278,36 @@
 						<p class="text-xl font-light text-red-600 line-through">{formatMoney(product.price)}</p>
 					{/if}
 				</div>
-				<p class="text-sm leading-relaxed font-light whitespace-pre-wrap text-gray-600">
+
+				<div class="mb-3 flex items-center gap-2 text-sm font-medium text-gray-800">
+					<svg class="h-4 w-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" />
+					</svg>
+					14 sold in last 1 hour
+				</div>
+
+				<div class="mb-3 flex max-w-[320px] items-center justify-between rounded-lg bg-[#f02d2d] px-4 py-2 text-white">
+					<span class="text-sm font-bold">Hurry up! Offer ends in</span>
+					<div class="flex items-center gap-1.5 text-center text-sm font-bold">
+						<div class="flex flex-col"><span class="text-base leading-none">00</span><span class="text-[0.55rem] font-normal leading-none mt-1">Days</span></div>
+						<span class="mb-2">:</span>
+						<div class="flex flex-col"><span class="text-base leading-none">08</span><span class="text-[0.55rem] font-normal leading-none mt-1">Hrs</span></div>
+						<span class="mb-2">:</span>
+						<div class="flex flex-col"><span class="text-base leading-none">56</span><span class="text-[0.55rem] font-normal leading-none mt-1">Mins</span></div>
+						<span class="mb-2">:</span>
+						<div class="flex flex-col"><span class="text-base leading-none">47</span><span class="text-[0.55rem] font-normal leading-none mt-1">Secs</span></div>
+					</div>
+				</div>
+
+				<div class="mb-5 flex gap-2">
+					<span class="rounded-md bg-[#84cc16] px-3 py-1.5 text-xs font-medium text-black shadow-sm">Warranty: 1 year</span>
+					<span class="rounded-md bg-[#84cc16] px-3 py-1.5 text-xs font-medium text-black shadow-sm">Size: 16x16 inches</span>
+				</div>
+
+				<div class="text-sm leading-relaxed text-gray-700 text-justify">
 					{product.description}
-				</p>
+				</div>
 			</div>
 
 			{#if colors.length > 0}
@@ -399,6 +437,18 @@
 				</div>
 			</div>
 
+			<button
+				type="button"
+				class="animate-shake mb-10 flex h-14 w-full items-center justify-center gap-2 rounded bg-[#222222] px-4 text-sm font-bold tracking-widest text-white uppercase transition-colors hover:bg-black"
+				onclick={buyNow}
+			>
+				<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+				</svg>
+				Buy with Cash on Delivery
+			</button>
+
 			<div class="mb-10 flex items-center justify-between border border-gray-100 bg-gray-50 p-4 rounded-xl">
 				<div>
 					<p class="mb-0.5 text-xs font-bold text-gray-900 uppercase">💵 Cash on Delivery Available</p>
@@ -472,6 +522,102 @@
 		</div>
 	</div>
 </div>
+
+<div class="border-t border-gray-100 bg-white py-14">
+	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+		<div class="mb-12">
+			<h2 class="mb-8 text-center font-serif text-2xl text-gray-800">Customer Reviews</h2>
+			
+			<div class="flex flex-col items-center justify-center gap-8 md:flex-row md:gap-16">
+				<div class="flex flex-col items-center md:items-start text-center md:text-left">
+					<div class="flex items-center gap-2 mb-1">
+						<div class="flex text-[#b1df57]">
+							{#each Array(5) as _}
+								<svg class="h-5 w-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+							{/each}
+						</div>
+						<span class="text-sm text-gray-600">5.00 out of 5</span>
+					</div>
+					<span class="text-sm text-gray-500">Based on {fakeReviews.length} reviews</span>
+				</div>
+
+				<div class="flex flex-col gap-2 border-y border-gray-100 py-4 md:border-y-0 md:border-x md:px-16 md:py-0">
+					{#each [5,4,3,2,1] as star}
+						<div class="flex items-center gap-3">
+							<div class="flex text-[#b1df57]">
+								{#each Array(5) as _, i}
+									<svg class="h-4 w-4 {i < star ? 'fill-current' : 'text-gray-200 stroke-current fill-none'}" viewBox="0 0 20 20" stroke-width="1.5"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+								{/each}
+							</div>
+							<div class="h-2.5 w-32 bg-gray-100 rounded-sm overflow-hidden">
+								<div class="h-full bg-[#b1df57]" style="width: {star === 5 ? '100%' : '0%'}"></div>
+							</div>
+							<span class="text-xs text-gray-500 w-2">{star === 5 ? fakeReviews.length : 0}</span>
+						</div>
+					{/each}
+				</div>
+
+				<div class="flex items-center justify-center">
+					<button class="bg-[#b1df57] px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#9ccb3d] shadow-sm">
+						Write a review
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8" style="scrollbar-width: none; -ms-overflow-style: none;">
+			{#each fakeReviews as review}
+				<div class="flex w-[320px] shrink-0 snap-start flex-col gap-4 rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+					<div class="flex gap-4">
+						<div class="h-[88px] w-[88px] shrink-0 overflow-hidden bg-gray-50 rounded">
+							<img src={review.image} alt={review.name} class="h-full w-full object-cover" />
+						</div>
+						<div class="flex flex-col">
+							<div class="flex text-[#84cc16] mb-1.5">
+								{#each Array(5) as _}
+									<svg class="h-4 w-4 fill-current" viewBox="0 0 20 20">
+										<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+									</svg>
+								{/each}
+							</div>
+							{#if review.title}
+								<h4 class="font-bold text-sm text-gray-800 mb-0.5">{review.title}</h4>
+							{/if}
+							<p class="text-xs text-gray-500 line-clamp-3 leading-relaxed">{review.text}</p>
+						</div>
+					</div>
+					<div class="mt-auto">
+						<p class="text-xs font-bold text-gray-700">{review.name}</p>
+					</div>
+				</div>
+			{/each}
+		</div>
+		
+		<div class="flex items-center justify-center gap-6 text-[#84cc16]">
+			<button class="transition-transform hover:scale-110">
+				<svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" /></svg>
+			</button>
+			<button class="transition-transform hover:scale-110">
+				<svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" /></svg>
+			</button>
+		</div>
+	</div>
+</div>
+
+<style>
+	/* Hide scrollbar for Chrome, Safari and Opera */
+	div::-webkit-scrollbar {
+		display: none;
+	}
+	@keyframes shake {
+		0%, 100% { transform: translateX(0); }
+		10%, 30%, 50%, 70%, 90% { transform: translateX(-3px); }
+		20%, 40%, 60%, 80% { transform: translateX(3px); }
+	}
+	.animate-shake {
+		animation: shake 5s ease-in-out infinite;
+	}
+</style>
 
 {#if relatedProducts.length}
 	<div class="border-t border-gray-100 bg-white py-20">
