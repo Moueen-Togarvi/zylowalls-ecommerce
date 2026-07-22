@@ -170,9 +170,6 @@
 			<div class="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
 				<div>
 					<h1 class="font-serif text-4xl leading-tight uppercase sm:text-5xl">The Collection</h1>
-					<p class="mt-4 max-w-2xl text-sm leading-6 font-medium text-[#596c62] sm:text-base">
-						Explore premium wall art pieces for daily wear, occasion styling, and refined modest wardrobes.
-					</p>
 				</div>
 				<div class="flex flex-wrap gap-2">
 					<span
