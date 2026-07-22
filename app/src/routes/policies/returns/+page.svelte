@@ -32,11 +32,11 @@
 			<h2 class="not-prose mb-4 font-serif text-lg tracking-widest text-black uppercase">
 				Our Promise
 			</h2>
-			<p>
-				We want you to love every piece from Zylowalls. If for any reason you are not completely
-				satisfied with your purchase, we are here to help. We accept returns and exchanges within <strong
-					class="font-medium text-black">14 days</strong
-				> of your delivery date.
+			<p class="text-sm font-light leading-relaxed text-gray-600">
+				We want you to be completely satisfied with your Zylowalls purchase. If for any reason you
+				are not happy with your order, we accept returns within <strong
+					class="font-medium text-black">7 days</strong
+				> of the delivery date.
 			</p>
 		</section>
 
@@ -46,7 +46,7 @@
 			</h2>
 			<p class="mb-4">To be eligible for a return, your item must meet the following conditions:</p>
 			<ul class="not-prose space-y-3">
-				{#each ['Item must be unworn, unwashed, and in its original condition', 'All original tags must still be attached to the garment', 'Item must be returned in its original packaging', 'A valid proof of purchase (order confirmation) must be provided', 'Return request must be initiated within 14 days of delivery'] as condition}
+				{#each ['Item must be unworn, unwashed, and in its original condition', 'All original tags must still be attached to the garment', 'Item must be returned in its original packaging', 'A valid proof of purchase (order confirmation) must be provided', 'Return request must be initiated within 7 days of delivery'] as condition}
 					<li class="flex items-start">
 						<svg
 							class="mt-0.5 mr-3 h-5 w-5 flex-shrink-0 text-gold"

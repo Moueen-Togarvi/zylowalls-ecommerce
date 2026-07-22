@@ -13,7 +13,7 @@
 		{
 			question: 'What is your return and exchange policy?',
 			answer:
-				'We accept returns and exchanges within 14 days of delivery for undamaged items in original packaging. Custom-made items are non-refundable unless damaged during transit.'
+				'We accept returns and exchanges within 7 days of delivery for undamaged items in original packaging. Custom-made items are non-refundable unless damaged during transit.'
 		},
 		{
 			question: 'What happens if my package arrives damaged?',
@@ -85,7 +85,7 @@
 					Returns & Exchanges &rarr;
 				</h2>
 				<p class="text-xs font-light text-gray-600">
-					Learn about our 14-day return window, exchange eligibility, and step-by-step return process.
+					Learn about our 7-day return window, exchange eligibility, and step-by-step return process.
 				</p>
 			</div>
 		</a>

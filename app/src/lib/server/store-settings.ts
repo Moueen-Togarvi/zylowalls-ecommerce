@@ -18,7 +18,7 @@ export const defaultStoreSettings: SettingValues = {
 	free_shipping_threshold: '15000',
 	cod_enabled: 'true',
 	jazzcash_status: 'coming_soon',
-	return_policy_days: '14',
+	return_policy_days: '7',
 	shipping_note: 'Free delivery over Rs. 15,000',
 	order_notify_email: '',
 	resend_from_email: ''

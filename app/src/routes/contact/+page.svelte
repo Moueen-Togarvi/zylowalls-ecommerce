@@ -10,7 +10,7 @@
 		{
 			question: 'What is your return policy?',
 			answer:
-				'We accept returns within 14 days of delivery for undamaged items in their original packaging. Please note that custom-made calligraphy or personalized wall art designs are final sale.'
+				'We accept returns within 7 days of delivery for undamaged items in their original packaging. Please note that custom-made calligraphy or personalized wall art designs are final sale.'
 		},
 		{
 			question: 'How long does shipping take?',
