@@ -33,6 +33,7 @@
 		{ href: '/', label: 'Home' },
 		{ href: '/shop', label: 'Shop' },
 		{ href: '/collections', label: 'Collections' },
+		{ href: '/track', label: 'Track Order' },
 		{ href: '/size-guide', label: 'Size Guide' },
 		{ href: '/about', label: 'About' },
 		{ href: '/contact', label: 'Contact' }
@@ -436,6 +437,9 @@
 							</li>
 							<li>
 								<a href="/search" class="transition-colors hover:text-gold">Search Catalog</a>
+							</li>
+							<li>
+								<a href="/track" class="transition-colors hover:text-gold font-semibold text-white">Track Order</a>
 							</li>
 							<li>
 								<a href="/size-guide" class="transition-colors hover:text-gold">Size Guide</a>
