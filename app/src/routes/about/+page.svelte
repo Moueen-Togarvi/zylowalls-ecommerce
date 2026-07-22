@@ -100,7 +100,7 @@
 				graduation.
 			</p>
 			<p>
-				After graduating, they decided to begin with handcrafted wall art: combining modern laser-cut technology with premium wood and acrylic materials to create stunning 3D calligraphy and wall panels that bring style and serenity to any room.
+				After graduating, they decided to begin with handcrafted wall art: combining modern laser-cut technology with premium wood and acrylic materials to create stunning calligraphy and wall panels that bring style and serenity to any room.
 			</p>
 			<p>
 				They prepared their first pieces and uploaded their first product showcase video. The response was overwhelming. Art lovers appreciated the high-gloss finishes and intricate details, and from that moment the brand began to grow. What started as a plan between two university friends became

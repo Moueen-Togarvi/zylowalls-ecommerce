@@ -27,9 +27,9 @@ export const defaultStoreSettings: SettingValues = {
 export const defaultStorefrontSettings: SettingValues = {
 	hero_eyebrow: 'New Season Edit',
 	hero_headline_phrases:
-		'Premium Wall Art\n3D Acrylic Calligraphy\nWooden Art Panels\nModern Home Decor\nEid Sale Zylowalls',
+		'Premium Wall Art\nAcrylic Calligraphy\nWooden Art Panels\nModern Home Decor\nEid Sale Zylowalls',
 	hero_subheading:
-		'Premium 3D acrylic calligraphy, geometric wooden wall art, and custom panels to transform your walls.',
+		'Premium acrylic calligraphy, wooden wall art, and custom panels to transform your walls.',
 	hero_primary_label: 'Shop Collection',
 	hero_primary_href: '/shop',
 	hero_secondary_label: 'View Lookbook',
@@ -47,7 +47,7 @@ export const defaultStorefrontSettings: SettingValues = {
 	show_inventory: 'true',
 
 	// Slide 1
-	slide1_title: '3D Acrylic Calligraphy',
+	slide1_title: 'Acrylic Calligraphy',
 	slide1_tagline: 'LUXURIOUS WALL ART',
 	slide1_description:
 		'Multi-layered glossy acrylic calligraphy custom-crafted to reflect modern elegance. Perfect for living rooms, entrance halls, and gifting.',
@@ -68,8 +68,8 @@ export const defaultStorefrontSettings: SettingValues = {
 	slide3_title: 'Custom Laser Wall Art',
 	slide3_tagline: 'ARTISAN CRAFTSMANSHIP',
 	slide3_description:
-		'Decorate your dining room, bedroom, or workspace with curated geometric & floral designs that add character and depth to any wall.',
-	slide3_link: '/shop?category=3d-wall-panels',
+		'Decorate your dining room, bedroom, or workspace with curated floral & Islamic art designs that add character and depth to any wall.',
+	slide3_link: '/shop',
 	slide3_image: '/new-products/IMG-20260718-WA0021.jpg.jpeg',
 	slide3_promo: '15% OFF',
 

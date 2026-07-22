@@ -297,7 +297,7 @@
 
 		<!-- Subtitle -->
 		<p class="hero-reveal mx-auto mt-8 max-w-2xl font-serif text-lg italic text-[#596c62] sm:text-xl md:text-2xl">
-			Handcrafted 3D acrylic calligraphy, geometric wooden wall art, and premium panels to transform your walls.
+			Handcrafted acrylic calligraphy, wooden wall art, and premium panels to transform your walls.
 		</p>
 
 		<!-- Call to Action Buttons -->
@@ -345,7 +345,61 @@
 <!-- Categories -->
 <CategoryCircleCards {collections} />
 
-<!-- Featured Collections -->
+<!-- Bestsellers / Most Loved -->
+<section class="overflow-hidden bg-cream py-14">
+	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+		<div class="mb-8 flex flex-col gap-6">
+			<div class="text-center">
+				<h2 class="font-serif text-3xl tracking-widest text-[#1b1918] uppercase">Most Loved</h2>
+			</div>
+
+			<div class="category-ribbon" aria-label="Bestseller categories">
+				<div class="category-ribbon__track">
+					{#each bestsellerCategoryTags as tag}
+						<a
+							href="/collections"
+							class="inline-flex min-h-8 shrink-0 items-center justify-center rounded-full border border-[#1b1918]/10 bg-[#fffaf0] px-4 text-[0.68rem] font-black tracking-[0.12em] text-[#1b1918] uppercase shadow-[0_10px_22px_rgba(27,25,24,0.08)] transition-all hover:bg-[#1b1918] hover:text-white"
+						>
+							{tag}
+						</a>
+					{/each}
+				</div>
+			</div>
+		</div>
+
+		<div class="product-loop-stack">
+			{#each bestsellerRows as row, rowIndex}
+				<div
+					class="product-loop {rowIndex === 1 ? 'product-loop--second' : ''}"
+					aria-label={`Most loved products row ${rowIndex + 1}`}
+				>
+					<div class="product-loop__track">
+						{#each [...row, ...row] as item, itemIndex}
+							<div
+								class={`product-loop__item min-w-0 sm:w-[17.5rem] sm:shrink-0 lg:w-[18.25rem] ${itemIndex >= row.length ? 'product-loop__item--duplicate' : ''}`}
+							>
+								<ProductCard product={item} aspectRatio="aspect-[5/6]" isMostLoved={true} />
+							</div>
+						{/each}
+					</div>
+				</div>
+			{/each}
+		</div>
+
+		{#if hasViewAll(mostLovedSection)}
+			<div class="mt-8 text-center">
+				<a
+					href={mostLovedSection.viewAllHref}
+					class="inline-flex min-h-11 items-center justify-center rounded-full border border-[#1b1918]/12 bg-white px-6 text-xs font-black tracking-[0.12em] text-[#1b1918] uppercase shadow-[0_12px_28px_rgba(27,25,24,0.08)] transition-colors hover:border-[#e4b43d] hover:bg-[#e4b43d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1b1918]"
+				>
+					View All
+				</a>
+			</div>
+		{/if}
+	</div>
+</section>
+
+<!-- Featured / Signature Collections -->
 <section class="border-t border-[#1b1918]/8 bg-[#fbf9f2] px-4 py-16 sm:px-6 lg:px-8">
 	<div class="mx-auto max-w-6xl">
 		<div class="mb-10 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
@@ -359,7 +413,7 @@
 			</div>
 			<div class="max-w-md space-y-4 sm:text-right">
 				<p class="text-sm leading-6 font-medium text-[#596c62]">
-					Refined designs for your home: 3D calligraphy panels, wooden geometric art, and premium acrylic wall decor.
+					Refined designs for your home: calligraphy panels, wooden art, and premium acrylic wall decor.
 				</p>
 			</div>
 		</div>
@@ -487,62 +541,7 @@
 	</div>
 </section>
 
-
-<!-- Bestsellers -->
-<section class="overflow-hidden bg-cream py-14">
-	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<div class="mb-8 flex flex-col gap-6">
-			<div class="text-center">
-				<h2 class="font-serif text-3xl tracking-widest text-[#1b1918] uppercase">Most Loved</h2>
-			</div>
-
-			<div class="category-ribbon" aria-label="Bestseller categories">
-				<div class="category-ribbon__track">
-					{#each bestsellerCategoryTags as tag}
-						<a
-							href="/collections"
-							class="inline-flex min-h-8 shrink-0 items-center justify-center rounded-full border border-[#1b1918]/10 bg-[#fffaf0] px-4 text-[0.68rem] font-black tracking-[0.12em] text-[#1b1918] uppercase shadow-[0_10px_22px_rgba(27,25,24,0.08)] transition-all hover:bg-[#1b1918] hover:text-white"
-						>
-							{tag}
-						</a>
-					{/each}
-				</div>
-			</div>
-		</div>
-
-		<div class="product-loop-stack">
-			{#each bestsellerRows as row, rowIndex}
-				<div
-					class="product-loop {rowIndex === 1 ? 'product-loop--second' : ''}"
-					aria-label={`Most loved products row ${rowIndex + 1}`}
-				>
-					<div class="product-loop__track">
-						{#each [...row, ...row] as item, itemIndex}
-							<div
-								class={`product-loop__item min-w-0 sm:w-[17.5rem] sm:shrink-0 lg:w-[18.25rem] ${itemIndex >= row.length ? 'product-loop__item--duplicate' : ''}`}
-							>
-								<ProductCard product={item} aspectRatio="aspect-[5/6]" isMostLoved={true} />
-							</div>
-						{/each}
-					</div>
-				</div>
-			{/each}
-		</div>
-
-		{#if hasViewAll(mostLovedSection)}
-			<div class="mt-8 text-center">
-				<a
-					href={mostLovedSection.viewAllHref}
-					class="inline-flex min-h-11 items-center justify-center rounded-full border border-[#1b1918]/12 bg-white px-6 text-xs font-black tracking-[0.12em] text-[#1b1918] uppercase shadow-[0_12px_28px_rgba(27,25,24,0.08)] transition-colors hover:border-[#e4b43d] hover:bg-[#e4b43d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1b1918]"
-				>
-					View All
-				</a>
-			</div>
-		{/if}
-	</div>
-</section>
-
-<!-- Special Promo Offers Section -->
+<!-- Special Promo Offers Section (Exclusive Deals & Offers) -->
 <ProOfferGrid {products} onAddToCart={addProductToCart} />
 
 {#if reviewPhotos.length}

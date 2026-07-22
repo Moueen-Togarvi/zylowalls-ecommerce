@@ -88,7 +88,7 @@ const fallbackDemoNames = [
 	'Shahada Modern Calligraphy',
 	'Bismillah Islamic Wood Panel',
 	'4 Qul Square Calligraphy Set',
-	'Geometric Mandala Wooden Art',
+	'Mandala Wooden Art',
 	'Abstract Forest Laser Cut Panel',
 	'Minimalist Tree of Life Decor',
 	'Sleek Leaf Silhouette Set',
@@ -96,8 +96,8 @@ const fallbackDemoNames = [
 	'Arabesque MDF Carved Calligraphy',
 	'Surah Rahman Wooden Artwork',
 	'Linear Face Art Acrylic Panel',
-	'Chevron Pattern 3D Wood Art',
-	'Geometric Hexagon Wall Tiles',
+	'Chevron Pattern Wood Art',
+	'Hexagon Wall Tiles',
 	'Modern Calligraphy Round Shield'
 ];
 
@@ -167,11 +167,11 @@ function createFallbackDemoProducts(): StorefrontProduct[] {
 const fallbackProductSeed: StorefrontProduct[] = [
 	{
 		id: 'fallback-product-ayat-ul-kursi',
-		name: 'Ayat-ul-Kursi 3D Acrylic Calligraphy',
-		slug: 'ayat-ul-kursi-3d-acrylic-calligraphy',
+		name: 'Ayat-ul-Kursi Acrylic Calligraphy',
+		slug: 'ayat-ul-kursi-acrylic-calligraphy',
 		description:
-			'Premium double-layer glossy acrylic Islamic calligraphy. Handcrafted with high precision laser cutting, creating a stunning 3D reflection on your walls. Perfect for living rooms, entrance halls, or gifting.',
-		fabricDetails: 'High-gloss acrylic face, sturdy MDF backing, 3D float-mount brackets included.',
+			'Premium double-layer glossy acrylic Islamic calligraphy. Handcrafted with high precision laser cutting, creating a stunning reflection on your walls. Perfect for living rooms, entrance halls, or gifting.',
+		fabricDetails: 'High-gloss acrylic face, sturdy MDF backing, float-mount brackets included.',
 		price: 6800,
 		salePrice: null,
 		metaTitle: null,
@@ -181,7 +181,7 @@ const fallbackProductSeed: StorefrontProduct[] = [
 			{
 				id: 'fallback-image-ayat-1',
 				url: '/acrylic_calligraphy.png',
-				altText: 'Ayat-ul-Kursi 3D Acrylic Calligraphy',
+				altText: 'Ayat-ul-Kursi Acrylic Calligraphy',
 				displayOrder: 0
 			}
 		],
@@ -204,11 +204,11 @@ const fallbackProductSeed: StorefrontProduct[] = [
 		collections: [fallbackCollectionSeed[0]]
 	},
 	{
-		id: 'fallback-product-geometric-panels',
-		name: 'Geometric Floral Wooden Panel Set',
-		slug: 'geometric-floral-wooden-panel-set',
+		id: 'fallback-product-floral-panels',
+		name: 'Floral Wooden Panel Set',
+		slug: 'floral-wooden-panel-set',
 		description:
-			'Stunning 3-piece laser-cut wood wall panel set. Modern geometric design that adds a rustic yet contemporary charm to any bedroom or dining room wall. Comes ready to hang with pre-applied heavy-duty tape.',
+			'Stunning 3-piece laser-cut wood wall panel set. Modern floral design that adds a rustic yet contemporary charm to any bedroom or dining room wall. Comes ready to hang with pre-applied heavy-duty tape.',
 		fabricDetails: '6mm premium MDF engineered wood, matte charcoal finish, 3 panels total.',
 		price: 4500,
 		salePrice: 3999,
@@ -219,7 +219,7 @@ const fallbackProductSeed: StorefrontProduct[] = [
 			{
 				id: 'fallback-image-geo-1',
 				url: '/wooden_panels.png',
-				altText: 'Geometric Floral Wooden Panel Set',
+				altText: 'Floral Wooden Panel Set',
 				displayOrder: 0
 			}
 		],

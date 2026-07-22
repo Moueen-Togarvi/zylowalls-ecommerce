@@ -50,7 +50,7 @@
 	let selectedColor = $state('');
 	let selectedSize = $state('');
 	const shopDescription =
-		'Shop Zylowalls premium wooden calligraphy, 3D acrylic wall art, and laser-cut wood panels.';
+		'Shop Zylowalls premium wooden calligraphy, acrylic wall art, and laser-cut wood panels.';
 	let shopSocialImage = $derived(absoluteUrl(SITE_IMAGE, page.url.origin));
 	let shopBreadcrumbJsonLd = $derived(
 		breadcrumbJsonLd(

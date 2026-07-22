@@ -8,7 +8,7 @@
 
 	const defaultSliderItems = [
 		{
-			title: '3D Acrylic Calligraphy',
+			title: 'Acrylic Calligraphy',
 			tagline: 'LUXURIOUS WALL ART',
 			description:
 				'Multi-layered glossy acrylic calligraphy custom-crafted to reflect modern elegance. Perfect for living rooms, entrance halls, and gifting.',
@@ -20,7 +20,7 @@
 			promoBadge: '20% OFF',
 			descColor: 'text-white/70',
 			details: [
-				{ label: '3D Double Layer', desc: 'Premium Shadow Effect' },
+				{ label: 'Double Layer', desc: 'Premium Shadow Effect' },
 				{ label: 'Glossy Acrylic', desc: 'Reflective & Easy to Clean' }
 			]
 		},
@@ -38,15 +38,15 @@
 			descColor: 'text-white/70',
 			details: [
 				{ label: 'MDF Engineered Wood', desc: '6mm Durable Structure' },
-				{ label: 'Laser-Cut Designs', desc: 'Flawless Geometric Details' }
+				{ label: 'Laser-Cut Designs', desc: 'Flawless Fine Details' }
 			]
 		},
 		{
 			title: 'Custom Laser Wall Art',
 			tagline: 'ARTISAN CRAFTSMANSHIP',
 			description:
-				'Decorate your dining room, bedroom, or workspace with curated geometric & floral designs that add character and depth to any wall.',
-			link: '/shop?category=3d-wall-panels',
+				'Decorate your dining room, bedroom, or workspace with curated floral & Islamic art designs that add character and depth to any wall.',
+			link: '/shop',
 			image: '/new-products/IMG-20260718-WA0021.jpg.jpeg',
 			bgClass: 'bg-gradient-to-br from-[#1d1e22] via-[#2a2c35] to-[#15161b]',
 			accentText: 'text-[#c5a880]',
@@ -150,7 +150,7 @@
 								{#each item.details as detail, dIdx}
 									<div class="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-2 shadow-[0_8px_32px_rgba(0,0,0,0.15)] backdrop-blur-md transition-all duration-300 hover:scale-[1.03] hover:border-[#e4b43d]/30">
 										<div class="h-9 w-9 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-white/5">
-											<div class="h-full w-full bg-gradient-to-tr from-gold to-orange-400 flex items-center justify-center text-xs font-bold text-white">3D</div>
+											<div class="h-full w-full bg-gradient-to-tr from-gold to-orange-400 flex items-center justify-center text-xs font-bold text-white">PRO</div>
 										</div>
 										<div class="text-left min-w-0">
 											<span class="block text-[0.52rem] font-bold tracking-wider text-[#e4b43d] uppercase">Detail {dIdx + 1}</span>

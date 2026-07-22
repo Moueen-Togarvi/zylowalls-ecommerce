@@ -5,7 +5,7 @@
 	let { data } = $props();
 	let products = $derived((data.products || []) as Array<any>);
 	const lookbookDescription =
-		'Explore the Zylowalls lookbook for premium wooden calligraphy, 3D acrylic wall art, and laser-cut wood panel layouts.';
+		'Explore the Zylowalls lookbook for premium wooden calligraphy, acrylic wall art, and laser-cut wood panel layouts.';
 	let lookbookSocialImage = $derived(absoluteUrl(SITE_IMAGE, page.url.origin));
 	let lookbookBreadcrumbJsonLd = $derived(
 		breadcrumbJsonLd(
