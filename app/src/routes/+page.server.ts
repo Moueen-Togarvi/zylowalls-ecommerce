@@ -20,10 +20,26 @@ import {
 } from '$lib/shared/home-sections';
 import type { PageServerLoad } from './$types';
 
-const productInclude = {
-	images: { orderBy: { displayOrder: 'asc' } },
-	variants: true,
-	collections: true
+// Only select fields needed on the homepage — avoids fetching heavy description text etc.
+const productSelect = {
+	id: true,
+	name: true,
+	slug: true,
+	price: true,
+	salePrice: true,
+	isActive: true,
+	createdAt: true,
+	images: {
+		select: { url: true, displayOrder: true },
+		orderBy: { displayOrder: 'asc' as const },
+		take: 1 // Only first image needed for product cards
+	},
+	variants: {
+		select: { id: true, color: true, size: true, stockCount: true, price: true }
+	},
+	collections: {
+		select: { id: true, name: true, slug: true }
+	}
 } as const;
 
 const buildHomeSections = (
@@ -50,30 +66,39 @@ const buildHomeSections = (
 		})
 	);
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ setHeaders }) => {
+	// Cache homepage at CDN for 5 minutes, allow stale for 10 min
+	setHeaders({
+		'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=600'
+	});
+
 	try {
 		const storefrontSectionProduct = (prisma as any).storefrontSectionProduct;
-		const [products, productCount, collections, reviewPhotos, placements, storefrontSettings] =
+		const [products, collections, reviewPhotos, placements, storefrontSettings] =
 			await Promise.all([
 				prisma.product.findMany({
 					where: { isActive: true },
-					include: productInclude,
+					select: productSelect,
 					orderBy: { createdAt: 'desc' },
-					take: 12
+					take: 16
 				}),
-				prisma.product.count({ where: { isActive: true } }),
 				prisma.collection.findMany({
 					where: { isVisible: true },
 					orderBy: { displayOrder: 'asc' },
-					include: {
-						_count: {
-							select: { products: true }
-						}
+					select: {
+						id: true,
+						name: true,
+						slug: true,
+						imageUrl: true,
+						description: true,
+						displayOrder: true,
+						_count: { select: { products: true } }
 					}
 				}),
 				prisma.reviewPhoto.findMany({
 					where: { isVisible: true },
-					orderBy: [{ displayOrder: 'asc' }, { createdAt: 'desc' }]
+					orderBy: [{ displayOrder: 'asc' }, { createdAt: 'desc' }],
+					select: { id: true, url: true }
 				}),
 				storefrontSectionProduct?.findMany
 					? storefrontSectionProduct.findMany({
@@ -83,11 +108,13 @@ export const load: PageServerLoad = async () => {
 								product: { isActive: true }
 							},
 							include: {
-								product: {
-									include: productInclude
-								}
+								product: { select: productSelect }
 							},
-							orderBy: [{ sectionKey: 'asc' }, { displayOrder: 'asc' }, { createdAt: 'asc' }]
+							orderBy: [
+								{ sectionKey: 'asc' },
+								{ displayOrder: 'asc' },
+								{ createdAt: 'asc' }
+							]
 						})
 					: Promise.resolve([]),
 				getPublicStorefrontSettings()
@@ -104,12 +131,13 @@ export const load: PageServerLoad = async () => {
 
 		return {
 			products: serializedProducts,
-			homeSections: buildHomeSections(serializedProducts, productCount, selectedProductsBySection),
+			homeSections: buildHomeSections(
+				serializedProducts,
+				serializedProducts.length,
+				selectedProductsBySection
+			),
 			collections,
-			reviewPhotos: reviewPhotos.map((photo) => ({
-				id: photo.id,
-				url: photo.url
-			})),
+			reviewPhotos,
 			storefrontSettings
 		};
 	} catch (error) {
@@ -122,7 +150,7 @@ export const load: PageServerLoad = async () => {
 		const fallbackProducts = getFallbackProducts();
 
 		return {
-			products: fallbackProducts.slice(0, 12),
+			products: fallbackProducts.slice(0, 16),
 			homeSections: buildHomeSections(fallbackProducts, fallbackProducts.length),
 			collections: getFallbackCollections(),
 			reviewPhotos: getFallbackReviewPhotos(),

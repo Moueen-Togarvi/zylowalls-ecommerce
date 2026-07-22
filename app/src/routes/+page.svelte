@@ -229,6 +229,8 @@
 	<meta property="og:image" content={homeSocialImage} />
 	<meta name="twitter:title" content={`${SITE_NAME} | Premium Wall Art & Decor`} />
 	<meta name="twitter:description" content={SITE_DESCRIPTION} />
+	<!-- Preload the first hero background image (LCP) -->
+	<link rel="preload" as="image" href={bgSlides[0]} fetchpriority="high" />
 	{@html homeBreadcrumbJsonLd}
 </svelte:head>
 
@@ -242,6 +244,9 @@
 			<img
 				src={slide}
 				alt="Wall Art Interior Background"
+				fetchpriority={index === 0 ? 'high' : 'low'}
+				loading={index === 0 ? 'eager' : 'lazy'}
+				decoding={index === 0 ? 'sync' : 'async'}
 				class="absolute inset-0 h-full w-full object-cover transition-opacity duration-[1200ms] ease-in-out mix-blend-multiply"
 				style="opacity: {activeBgIndex === index ? '0.72' : '0'};"
 			/>

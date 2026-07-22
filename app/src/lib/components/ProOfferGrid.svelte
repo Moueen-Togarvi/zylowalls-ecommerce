@@ -151,6 +151,8 @@
 							<img
 								src={spotlightProduct.images?.[0]?.url || '/acrylic_calligraphy.png'}
 								alt={spotlightProduct.name}
+								loading="lazy"
+								decoding="async"
 								class="h-full w-full object-cover"
 							/>
 						</div>
@@ -188,6 +190,8 @@
 							<img
 								src="/new-products/IMG-20260718-WA0014.jpg.jpeg"
 								alt="Acrylic Calligraphy"
+								loading="lazy"
+								decoding="async"
 								class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
 							/>
 						</div>
@@ -233,6 +237,8 @@
 							<img
 								src="/new-products/IMG-20260718-WA0031.jpg.jpeg"
 								alt="Wooden Wall Art"
+								loading="lazy"
+								decoding="async"
 								class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
 							/>
 						</div>
@@ -278,6 +284,8 @@
 							<img
 								src="/acrylic_calligraphy.png"
 								alt="Islamic Art Decor"
+								loading="lazy"
+								decoding="async"
 								class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
 							/>
 						</div>

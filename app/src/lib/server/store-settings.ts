@@ -157,7 +157,21 @@ const descriptions: Record<string, string> = {
 	flash_sale_cta_link: 'Flash Sale Button URL'
 };
 
+// In-memory cache for storefront settings (refreshes every 2 minutes)
+let settingsCache: { values: SettingValues; expiresAt: number } | null = null;
+const SETTINGS_CACHE_TTL_MS = 2 * 60 * 1000; // 2 minutes
+
 export const getSettings = async (defaults: SettingValues) => {
+	const now = Date.now();
+	if (settingsCache && now < settingsCache.expiresAt) {
+		// Merge cache with defaults (in case keys differ)
+		const merged = { ...defaults };
+		for (const [k, v] of Object.entries(settingsCache.values)) {
+			merged[k] = v;
+		}
+		return merged;
+	}
+
 	const keys = Object.keys(defaults);
 	const rows = await prisma.storeSetting.findMany({
 		where: { key: { in: keys } }
@@ -168,7 +182,13 @@ export const getSettings = async (defaults: SettingValues) => {
 		values[row.key] = row.value;
 	}
 
+	settingsCache = { values, expiresAt: now + SETTINGS_CACHE_TTL_MS };
+
 	return values;
+};
+
+export const invalidateSettingsCache = () => {
+	settingsCache = null;
 };
 
 export const saveSettings = async (values: SettingValues) => {

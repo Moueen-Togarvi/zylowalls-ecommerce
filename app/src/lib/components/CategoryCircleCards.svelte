@@ -34,6 +34,8 @@
 								<img
 									src={category.imageUrl || '/image.png'}
 									alt={category.name}
+									loading="lazy"
+									decoding="async"
 									class="h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
 								/>
 							</div>
