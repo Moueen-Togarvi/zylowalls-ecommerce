@@ -168,6 +168,26 @@
 		});
 	}
 
+	let countdown = $state({ h: 8, m: 56, s: 47 });
+
+	$effect(() => {
+		const interval = setInterval(() => {
+			if (countdown.s > 0) {
+				countdown.s--;
+			} else {
+				if (countdown.m > 0) {
+					countdown.m--;
+					countdown.s = 59;
+				} else if (countdown.h > 0) {
+					countdown.h--;
+					countdown.m = 59;
+					countdown.s = 59;
+				}
+			}
+		}, 1000);
+		return () => clearInterval(interval);
+	});
+
 	function buyNow() {
 		if (selectedVariantOutOfStock) return;
 
@@ -279,7 +299,7 @@
 					{/if}
 				</div>
 
-				<div class="mb-3 flex items-center gap-2 text-sm font-medium text-gray-800">
+				<div class="mb-3 flex items-center gap-1 text-[0.95rem] font-medium text-gray-800">
 					<svg class="h-4 w-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" />
@@ -287,22 +307,22 @@
 					14 sold in last 1 hour
 				</div>
 
-				<div class="mb-3 flex max-w-[320px] items-center justify-between rounded-lg bg-[#f02d2d] px-4 py-2 text-white">
-					<span class="text-sm font-bold">Hurry up! Offer ends in</span>
+				<div class="mb-4 flex max-w-[340px] items-center justify-between rounded-xl bg-[#ef4444] px-4 py-2.5 text-white shadow-sm">
+					<span class="text-sm font-semibold tracking-wide">Hurry up! Offer ends in</span>
 					<div class="flex items-center gap-1.5 text-center text-sm font-bold">
-						<div class="flex flex-col"><span class="text-base leading-none">00</span><span class="text-[0.55rem] font-normal leading-none mt-1">Days</span></div>
-						<span class="mb-2">:</span>
-						<div class="flex flex-col"><span class="text-base leading-none">08</span><span class="text-[0.55rem] font-normal leading-none mt-1">Hrs</span></div>
-						<span class="mb-2">:</span>
-						<div class="flex flex-col"><span class="text-base leading-none">56</span><span class="text-[0.55rem] font-normal leading-none mt-1">Mins</span></div>
-						<span class="mb-2">:</span>
-						<div class="flex flex-col"><span class="text-base leading-none">47</span><span class="text-[0.55rem] font-normal leading-none mt-1">Secs</span></div>
+						<div class="flex flex-col"><span class="text-[1.1rem] leading-none">00</span><span class="text-[0.6rem] font-normal leading-tight">Days</span></div>
+						<span class="mb-3 text-lg font-normal">:</span>
+						<div class="flex flex-col"><span class="text-[1.1rem] leading-none">{countdown.h.toString().padStart(2, '0')}</span><span class="text-[0.6rem] font-normal leading-tight">Hrs</span></div>
+						<span class="mb-3 text-lg font-normal">:</span>
+						<div class="flex flex-col"><span class="text-[1.1rem] leading-none">{countdown.m.toString().padStart(2, '0')}</span><span class="text-[0.6rem] font-normal leading-tight">Mins</span></div>
+						<span class="mb-3 text-lg font-normal">:</span>
+						<div class="flex flex-col"><span class="text-[1.1rem] leading-none">{countdown.s.toString().padStart(2, '0')}</span><span class="text-[0.6rem] font-normal leading-tight">Secs</span></div>
 					</div>
 				</div>
 
 				<div class="mb-5 flex gap-2">
-					<span class="rounded-md bg-[#84cc16] px-3 py-1.5 text-xs font-medium text-black shadow-sm">Warranty: 1 year</span>
-					<span class="rounded-md bg-[#84cc16] px-3 py-1.5 text-xs font-medium text-black shadow-sm">Size: 16x16 inches</span>
+					<span class="rounded-[4px] bg-[#84cc16] px-3.5 py-1.5 text-[0.8rem] font-medium text-black">Warranty: 1 year</span>
+					<span class="rounded-[4px] bg-[#84cc16] px-3.5 py-1.5 text-[0.8rem] font-medium text-black">Size: 16x16 inches</span>
 				</div>
 
 				<div class="text-sm leading-relaxed text-gray-700 text-justify">
@@ -404,7 +424,7 @@
 					</button>
 				</div>
 
-				<div class="grid flex-1 gap-3 sm:grid-cols-[1fr_1fr_auto]">
+				<div class="grid flex-1 gap-3 sm:grid-cols-[1fr_auto]">
 					<button
 						type="button"
 						disabled={selectedVariantOutOfStock}
@@ -412,22 +432,6 @@
 						onclick={addToCart}
 					>
 						<span>{selectedVariantOutOfStock ? 'Out of Stock' : 'Add to Bag'}</span>
-					</button>
-					<button
-						type="button"
-						disabled={selectedVariantOutOfStock}
-						class="flex h-14 items-center justify-center gap-2 bg-[#e4b43d] px-4 text-sm font-bold tracking-widest text-[#14352d] uppercase transition-colors hover:bg-[#14352d] hover:text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
-						onclick={buyNow}
-					>
-						<span>{selectedVariantOutOfStock ? 'Unavailable' : 'Buy Now'}</span>
-						<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="1.8"
-								d="M5 12h14M13 6l6 6-6 6"
-							/>
-						</svg>
 					</button>
 					<WishlistButton
 						{product}
@@ -439,7 +443,7 @@
 
 			<button
 				type="button"
-				class="animate-shake mb-10 flex h-14 w-full items-center justify-center gap-2 rounded bg-[#222222] px-4 text-sm font-bold tracking-widest text-white uppercase transition-colors hover:bg-black"
+				class="animate-heartbeat mb-10 flex h-14 w-full items-center justify-center gap-3 rounded-lg bg-[#ef4444] px-4 text-sm font-bold tracking-widest text-white uppercase transition-colors hover:bg-red-600"
 				onclick={buyNow}
 			>
 				<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -594,10 +598,10 @@
 		</div>
 		
 		<div class="flex items-center justify-center gap-6 text-[#84cc16]">
-			<button class="transition-transform hover:scale-110">
+			<button class="transition-transform hover:scale-110" aria-label="Previous review">
 				<svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" /></svg>
 			</button>
-			<button class="transition-transform hover:scale-110">
+			<button class="transition-transform hover:scale-110" aria-label="Next review">
 				<svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" /></svg>
 			</button>
 		</div>
@@ -609,13 +613,15 @@
 	div::-webkit-scrollbar {
 		display: none;
 	}
-	@keyframes shake {
-		0%, 100% { transform: translateX(0); }
-		10%, 30%, 50%, 70%, 90% { transform: translateX(-3px); }
-		20%, 40%, 60%, 80% { transform: translateX(3px); }
+	@keyframes heartbeat {
+		0%, 100% { transform: scale(1); }
+		15% { transform: scale(1.03); }
+		30% { transform: scale(1); }
+		45% { transform: scale(1.03); }
+		60% { transform: scale(1); }
 	}
-	.animate-shake {
-		animation: shake 5s ease-in-out infinite;
+	.animate-heartbeat {
+		animation: heartbeat 2s ease-in-out infinite;
 	}
 </style>
 
