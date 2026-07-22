@@ -423,7 +423,7 @@
 						</svg>
 					</div>
 					<div class="text-left leading-tight">
-						<span class="block text-xs font-black text-[#1b1918] uppercase">10K+ Happy</span>
+						<span class="block text-xs font-black text-[#1b1918] uppercase">50K+ Happy</span>
 						<span class="block text-[0.62rem] text-gray-500 font-medium">Satisfied Customers</span>
 					</div>
 				</div>
@@ -611,7 +611,7 @@
 	}
 
 	.sale-tape__track--ltr {
-		animation: sale-tape-left-to-right 18s linear infinite;
+		animation: sale-tape-left-to-right 35s linear infinite;
 	}
 
 	.sale-tape__track span {
