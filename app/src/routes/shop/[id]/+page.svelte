@@ -15,14 +15,14 @@
 	let activeTab = $state('details');
 
 	const fakeReviews = [
-		{ name: 'Fahad hussain', text: 'very good quality.', image: 'https://res.cloudinary.com/dwyge1qce/image/upload/v1/uploads/products/u71a1i4s.jpg?v=1729092470631' },
-		{ name: 'Sabeela', title: 'Very good', text: 'Nice clock this is my 3rd order 2 orders was not good but this time this is reqully nice machiner...', image: 'https://res.cloudinary.com/dwyge1qce/image/upload/v1/uploads/products/d12s02v3.jpg?v=1727878841499' },
-		{ name: 'Alisha Batool', title: 'Panda lamp', text: 'This is actually very cute and I loved it. Light bhi bht zbrdast', image: 'https://res.cloudinary.com/dwyge1qce/image/upload/v1/uploads/products/g83n7v5s.jpg?v=1727885472851' },
-		{ name: 'Hamza Ali', text: 'Excellent product, totally worth the price. Will order again.', image: 'https://res.cloudinary.com/dwyge1qce/image/upload/v1/uploads/products/y58u2m9q.jpg?v=1727878841499' },
-		{ name: 'Ayesha Khan', text: 'The finishing is really premium, highly recommended.', image: 'https://res.cloudinary.com/dwyge1qce/image/upload/v1/uploads/products/q27w9b4x.jpg?v=1729092470631' },
-		{ name: 'Usman Ghani', text: 'Delivered on time and packaging was great.', image: 'https://res.cloudinary.com/dwyge1qce/image/upload/v1/uploads/products/p41n6k3z.jpg?v=1727885472851' },
-		{ name: 'Zara', title: 'Amazing', text: 'Looks beautiful in my living room.', image: 'https://res.cloudinary.com/dwyge1qce/image/upload/v1/uploads/products/l62m1c5d.jpg?v=1729092470631' },
-		{ name: 'Bilal', text: 'Good customer service and nice wall art.', image: 'https://res.cloudinary.com/dwyge1qce/image/upload/v1/uploads/products/d12s02v3.jpg?v=1727878841499' }
+		{ name: 'Fahad hussain', text: 'very good quality.', image: '/reviews/rev1.png' },
+		{ name: 'Sabeela', title: 'Very good', text: 'Nice clock this is my 3rd order 2 orders was not good but this time this is reqully nice machiner...', image: '/reviews/rev2.png' },
+		{ name: 'Alisha Batool', title: 'Panda lamp', text: 'This is actually very cute and I loved it. Light bhi bht zbrdast', image: '/reviews/rev3.png' },
+		{ name: 'Hamza Ali', text: 'Excellent product, totally worth the price. Will order again.', image: '/reviews/rev1.png' },
+		{ name: 'Ayesha Khan', text: 'The finishing is really premium, highly recommended.', image: '/reviews/rev2.png' },
+		{ name: 'Usman Ghani', text: 'Delivered on time and packaging was great.', image: '/reviews/rev3.png' },
+		{ name: 'Zara', title: 'Amazing', text: 'Looks beautiful in my living room.', image: '/reviews/rev1.png' },
+		{ name: 'Bilal', text: 'Good customer service and nice wall art.', image: '/reviews/rev2.png' }
 	];
 
 	let images = $derived(product.images?.map((image: any) => image.url) || []);
@@ -259,17 +259,17 @@
 				{/each}
 			</div>
 
-			<div class="relative aspect-square flex-grow overflow-hidden bg-gray-50 lg:aspect-[4/5]">
+			<div class="relative flex-grow flex items-center justify-center overflow-hidden bg-gray-50/50 rounded-xl p-2">
 				{#if product.salePrice}
 					<div
-						class="absolute top-4 left-4 z-10 bg-white/90 px-3 py-1.5 text-xs font-bold tracking-widest text-black uppercase backdrop-blur"
+						class="absolute top-4 left-4 z-10 bg-white/90 px-3 py-1.5 text-xs font-bold tracking-widest text-black uppercase backdrop-blur rounded-md shadow-sm"
 					>
 						Sale
 					</div>
 				{/if}
 				{#if productOutOfStock}
 					<div
-						class="absolute top-4 right-4 z-10 bg-red-600 px-3 py-1.5 text-xs font-bold tracking-widest text-white uppercase"
+						class="absolute top-4 right-4 z-10 bg-red-600 px-3 py-1.5 text-xs font-bold tracking-widest text-white uppercase rounded-md shadow-sm"
 					>
 						Out of Stock
 					</div>
@@ -277,7 +277,7 @@
 				<img
 					src={images[activeImage] || productImage(product)}
 					alt={product.name}
-					class="h-full w-full object-cover object-center"
+					class="w-full h-auto max-h-[600px] object-contain rounded-lg shadow-sm"
 				/>
 			</div>
 		</div>
