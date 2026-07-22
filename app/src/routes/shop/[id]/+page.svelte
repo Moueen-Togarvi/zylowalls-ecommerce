@@ -3,6 +3,7 @@
 	import { page } from '$app/state';
 	import { cart } from '$lib/client/cart.svelte';
 	import WishlistButton from '$lib/components/WishlistButton.svelte';
+	import ProductCard from '$lib/components/ProductCard.svelte';
 	import { formatMoney } from '$lib/shared/money';
 	import { SITE_NAME, absoluteUrl, jsonLdScript, metaDescription } from '$lib/shared/seo';
 
@@ -14,16 +15,52 @@
 	let quantity = $state(1);
 	let activeTab = $state('details');
 
-	const fakeReviews = [
-		{ name: 'Fahad hussain', text: 'very good quality.', image: '/reviews/rev1.png' },
-		{ name: 'Sabeela', title: 'Very good', text: 'Nice clock this is my 3rd order 2 orders was not good but this time this is reqully nice machiner...', image: '/reviews/rev2.png' },
-		{ name: 'Alisha Batool', title: 'Panda lamp', text: 'This is actually very cute and I loved it. Light bhi bht zbrdast', image: '/reviews/rev3.png' },
-		{ name: 'Hamza Ali', text: 'Excellent product, totally worth the price. Will order again.', image: '/reviews/rev1.png' },
+	let reviewsScrollContainer = $state<HTMLDivElement>();
+	let showReviewModal = $state(false);
+	let newReviewName = $state('');
+	let newReviewTitle = $state('');
+	let newReviewText = $state('');
+	let newReviewRating = $state(5);
+	let reviewSubmittedSuccess = $state(false);
+
+	let fakeReviews = $state([
+		{ name: 'Fahad hussain', text: 'very good quality wall art.', image: '/reviews/rev1.png' },
+		{ name: 'Sabeela', title: 'Very good', text: 'Nice clock wall decor, this is my 3rd order. Really nice finish.', image: '/reviews/rev2.png' },
+		{ name: 'Alisha Batool', title: 'Ayat-ul-Kursi Calligraphy', text: 'This 3D acrylic calligraphy is actually very beautiful and I loved it. Quality is top notch!', image: '/reviews/rev1.png' },
+		{ name: 'Hamza Ali', text: 'Excellent wall art piece, totally worth the price. Will order again.', image: '/reviews/rev1.png' },
 		{ name: 'Ayesha Khan', text: 'The finishing is really premium, highly recommended.', image: '/reviews/rev2.png' },
 		{ name: 'Usman Ghani', text: 'Delivered on time and packaging was great.', image: '/reviews/rev3.png' },
 		{ name: 'Zara', title: 'Amazing', text: 'Looks beautiful in my living room.', image: '/reviews/rev1.png' },
 		{ name: 'Bilal', text: 'Good customer service and nice wall art.', image: '/reviews/rev2.png' }
-	];
+	]);
+
+	function scrollReviews(dir: 'left' | 'right') {
+		if (reviewsScrollContainer) {
+			reviewsScrollContainer.scrollBy({ left: dir === 'left' ? -340 : 340, behavior: 'smooth' });
+		}
+	}
+
+	function submitReview(e: Event) {
+		e.preventDefault();
+		if (!newReviewName.trim() || !newReviewText.trim()) return;
+		fakeReviews = [
+			{
+				name: newReviewName,
+				title: newReviewTitle || 'Verified Buyer',
+				text: newReviewText,
+				image: '/reviews/rev1.png'
+			},
+			...fakeReviews
+		];
+		newReviewName = '';
+		newReviewTitle = '';
+		newReviewText = '';
+		reviewSubmittedSuccess = true;
+		setTimeout(() => {
+			showReviewModal = false;
+			reviewSubmittedSuccess = false;
+		}, 1200);
+	}
 
 	let images = $derived(product.images?.map((image: any) => image.url) || []);
 	let colors = $derived(
@@ -498,8 +535,8 @@
 					{#if activeTab === 'details'}
 						<ul class="space-y-2">
 							<li>
-								<strong>Fabric:</strong>
-								{product.fabricDetails || 'Premium modestwear fabric'}
+								<strong>Material:</strong>
+								{product.fabricDetails || 'High-Gloss Acrylic & Premium MDF Wood'}
 							</li>
 							<li>
 								<strong>Categories:</strong>
@@ -558,14 +595,22 @@
 				</div>
 
 				<div class="flex items-center justify-center">
-					<button class="bg-[#b1df57] px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#9ccb3d] shadow-sm">
+					<button
+						type="button"
+						onclick={() => (showReviewModal = true)}
+						class="bg-[#b1df57] px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#9ccb3d] shadow-sm rounded-lg"
+					>
 						Write a review
 					</button>
 				</div>
 			</div>
 		</div>
 
-		<div class="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8" style="scrollbar-width: none; -ms-overflow-style: none;">
+		<div
+			bind:this={reviewsScrollContainer}
+			class="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8"
+			style="scrollbar-width: none; -ms-overflow-style: none;"
+		>
 			{#each fakeReviews as review}
 				<div class="flex w-[320px] shrink-0 snap-start flex-col gap-4 rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
 					<div class="flex gap-4">
@@ -594,11 +639,21 @@
 		</div>
 		
 		<div class="flex items-center justify-center gap-6 text-[#84cc16]">
-			<button class="transition-transform hover:scale-110" aria-label="Previous review">
-				<svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" /></svg>
+			<button
+				type="button"
+				onclick={() => scrollReviews('left')}
+				class="flex h-10 w-10 items-center justify-center rounded-full border border-[#84cc16] transition-transform hover:scale-110 active:scale-95"
+				aria-label="Previous review"
+			>
+				<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" /></svg>
 			</button>
-			<button class="transition-transform hover:scale-110" aria-label="Next review">
-				<svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" /></svg>
+			<button
+				type="button"
+				onclick={() => scrollReviews('right')}
+				class="flex h-10 w-10 items-center justify-center rounded-full border border-[#84cc16] transition-transform hover:scale-110 active:scale-95"
+				aria-label="Next review"
+			>
+				<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" /></svg>
 			</button>
 		</div>
 	</div>
@@ -618,46 +673,98 @@
 
 			<div class="grid grid-cols-2 gap-6 md:grid-cols-4">
 				{#each relatedProducts as item}
-					<div class="group">
-						<div class="relative mb-4 aspect-[3/4] overflow-hidden bg-gray-100">
-							<a href={`/shop/${item.slug}`} class="block h-full" aria-label={`View ${item.name}`}>
-								<img
-									src={productImage(item)}
-									alt={item.name}
-									class="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-								/>
-							</a>
-							<WishlistButton
-								product={item}
-								class="absolute right-3 bottom-3 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/80 bg-white/86 text-[#14352d] shadow-[0_10px_22px_rgba(20,53,45,0.16)] backdrop-blur transition-colors hover:bg-[#e4b43d]"
-								iconClass="h-4 w-4"
-							/>
-							<a
-								href={`/shop/${item.slug}`}
-								class="absolute right-14 bottom-3 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/80 bg-white/86 text-[#14352d] shadow-[0_10px_22px_rgba(20,53,45,0.16)] backdrop-blur transition-colors hover:bg-[#e4b43d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#14352d]"
-								aria-label={`Open ${item.name} details`}
-							>
-								<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="1.8"
-										d="M7 17L17 7M9 7h8v8"
-									/>
-								</svg>
-							</a>
-						</div>
-						<a href={`/shop/${item.slug}`} class="block">
-							<h3 class="mb-1 font-serif text-sm transition-colors group-hover:text-gold">
-								{item.name}
-							</h3>
-							<p class="text-xs font-medium text-gray-500">
-								{formatMoney(item.salePrice || item.price)}
-							</p>
-						</a>
-					</div>
+					<ProductCard product={item} />
 				{/each}
 			</div>
+		</div>
+	</div>
+{/if}
+
+{#if showReviewModal}
+	<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+		<div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+			{#if reviewSubmittedSuccess}
+				<div class="py-8 text-center">
+					<div class="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-[#84cc16]">
+						<svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+						</svg>
+					</div>
+					<h3 class="font-serif text-xl font-bold text-gray-900">Thank You!</h3>
+					<p class="mt-1 text-xs text-gray-500">Your review has been submitted successfully.</p>
+				</div>
+			{:else}
+				<div class="mb-4 flex items-center justify-between">
+					<h3 class="font-serif text-lg font-bold text-gray-900">Write a Customer Review</h3>
+					<button
+						type="button"
+						onclick={() => (showReviewModal = false)}
+						class="rounded-lg p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+					>
+						✕
+					</button>
+				</div>
+				<form onsubmit={submitReview} class="space-y-4">
+					<div>
+						<label class="block text-xs font-bold uppercase text-gray-700">Your Rating</label>
+						<div class="mt-1 flex gap-1 text-[#84cc16]">
+							{#each [1, 2, 3, 4, 5] as star}
+								<button
+									type="button"
+									onclick={() => (newReviewRating = star)}
+									class="text-2xl transition-transform hover:scale-110"
+								>
+									★
+								</button>
+							{/each}
+						</div>
+					</div>
+					<div>
+						<label class="block text-xs font-bold uppercase text-gray-700">Your Name *</label>
+						<input
+							type="text"
+							required
+							bind:value={newReviewName}
+							placeholder="e.g. Sara Ahmed"
+							class="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-sm focus:border-black focus:ring-0"
+						/>
+					</div>
+					<div>
+						<label class="block text-xs font-bold uppercase text-gray-700">Title</label>
+						<input
+							type="text"
+							bind:value={newReviewTitle}
+							placeholder="e.g. Stunning Wall Decor!"
+							class="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-sm focus:border-black focus:ring-0"
+						/>
+					</div>
+					<div>
+						<label class="block text-xs font-bold uppercase text-gray-700">Review *</label>
+						<textarea
+							required
+							rows="3"
+							bind:value={newReviewText}
+							placeholder="Tell us what you liked about this product..."
+							class="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-sm focus:border-black focus:ring-0"
+						></textarea>
+					</div>
+					<div class="flex justify-end gap-3 pt-2">
+						<button
+							type="button"
+							onclick={() => (showReviewModal = false)}
+							class="rounded-lg border border-gray-200 px-4 py-2 text-xs font-bold text-gray-600 hover:bg-gray-50"
+						>
+							Cancel
+						</button>
+						<button
+							type="submit"
+							class="rounded-lg bg-[#b1df57] px-5 py-2 text-xs font-bold text-white shadow-sm hover:bg-[#9ccb3d]"
+						>
+							Submit Review
+						</button>
+					</div>
+				</form>
+			{/if}
 		</div>
 	</div>
 {/if}

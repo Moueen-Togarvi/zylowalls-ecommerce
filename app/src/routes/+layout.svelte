@@ -424,7 +424,7 @@
 					<div class="col-span-1 md:col-span-1">
 						<h3 class="mb-6 text-xl"><ZylowallsWordmark /></h3>
 						<p class="text-sm font-light text-gray-400">
-							Elevating modest fashion with premium craftsmanship and timeless design.
+							Elevating home decor with premium wall art, acrylic calligraphy, and timeless craftsmanship.
 						</p>
 					</div>
 					<div>

@@ -72,7 +72,7 @@
 					<div class="space-y-5">
 						<TextInput label="Title" name="name" placeholder="e.g. Ayat-ul-Kursi 3D Calligraphy" required />
 						<TextInput label="Slug" name="slug" placeholder="auto-generated if empty" help="URL-friendly identifier. Leave blank to auto-generate from the title." />
-						<Textarea label="Description" name="description" rows={5} placeholder="Describe fabric, silhouette, and care details…" />
+						<Textarea label="Description" name="description" rows={5} placeholder="Describe material, finishing, and mounting details…" />
 					</div>
 				</Card>
 

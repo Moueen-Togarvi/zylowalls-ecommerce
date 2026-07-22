@@ -6,7 +6,7 @@
 	let collections = $derived((data.collections || []) as Array<any>);
 	let categorySearch = $state('');
 	const collectionsDescription =
-		'Browse Zylowalls collections by modest edit, including acrylic calligraphy, wooden wall art, and 3D wood panels.';
+		'Browse Zylowalls collections including acrylic calligraphy, wooden wall art, and 3D wood panels.';
 	let collectionsJsonLd = $derived(
 		jsonLdScript({
 			'@context': 'https://schema.org',
