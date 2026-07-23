@@ -187,15 +187,13 @@
 >
 	{#if !isAdminRoute}
 		<!-- Announcement Bar (above navbar) -->
-		<div class="announcement-bar sticky top-0 z-[51] overflow-hidden bg-[#1b1918] py-2">
-			<div class="announcement-bar__track flex items-center gap-0">
+		<div class="announcement-bar bg-[#1b1918] sticky top-0 z-[51]">
+			<div class="announcement-bar__track">
 				{#each Array(20) as _}
-					<div class="flex shrink-0 items-center gap-0">
-						<span class="announcement-item">🚚 Cash on Delivery Available</span>
-						<span class="announcement-sep">✦</span>
-						<span class="announcement-item">📦 Nationwide Delivery — Rs. 200 Only</span>
-						<span class="announcement-sep">✦</span>
-					</div>
+					<span class="announcement-item">🚚 Cash on Delivery Available</span>
+					<span class="announcement-sep">✦</span>
+					<span class="announcement-item">📦 Nationwide Delivery — Rs. 200 Only</span>
+					<span class="announcement-sep">✦</span>
 				{/each}
 			</div>
 		</div>

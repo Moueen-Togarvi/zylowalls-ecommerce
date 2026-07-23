@@ -121,6 +121,7 @@
 	});
 </script>
 
+update
 <section
 	class="relative overflow-hidden border-y border-[#354238]/8 bg-[#fbf9f2]"
 	onmouseenter={() => (sliderHovered = true)}
@@ -128,7 +129,7 @@
 >
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div
-			class="relative my-6 h-[480px] sm:h-[430px] md:h-[450px] w-full overflow-hidden rounded-2xl border border-[#354238]/10 shadow-[0_20px_50px_rgba(53,66,56,0.05)]"
+			class="relative my-6 h-[480px] w-full overflow-hidden rounded-2xl border border-[#354238]/10 shadow-[0_20px_50px_rgba(53,66,56,0.05)] sm:h-[430px] md:h-[450px]"
 		>
 			{#each sliderItems as item, index}
 				<!-- GPU Accelerated Horizontal sliding container -->
@@ -137,41 +138,74 @@
 					style="transform: translateX({(index - activeSlide) * 100}%);"
 				>
 					<!-- Spotlight Glow Effects -->
-					<div class="pointer-events-none absolute top-0 left-0 z-0 h-full w-full bg-[radial-gradient(circle_at_top_left,rgba(228,180,61,0.08),transparent_45%)]"></div>
-					<div class="pointer-events-none absolute top-0 right-0 z-0 h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(228,180,61,0.08),transparent_45%)]"></div>
+					<div
+						class="pointer-events-none absolute top-0 left-0 z-0 h-full w-full bg-[radial-gradient(circle_at_top_left,rgba(228,180,61,0.08),transparent_45%)]"
+					></div>
+					<div
+						class="pointer-events-none absolute top-0 right-0 z-0 h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(228,180,61,0.08),transparent_45%)]"
+					></div>
 
 					<!-- Content Container -->
-					<div class="relative z-10 flex flex-col justify-between w-full h-full p-5 sm:p-6 md:p-7">
+					<div class="relative z-10 flex h-full w-full flex-col justify-between p-5 sm:p-6 md:p-7">
 						<!-- Main Slide Content: Grid Layout -->
-						<div class="grid grid-cols-1 gap-6 sm:grid-cols-12 items-center flex-1 w-full">
-							
+						<div class="grid w-full flex-1 grid-cols-1 items-center gap-6 sm:grid-cols-12">
 							<!-- Left Column: Floating Detail Cards -->
-							<div class="hidden sm:flex sm:col-span-3 flex-col gap-3 transform transition-all duration-700 ease-out {activeSlide === index ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'} delay-[100ms]">
+							<div
+								class="hidden transform flex-col gap-3 transition-all duration-700 ease-out sm:col-span-3 sm:flex {activeSlide ===
+								index
+									? 'translate-y-0 opacity-100'
+									: 'translate-y-6 opacity-0'} delay-[100ms]"
+							>
 								{#each item.details as detail, dIdx}
-									<div class="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-2 shadow-[0_8px_32px_rgba(0,0,0,0.15)] backdrop-blur-md transition-all duration-300 hover:scale-[1.03] hover:border-[#e4b43d]/30">
-										<div class="h-9 w-9 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-white/5">
-											<div class="h-full w-full bg-gradient-to-tr from-gold to-orange-400 flex items-center justify-center text-xs font-bold text-white">PRO</div>
+									<div
+										class="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-2 shadow-[0_8px_32px_rgba(0,0,0,0.15)] backdrop-blur-md transition-all duration-300 hover:scale-[1.03] hover:border-[#e4b43d]/30"
+									>
+										<div
+											class="h-9 w-9 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-white/5"
+										>
+											<div
+												class="flex h-full w-full items-center justify-center bg-gradient-to-tr from-gold to-orange-400 text-xs font-bold text-white"
+											>
+												PRO
+											</div>
 										</div>
-										<div class="text-left min-w-0">
-											<span class="block text-[0.52rem] font-bold tracking-wider text-[#e4b43d] uppercase">Detail {dIdx + 1}</span>
-											<span class="block text-[0.65rem] font-black text-white truncate uppercase mt-0.5">{detail.label}</span>
-											<span class="block text-[0.52rem] text-white/50 truncate mt-0.5">{detail.desc}</span>
+										<div class="min-w-0 text-left">
+											<span
+												class="block text-[0.52rem] font-bold tracking-wider text-[#e4b43d] uppercase"
+												>Detail {dIdx + 1}</span
+											>
+											<span
+												class="mt-0.5 block truncate text-[0.65rem] font-black text-white uppercase"
+												>{detail.label}</span
+											>
+											<span class="mt-0.5 block truncate text-[0.52rem] text-white/50"
+												>{detail.desc}</span
+											>
 										</div>
 									</div>
 								{/each}
 							</div>
 
 							<!-- Center Column: Glowing Arch / Mock Frame -->
-							<div class="col-span-12 sm:col-span-5 flex items-end justify-center h-full relative">
+							<div class="relative col-span-12 flex h-full items-end justify-center sm:col-span-5">
 								<!-- Glowing Arch Background Frame -->
-								<div class="absolute bottom-0 w-[180px] sm:w-[230px] h-[78%] rounded-t-full bg-gradient-to-t from-white/5 to-white/10 border-t border-x border-white/10 shadow-[0_0_60px_rgba(228,180,61,0.1)] z-0"></div>
-								<div class="absolute bottom-0 w-[160px] sm:w-[200px] h-[70%] rounded-t-full bg-[#1e2926]/10 z-0"></div>
+								<div
+									class="absolute bottom-0 z-0 h-[78%] w-[180px] rounded-t-full border-x border-t border-white/10 bg-gradient-to-t from-white/5 to-white/10 shadow-[0_0_60px_rgba(228,180,61,0.1)] sm:w-[230px]"
+								></div>
+								<div
+									class="absolute bottom-0 z-0 h-[70%] w-[160px] rounded-t-full bg-[#1e2926]/10 sm:w-[200px]"
+								></div>
 
 								<!-- Spotlight beam overlay -->
-								<div class="absolute -top-12 left-1/2 -translate-x-1/2 w-[260px] h-[260px] bg-[radial-gradient(circle_at_center,rgba(228,180,61,0.12),transparent_60%)] pointer-events-none blur-xl z-0"></div>
+								<div
+									class="pointer-events-none absolute -top-12 left-1/2 z-0 h-[260px] w-[260px] -translate-x-1/2 bg-[radial-gradient(circle_at_center,rgba(228,180,61,0.12),transparent_60%)] blur-xl"
+								></div>
 
 								<!-- Premium Framed Product Image -->
-								<div class="relative z-10 h-[190px] sm:h-[240px] md:h-[280px] w-[150px] sm:w-[190px] md:w-[210px] border-[6px] border-[#e4b43d] bg-neutral-950 rounded shadow-2xl overflow-hidden transform transition-transform duration-[1500ms] ease-out" style="transform: scale({activeSlide === index ? '1.04' : '1.01'});">
+								<div
+									class="relative z-10 h-[190px] w-[150px] transform overflow-hidden rounded border-[6px] border-[#e4b43d] bg-neutral-950 shadow-2xl transition-transform duration-[1500ms] ease-out sm:h-[240px] sm:w-[190px] md:h-[280px] md:w-[210px]"
+									style="transform: scale({activeSlide === index ? '1.04' : '1.01'});"
+								>
 									<img
 										src={item.image}
 										alt={item.title}
@@ -183,44 +217,69 @@
 							</div>
 
 							<!-- Right Column: Luxury Text Content -->
-							<div class="col-span-12 sm:col-span-4 flex flex-col items-center sm:items-start text-center sm:text-left justify-center transform transition-all duration-700 ease-out {activeSlide === index ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'} delay-[250ms]">
+							<div
+								class="col-span-12 flex transform flex-col items-center justify-center text-center transition-all duration-700 ease-out sm:col-span-4 sm:items-start sm:text-left {activeSlide ===
+								index
+									? 'translate-y-0 opacity-100'
+									: 'translate-y-6 opacity-0'} delay-[250ms]"
+							>
 								<!-- Logo / Small Badge -->
 								<div class="mb-2.5 flex items-center gap-2">
-									<span class="inline-flex rounded-full bg-white/10 border border-white/10 px-3 py-0.5 text-[0.55rem] font-bold tracking-[0.12em] text-[#e4b43d] uppercase sm:text-[0.58rem]">
+									<span
+										class="inline-flex rounded-full border border-white/10 bg-white/10 px-3 py-0.5 text-[0.55rem] font-bold tracking-[0.12em] text-[#e4b43d] uppercase sm:text-[0.58rem]"
+									>
 										{item.badge}
 									</span>
-									<span class="text-[0.58rem] font-bold tracking-[0.2em] text-white/60 uppercase hidden lg:inline-block">
+									<span
+										class="hidden text-[0.58rem] font-bold tracking-[0.2em] text-white/60 uppercase lg:inline-block"
+									>
 										{item.tagline}
 									</span>
 								</div>
 
 								<!-- Title with Glow Shadow -->
-								<h3 class="font-serif text-xl sm:text-2xl md:text-3xl lg:text-[2.2rem] font-black tracking-wide uppercase leading-tight text-white drop-shadow-[0_2px_10px_rgba(228,180,61,0.25)]">
+								<h3
+									class="font-serif text-xl leading-tight font-black tracking-wide text-white uppercase drop-shadow-[0_2px_10px_rgba(228,180,61,0.25)] sm:text-2xl md:text-3xl lg:text-[2.2rem]"
+								>
 									{item.title}
 								</h3>
-								<div class="h-[2.5px] w-10 mt-2.5 mb-3 rounded bg-[#e4b43d]"></div>
+								<div class="mt-2.5 mb-3 h-[2.5px] w-10 rounded bg-[#e4b43d]"></div>
 
 								<!-- Description -->
-								<p class="text-[0.68rem] sm:text-[0.75rem] leading-relaxed text-white/70 max-w-sm">
+								<p class="max-w-sm text-[0.68rem] leading-relaxed text-white/70 sm:text-[0.75rem]">
 									{item.description}
 								</p>
 
 								<!-- Bottom Promo & CTA Row -->
-								<div class="mt-4 sm:mt-5 flex items-center gap-3">
+								<div class="mt-4 flex items-center gap-3 sm:mt-5">
 									<!-- Save Box (Glassmorphism Pill) -->
-									<div class="flex items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-3.5 py-1 shadow-md backdrop-blur-md">
-										<span class="text-[0.52rem] font-bold tracking-[0.1em] text-white/50 uppercase">SAVE</span>
-										<span class="text-xs sm:text-sm font-black text-white">{item.promoBadge}</span>
+									<div
+										class="flex items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-3.5 py-1 shadow-md backdrop-blur-md"
+									>
+										<span class="text-[0.52rem] font-bold tracking-[0.1em] text-white/50 uppercase"
+											>SAVE</span
+										>
+										<span class="text-xs font-black text-white sm:text-sm">{item.promoBadge}</span>
 									</div>
 
 									<!-- Shop Now Button -->
 									<a
 										href={item.link}
-										class="inline-flex min-h-8 sm:min-h-9.5 items-center justify-center gap-2 rounded-full bg-white text-[#1f2926] px-4.5 text-[0.62rem] font-black uppercase shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#e4b43d] hover:text-[#1f2926] hover:shadow-xl sm:px-5.5 sm:text-[0.68rem]"
+										class="inline-flex min-h-8 items-center justify-center gap-2 rounded-full bg-white px-4.5 text-[0.62rem] font-black text-[#1f2926] uppercase shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#e4b43d] hover:text-[#1f2926] hover:shadow-xl sm:min-h-9.5 sm:px-5.5 sm:text-[0.68rem]"
 									>
 										Shop Now
-										<svg class="h-3 w-3 sm:h-3.5 sm:w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+										<svg
+											class="h-3 w-3 sm:h-3.5 sm:w-3.5"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke="currentColor"
+										>
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2.5"
+												d="M9 5l7 7-7 7"
+											/>
 										</svg>
 									</a>
 								</div>
@@ -228,22 +287,57 @@
 						</div>
 
 						<!-- Bottom Row: Information Details Row -->
-						<div class="hidden sm:flex items-center justify-between border-t border-white/10 pt-3 pb-1 mt-2 text-white/70 text-[0.62rem] sm:text-[0.68rem] tracking-wider uppercase font-bold transform transition-all duration-700 ease-out {activeSlide === index ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'} delay-[350ms]">
+						<div
+							class="mt-2 hidden transform items-center justify-between border-t border-white/10 pt-3 pb-1 text-[0.62rem] font-bold tracking-wider text-white/70 uppercase transition-all duration-700 ease-out sm:flex sm:text-[0.68rem] {activeSlide ===
+							index
+								? 'translate-y-0 opacity-100'
+								: 'translate-y-4 opacity-0'} delay-[350ms]"
+						>
 							<div class="flex items-center gap-1.5">
-								<svg class="h-4 w-4 text-[#e4b43d]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+								<svg
+									class="h-4 w-4 text-[#e4b43d]"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+									/>
 								</svg>
 								100% Premium Wood & Acrylic
 							</div>
 							<div class="flex items-center gap-1.5">
-								<svg class="h-4 w-4 text-[#e4b43d]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+								<svg
+									class="h-4 w-4 text-[#e4b43d]"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+									/>
 								</svg>
 								Artisan Handcrafted Edits
 							</div>
 							<div class="flex items-center gap-1.5">
-								<svg class="h-4 w-4 text-[#e4b43d]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+								<svg
+									class="h-4 w-4 text-[#e4b43d]"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M5 13l4 4L19 7"
+									/>
 								</svg>
 								Rs. 200 Delivery in Pakistan
 							</div>
