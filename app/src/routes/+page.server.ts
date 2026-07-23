@@ -35,7 +35,7 @@ const productSelect = {
 		take: 1 // Only first image needed for product cards
 	},
 	variants: {
-		select: { id: true, color: true, size: true, stockCount: true, price: true }
+		select: { id: true, color: true, size: true, stockCount: true }
 	},
 	collections: {
 		select: { id: true, name: true, slug: true }
