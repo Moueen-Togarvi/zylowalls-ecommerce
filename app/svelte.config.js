@@ -9,9 +9,7 @@ const config = {
 	kit: {
 		adapter: adapter({
 			runtime: 'nodejs22.x'
-		}),
-		// Preload all routes by default (SvelteKit's built-in link preloading)
-		preloadStrategy: 'modulepreload'
+		})
 	}
 };
 
