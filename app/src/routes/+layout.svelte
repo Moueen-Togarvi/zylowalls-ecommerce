@@ -186,8 +186,22 @@
 	class={`flex min-h-screen flex-col font-sans text-black ${isAdminRoute ? 'bg-white' : 'bg-cream'}`}
 >
 	{#if !isAdminRoute}
+		<!-- Announcement Bar (above navbar) -->
+		<div class="announcement-bar sticky top-0 z-[51] overflow-hidden bg-[#1b1918] py-2">
+			<div class="announcement-bar__track flex items-center gap-0">
+				{#each Array(20) as _}
+					<div class="flex shrink-0 items-center gap-0">
+						<span class="announcement-item">🚚 Cash on Delivery Available</span>
+						<span class="announcement-sep">✦</span>
+						<span class="announcement-item">📦 Nationwide Delivery — Rs. 200 Only</span>
+						<span class="announcement-sep">✦</span>
+					</div>
+				{/each}
+			</div>
+		</div>
+
 		<!-- Navbar -->
-		<header class="sticky top-0 z-50 px-3 pt-0 pb-3 sm:px-5">
+		<header class="sticky top-[2.1rem] z-50 px-3 pt-0 pb-3 sm:px-5">
 			<div class="mx-auto max-w-7xl">
 				<div class="transition-all duration-300">
 					<div class="flex h-14 items-center justify-between gap-2">
