@@ -28,7 +28,7 @@
 		{
 			question: 'Do you ship internationally?',
 			answer:
-				'Yes, we ship globally via DHL and international courier partners. International shipping rates are calculated at checkout.'
+				'No, currently we only deliver within Pakistan. All orders are shipped with Cash on Delivery nationwide.'
 		}
 	];
 
