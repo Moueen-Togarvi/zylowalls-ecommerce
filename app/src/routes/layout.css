@@ -140,12 +140,13 @@
 	}
 }
 
-/* ── Announcement Bar ─────────────────────────────────────────────────────── */
+/* ── Announcement Bar Ticker ─────────────────────────────────────────────────── */
 .announcement-bar {
 	height: 2.1rem;
 	overflow: hidden;
 	display: flex;
 	align-items: center;
+	background: #1b1918;
 }
 
 .announcement-bar__track {
@@ -154,7 +155,7 @@
 	align-items: center;
 	gap: 0;
 	will-change: transform;
-	animation: announcement-scroll 25s linear infinite;
+	animation: announcement-scroll 45s linear infinite;
 }
 
 .announcement-item {
@@ -176,8 +177,21 @@
 }
 
 @keyframes announcement-scroll {
-	from { transform: translateX(-50%); }
-	to   { transform: translateX(0); }
+	0% {
+		transform: translateX(-50%);
+	}
+	100% {
+		transform: translateX(0%);
+	}
+}
+
+@-webkit-keyframes announcement-scroll {
+	0% {
+		-webkit-transform: translateX(-50%);
+	}
+	100% {
+		-webkit-transform: translateX(0%);
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {

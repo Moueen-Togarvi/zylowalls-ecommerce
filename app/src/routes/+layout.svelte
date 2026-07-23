@@ -187,13 +187,13 @@
 >
 	{#if !isAdminRoute}
 		<!-- Announcement Bar (above navbar) -->
-		<div style="height:2rem; overflow:hidden; background:#1b1918; display:flex; align-items:center; position:sticky; top:0; z-index:51;">
-			<div class="ann-track">
+		<div class="announcement-bar bg-[#1b1918] sticky top-0 z-[51]">
+			<div class="announcement-bar__track">
 				{#each Array(20) as _}
-					<span class="ann-item">🚚 Cash on Delivery Available</span>
-					<span class="ann-sep">✦</span>
-					<span class="ann-item">📦 Nationwide Delivery — Rs. 200 Only</span>
-					<span class="ann-sep">✦</span>
+					<span class="announcement-item">🚚 Cash on Delivery Available</span>
+					<span class="announcement-sep">✦</span>
+					<span class="announcement-item">📦 Nationwide Delivery — Rs. 200 Only</span>
+					<span class="announcement-sep">✦</span>
 				{/each}
 			</div>
 		</div>
@@ -633,44 +633,6 @@
 
 	@media (prefers-reduced-motion: reduce) {
 		.route-loading-pill {
-			animation: none;
-		}
-	}
-
-	/* Announcement ticker */
-	:global(.ann-track) {
-		display: flex;
-		width: max-content;
-		align-items: center;
-		animation: ann-scroll 22s linear infinite;
-		will-change: transform;
-	}
-
-	:global(.ann-item) {
-		flex-shrink: 0;
-		font-size: 0.62rem;
-		font-weight: 700;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		color: #f5ead8;
-		padding: 0 1.5rem;
-		white-space: nowrap;
-	}
-
-	:global(.ann-sep) {
-		flex-shrink: 0;
-		font-size: 0.45rem;
-		color: #c5a880;
-		opacity: 0.7;
-	}
-
-	@keyframes ann-scroll {
-		from { transform: translateX(-50%); }
-		to   { transform: translateX(0); }
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		:global(.ann-track) {
 			animation: none;
 		}
 	}
