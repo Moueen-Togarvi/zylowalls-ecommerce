@@ -318,22 +318,11 @@
 									bind:group={shippingMethod}
 									value="STANDARD"
 									class="form-radio h-4 w-4 border-gray-300 text-black focus:ring-black"
+									checked
 								/>
-								<span class="ml-3 text-sm">Standard Shipping (5-7 Business Days)</span>
+								<span class="ml-3 text-sm">Standard Shipping (Pakistan — 5-7 Business Days)</span>
 							</div>
 							<span class="text-sm font-medium">Free</span>
-						</label>
-						<label class="flex cursor-pointer items-center justify-between p-4 hover:bg-gray-50">
-							<div class="flex items-center">
-								<input
-									type="radio"
-									bind:group={shippingMethod}
-									value="EXPRESS"
-									class="form-radio h-4 w-4 border-gray-300 text-black focus:ring-black"
-								/>
-								<span class="ml-3 text-sm">DHL Express (2-3 Business Days)</span>
-							</div>
-							<span class="text-sm font-medium">{formatMoney(expressShipping)}</span>
 						</label>
 					</div>
 
