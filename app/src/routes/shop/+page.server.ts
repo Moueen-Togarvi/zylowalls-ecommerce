@@ -23,14 +23,49 @@ function requestedPageFrom(url: URL) {
 }
 
 function filtersFrom(url: URL) {
+	const saleParam = String(url.searchParams.get('on-sale') ?? url.searchParams.get('sale') ?? '')
+		.trim()
+		.toLowerCase();
+
 	return {
 		q: String(url.searchParams.get('q') ?? '').trim(),
 		category: String(
 			url.searchParams.get('category') ?? url.searchParams.get('collection') ?? ''
 		).trim(),
 		color: String(url.searchParams.get('color') ?? '').trim(),
-		size: String(url.searchParams.get('size') ?? '').trim()
+		size: String(url.searchParams.get('size') ?? '').trim(),
+		onSale: ['1', 'true', 'yes'].includes(saleParam)
 	};
+}
+
+function salePriceFor(product: any) {
+	const price = Number(product.price);
+	const salePrice = Number(product.salePrice);
+
+	return Number.isFinite(price) &&
+		Number.isFinite(salePrice) &&
+		salePrice > 0 &&
+		salePrice < price
+		? salePrice
+		: null;
+}
+
+function isClockCategory(slug: string) {
+	return /\b(clock|clocks|timepiece|timepieces|watch|watches)\b/i.test(slug.replace(/-/g, ' '));
+}
+
+function productLooksLikeClock(product: any) {
+	const searchable = [
+		product.name,
+		product.slug,
+		product.description,
+		product.fabricDetails
+	]
+		.filter(Boolean)
+		.join(' ')
+		.toLowerCase();
+
+	return /\b(clock|clocks|timepiece|timepieces|watch|watches)\b/.test(searchable);
 }
 
 function productMatchesFilters(product: any, filters: ReturnType<typeof filtersFrom>) {
@@ -42,13 +77,15 @@ function productMatchesFilters(product: any, filters: ReturnType<typeof filtersF
 			.some((value) => String(value).toLowerCase().includes(query));
 	const matchesCategory =
 		!filters.category ||
-		product.collections?.some((collection: any) => collection.slug === filters.category);
+		(product.collections?.some((collection: any) => collection.slug === filters.category) &&
+			(!isClockCategory(filters.category) || productLooksLikeClock(product)));
 	const matchesColor =
 		!filters.color || product.variants?.some((variant: any) => variant.color === filters.color);
 	const matchesSize =
 		!filters.size || product.variants?.some((variant: any) => variant.size === filters.size);
+	const matchesSale = !filters.onSale || salePriceFor(product) !== null;
 
-	return matchesQuery && matchesCategory && matchesColor && matchesSize;
+	return matchesQuery && matchesCategory && matchesColor && matchesSize && matchesSale;
 }
 
 function buildOptions(products: any[]) {

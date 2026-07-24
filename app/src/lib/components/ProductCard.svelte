@@ -51,8 +51,23 @@
 
 	let variant = $derived(primaryVariant(product));
 
+	function salePriceFor(item: any) {
+		const price = Number(item?.price);
+		const salePrice = Number(item?.salePrice);
+
+		return Number.isFinite(price) &&
+			Number.isFinite(salePrice) &&
+			salePrice > 0 &&
+			salePrice < price
+			? salePrice
+			: null;
+	}
+
+	let validSalePrice = $derived(salePriceFor(product));
+	let hasDiscount = $derived(validSalePrice !== null);
+
 	function productPrice(item: any) {
-		return Number(item.salePrice || item.price);
+		return Number(salePriceFor(item) ?? item.price);
 	}
 
 	function handleAddToCart(event: MouseEvent) {
@@ -79,8 +94,8 @@
 	);
 
 	let discountPercent = $derived(
-		product.salePrice && product.price
-			? Math.round(((Number(product.price) - Number(product.salePrice)) / Number(product.price)) * 100)
+		hasDiscount
+			? Math.round(((Number(product.price) - Number(validSalePrice)) / Number(product.price)) * 100)
 			: 0
 	);
 
@@ -134,9 +149,9 @@
 		</a>
 
 		<!-- Red Sale Badge on top-left of image -->
-		{#if product.salePrice}
-			<span class="absolute top-3 left-3 z-10 rounded bg-red-600 px-2 py-0.5 text-[0.55rem] sm:text-[0.6rem] font-bold tracking-[0.1em] text-white uppercase shadow-sm">
-				Sale
+		{#if hasDiscount}
+			<span class="absolute top-3 left-3 z-10 rounded bg-red-600 px-2 py-0.5 text-[0.55rem] font-bold tracking-[0.1em] text-white uppercase shadow-sm sm:text-[0.6rem]">
+				{discountPercent}% Off
 			</span>
 		{/if}
 
@@ -231,9 +246,9 @@
 			<div class="min-w-0">
 				<div class="flex items-baseline gap-1 whitespace-nowrap">
 					<span class="text-[0.68rem] sm:text-base font-extrabold text-[#14352d] tracking-tight">
-						{formatMoney(product.salePrice || product.price)}
+						{formatMoney(validSalePrice ?? product.price)}
 					</span>
-					{#if product.salePrice}
+					{#if hasDiscount}
 						<span class="text-[0.5rem] sm:text-xs font-bold text-red-600 line-through">
 							{formatMoney(product.price)}
 						</span>

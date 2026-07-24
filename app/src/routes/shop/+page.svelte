@@ -15,6 +15,13 @@
 		previousPage: number;
 		nextPage: number;
 	};
+	type ShopFilters = {
+		q: string;
+		category: string;
+		color: string;
+		size: string;
+		onSale: boolean;
+	};
 
 	let { data } = $props();
 	let products = $derived((data.products || []) as Array<any>);
@@ -38,7 +45,7 @@
 		}) as Pagination
 	);
 	let filters = $derived(
-		(data.filters || { q: '', category: '', color: '', size: '' }) as Record<string, string>
+		(data.filters || { q: '', category: '', color: '', size: '', onSale: false }) as ShopFilters
 	);
 	let totalProducts = $derived(Number(data.totalProducts || products.length));
 	let visiblePages = $derived(
@@ -122,6 +129,7 @@
 		if (filters.category) params.set('category', filters.category);
 		if (filters.color) params.set('color', filters.color);
 		if (filters.size) params.set('size', filters.size);
+		if (filters.onSale) params.set('on-sale', 'true');
 
 		return `/shop?${params.toString()}`;
 	}
@@ -139,6 +147,7 @@
 		if (selectedCategory) params.set('category', selectedCategory);
 		if (selectedColor) params.set('color', selectedColor);
 		if (selectedSize) params.set('size', selectedSize);
+		if (filters.onSale) params.set('on-sale', 'true');
 		goto(`/shop?${params.toString()}`, { keepFocus: true, noScroll: true });
 	}
 
