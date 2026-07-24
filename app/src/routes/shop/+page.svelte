@@ -2,7 +2,13 @@
 	import { page } from '$app/state';
 	import { cart } from '$lib/client/cart.svelte';
 	import { formatMoney } from '$lib/shared/money';
-	import { SITE_IMAGE, SITE_KEYWORDS, SITE_NAME, absoluteUrl, breadcrumbJsonLd } from '$lib/shared/seo';
+	import {
+		SITE_IMAGE,
+		SITE_KEYWORDS,
+		SITE_NAME,
+		absoluteUrl,
+		breadcrumbJsonLd
+	} from '$lib/shared/seo';
 	import ProductCard from '$lib/components/ProductCard.svelte';
 
 	type Pagination = {
@@ -48,6 +54,7 @@
 		(data.filters || { q: '', category: '', color: '', size: '', onSale: false }) as ShopFilters
 	);
 	let totalProducts = $derived(Number(data.totalProducts || products.length));
+	let salePercent = $derived(Number(data.salePercent || 0));
 	let visiblePages = $derived(
 		buildVisiblePages(Number(pagination.page), Number(pagination.totalPages))
 	);
@@ -61,7 +68,10 @@
 	let shopSocialImage = $derived(absoluteUrl(SITE_IMAGE, page.url.origin));
 	let shopBreadcrumbJsonLd = $derived(
 		breadcrumbJsonLd(
-			[{ name: 'Home', url: '/' }, { name: 'Shop', url: '/shop' }],
+			[
+				{ name: 'Home', url: '/' },
+				{ name: 'Shop', url: '/shop' }
+			],
 			page.url.origin
 		)
 	);
@@ -175,7 +185,9 @@
 <section class="bg-[#fbf9f2] px-4 py-10 text-[#14352d] sm:px-6 lg:px-8">
 	<div class="mx-auto max-w-7xl">
 		<div class="mb-8 border-b border-[#14352d]/10 pb-8">
-			<p class="mb-3 text-xs font-black tracking-[0.2em] text-[#b58b2b] uppercase">Shop Zylowalls</p>
+			<p class="mb-3 text-xs font-black tracking-[0.2em] text-[#b58b2b] uppercase">
+				Shop Zylowalls
+			</p>
 			<div class="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
 				<div>
 					<h1 class="font-serif text-4xl leading-tight uppercase sm:text-5xl">The Collection</h1>
@@ -286,7 +298,7 @@
 							/>
 						</div>
 
-							<div class="border-t border-[#14352d]/10 pt-3">
+						<div class="border-t border-[#14352d]/10 pt-3">
 							<h3 class="mb-2 text-[0.68rem] font-black tracking-[0.14em] uppercase">Category</h3>
 							<div class="grid gap-1.5">
 								<label
@@ -326,7 +338,7 @@
 							</div>
 						</div>
 
-							<div class="border-t border-[#14352d]/10 pt-3">
+						<div class="border-t border-[#14352d]/10 pt-3">
 							<h3 class="mb-2 text-[0.68rem] font-black tracking-[0.14em] uppercase">Color</h3>
 							<div class="grid grid-cols-2 gap-1.5">
 								<label
@@ -375,7 +387,7 @@
 							</div>
 						</div>
 
-							<div class="hidden border-t border-[#14352d]/10 pt-3 md:block">
+						<div class="hidden border-t border-[#14352d]/10 pt-3 md:block">
 							<h3 class="mb-2 text-[0.68rem] font-black tracking-[0.14em] uppercase">Size</h3>
 							<div class="flex flex-wrap gap-1.5">
 								<label
@@ -426,7 +438,12 @@
 							: 'grid-cols-1 gap-6'}"
 					>
 						{#each products as item}
-							<ProductCard product={item} layout={isGridView ? 'grid' : 'list'} aspectRatio="aspect-[5/6]" />
+							<ProductCard
+								product={item}
+								layout={isGridView ? 'grid' : 'list'}
+								aspectRatio="aspect-[5/6]"
+								globalSalePercent={salePercent}
+							/>
 						{/each}
 					</div>
 				{:else}

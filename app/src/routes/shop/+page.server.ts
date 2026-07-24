@@ -6,6 +6,11 @@ import {
 	serializeStorefrontProduct,
 	warnStorefrontFallback
 } from '$lib/server/storefront-fallback';
+import {
+	defaultStorefrontSettings,
+	getPublicStorefrontSettings,
+	publicStorefrontSettingsFromValues
+} from '$lib/server/store-settings';
 import type { PageServerLoad } from './$types';
 
 const productInclude = {
@@ -44,17 +49,31 @@ function salePriceFor(product: any) {
 	return Number.isFinite(salePrice) && salePrice > 0 ? salePrice : null;
 }
 
+function salePercentFromSettings(settings: {
+	saleTapeEnabled?: boolean;
+	saleTapeItems?: string[];
+}) {
+	if (settings.saleTapeEnabled === false) return 0;
+
+	for (const item of settings.saleTapeItems || []) {
+		const match = String(item).match(/(\d{1,2})\s*%/);
+		if (!match) continue;
+
+		const percent = Number(match[1]);
+		if (Number.isFinite(percent) && percent > 0) {
+			return Math.min(percent, 95);
+		}
+	}
+
+	return 0;
+}
+
 function isClockCategory(slug: string) {
 	return /\b(clock|clocks|timepiece|timepieces|watch|watches)\b/i.test(slug.replace(/-/g, ' '));
 }
 
 function productLooksLikeClock(product: any) {
-	const searchable = [
-		product.name,
-		product.slug,
-		product.description,
-		product.fabricDetails
-	]
+	const searchable = [product.name, product.slug, product.description, product.fabricDetails]
 		.filter(Boolean)
 		.join(' ')
 		.toLowerCase();
@@ -62,7 +81,11 @@ function productLooksLikeClock(product: any) {
 	return /\b(clock|clocks|timepiece|timepieces|watch|watches)\b/.test(searchable);
 }
 
-function productMatchesFilters(product: any, filters: ReturnType<typeof filtersFrom>) {
+function productMatchesFilters(
+	product: any,
+	filters: ReturnType<typeof filtersFrom>,
+	globalSalePercent = 0
+) {
 	const query = filters.q.toLowerCase();
 	const matchesQuery =
 		!query ||
@@ -77,7 +100,7 @@ function productMatchesFilters(product: any, filters: ReturnType<typeof filtersF
 		!filters.color || product.variants?.some((variant: any) => variant.color === filters.color);
 	const matchesSize =
 		!filters.size || product.variants?.some((variant: any) => variant.size === filters.size);
-	const matchesSale = !filters.onSale || salePriceFor(product) !== null;
+	const matchesSale = !filters.onSale || salePriceFor(product) !== null || globalSalePercent > 0;
 
 	return matchesQuery && matchesCategory && matchesColor && matchesSize && matchesSale;
 }
@@ -132,7 +155,7 @@ export const load: PageServerLoad = async ({ url }) => {
 	const requestedPage = requestedPageFrom(url);
 
 	try {
-		const [allProducts, collections] = await Promise.all([
+		const [allProducts, collections, storefrontSettings] = await Promise.all([
 			prisma.product.findMany({
 				where: { isActive: true },
 				include: productInclude,
@@ -141,11 +164,13 @@ export const load: PageServerLoad = async ({ url }) => {
 			prisma.collection.findMany({
 				where: { isVisible: true },
 				orderBy: { displayOrder: 'asc' }
-			})
+			}),
+			getPublicStorefrontSettings()
 		]);
+		const salePercent = salePercentFromSettings(storefrontSettings);
 		const serializedProducts = allProducts.map(serializeStorefrontProduct);
 		const products = serializedProducts.filter((product: any) =>
-			productMatchesFilters(product, filters)
+			productMatchesFilters(product, filters, salePercent)
 		);
 		const options = buildOptions(serializedProducts);
 		const pagedProducts = pageSlice(products, requestedPage);
@@ -156,6 +181,7 @@ export const load: PageServerLoad = async ({ url }) => {
 			colors: options.colors,
 			sizes: options.sizes,
 			filters,
+			salePercent,
 			pagination: pagedProducts.pagination,
 			totalProducts: serializedProducts.length,
 			selectedCollection: filters.category
@@ -167,8 +193,12 @@ export const load: PageServerLoad = async ({ url }) => {
 
 		warnStorefrontFallback('/shop', error);
 
+		const storefrontSettings = publicStorefrontSettingsFromValues(defaultStorefrontSettings);
+		const salePercent = salePercentFromSettings(storefrontSettings);
 		const allProducts = getFallbackProducts();
-		const products = allProducts.filter((product) => productMatchesFilters(product, filters));
+		const products = allProducts.filter((product) =>
+			productMatchesFilters(product, filters, salePercent)
+		);
 		const options = buildOptions(allProducts);
 		const pagedProducts = pageSlice(products, requestedPage);
 
@@ -178,6 +208,7 @@ export const load: PageServerLoad = async ({ url }) => {
 			colors: options.colors,
 			sizes: options.sizes,
 			filters,
+			salePercent,
 			pagination: pagedProducts.pagination,
 			totalProducts: allProducts.length,
 			selectedCollection: filters.category
