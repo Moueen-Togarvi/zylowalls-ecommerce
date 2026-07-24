@@ -52,19 +52,19 @@
 	let variant = $derived(primaryVariant(product));
 
 	function salePriceFor(item: any) {
+		const price = Number(item?.price);
+		const percent = Number(globalSalePercent);
+
+		if (Number.isFinite(price) && price > 0 && Number.isFinite(percent) && percent > 0) {
+			return Math.round(price * (1 - Math.min(percent, 95) / 100));
+		}
+
 		const directSalePrice = Number(
 			item?.salePrice ?? item?.discountPrice ?? item?.discountedPrice ?? item?.offerPrice
 		);
 
 		if (Number.isFinite(directSalePrice) && directSalePrice > 0) {
 			return directSalePrice;
-		}
-
-		const price = Number(item?.price);
-		const percent = Number(globalSalePercent);
-
-		if (Number.isFinite(price) && price > 0 && Number.isFinite(percent) && percent > 0) {
-			return Math.round(price * (1 - Math.min(percent, 95) / 100));
 		}
 
 		return null;
@@ -78,9 +78,13 @@
 			Number(validSalePrice) < Number(product.price)
 	);
 	let displayDiscountPercent = $derived(
-		hasDiscount
-			? Math.round(((Number(product.price) - Number(validSalePrice)) / Number(product.price)) * 100)
-			: Math.round(Number(globalSalePercent) || 0)
+		Number(globalSalePercent) > 0
+			? Math.round(Number(globalSalePercent))
+			: hasDiscount
+				? Math.round(
+						((Number(product.price) - Number(validSalePrice)) / Number(product.price)) * 100
+					)
+				: Math.round(Number(globalSalePercent) || 0)
 	);
 
 	function productPrice(item: any) {

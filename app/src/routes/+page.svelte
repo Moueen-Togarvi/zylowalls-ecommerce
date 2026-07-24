@@ -9,7 +9,14 @@
 	import ProductCard from '$lib/components/ProductCard.svelte';
 
 	import { formatMoney } from '$lib/shared/money';
-	import { SITE_DESCRIPTION, SITE_IMAGE, SITE_KEYWORDS, SITE_NAME, absoluteUrl, breadcrumbJsonLd } from '$lib/shared/seo';
+	import {
+		SITE_DESCRIPTION,
+		SITE_IMAGE,
+		SITE_KEYWORDS,
+		SITE_NAME,
+		absoluteUrl,
+		breadcrumbJsonLd
+	} from '$lib/shared/seo';
 
 	let { data } = $props();
 	let products = $derived((data.products || []) as Array<any>);
@@ -75,8 +82,15 @@
 	let saleTapeItems = $derived(
 		(storefrontSettings.saleTapeItems?.length
 			? storefrontSettings.saleTapeItems
-			: ['AZADI SALE', '30% OFF', 'ZYLOWALLS', 'CASH ON DELIVERY', 'CUSTOMIZED PRODUCTS']) as string[]
+			: [
+					'AZADI SALE',
+					'30% OFF',
+					'ZYLOWALLS',
+					'CASH ON DELIVERY',
+					'CUSTOMIZED PRODUCTS'
+				]) as string[]
 	);
+	let salePercent = $derived(salePercentFromItems(saleTapeItems));
 	let saleTapeLoop = $derived(Array.from({ length: 8 }, () => saleTapeItems).flat());
 	let saleTapeEnabled = $derived(storefrontSettings.saleTapeEnabled !== false);
 	let homeSocialImage = $derived(absoluteUrl(SITE_IMAGE, page.url.origin));
@@ -91,6 +105,20 @@
 
 	function isBrandText(value: string) {
 		return brandPattern.test(value);
+	}
+
+	function salePercentFromItems(items: string[]) {
+		for (const item of items || []) {
+			const match = String(item).match(/(\d{1,2})\s*%/);
+			if (!match) continue;
+
+			const percent = Number(match[1]);
+			if (Number.isFinite(percent) && percent > 0) {
+				return Math.min(percent, 95);
+			}
+		}
+
+		return 0;
 	}
 
 	function productImage(item: any) {
@@ -239,7 +267,9 @@
 	class="relative isolate -mt-[4.25rem] overflow-hidden bg-[#fbf9f2] pt-32 pb-24 md:-mt-[4.75rem] md:pt-40 md:pb-36"
 >
 	<!-- Aesthetic Background Image Slideshow & Concentric Rings -->
-	<div class="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center overflow-hidden bg-[#fbf9f2]">
+	<div
+		class="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center overflow-hidden bg-[#fbf9f2]"
+	>
 		{#each bgSlides as slide, index}
 			<img
 				src={slide}
@@ -247,78 +277,126 @@
 				fetchpriority={index === 0 ? 'high' : 'low'}
 				loading={index === 0 ? 'eager' : 'lazy'}
 				decoding={index === 0 ? 'sync' : 'async'}
-				class="absolute inset-0 h-full w-full object-cover transition-opacity duration-[1200ms] ease-in-out mix-blend-multiply"
+				class="absolute inset-0 h-full w-full object-cover mix-blend-multiply transition-opacity duration-[1200ms] ease-in-out"
 				style="opacity: {activeBgIndex === index ? '0.72' : '0'};"
 			/>
 		{/each}
 
 		<!-- Soft white/beige backdrop overlay to ensure contrast and readability of the dark text -->
-		<div class="absolute inset-0 bg-[#fbf9f2]/58 backdrop-blur-[1px] z-0"></div>
+		<div class="absolute inset-0 z-0 bg-[#fbf9f2]/58 backdrop-blur-[1px]"></div>
 
 		<!-- Bottom Gradient Blend Overlay -->
-		<div class="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#fbf9f2] via-[#fbf9f2]/60 to-transparent z-10"></div>
+		<div
+			class="absolute inset-x-0 bottom-0 z-10 h-32 bg-gradient-to-t from-[#fbf9f2] via-[#fbf9f2]/60 to-transparent"
+		></div>
 
-		<div class="absolute w-[360px] h-[360px] rounded-full border border-[#1b1918]/[0.02] z-0"></div>
-		<div class="absolute w-[600px] h-[600px] rounded-full border border-[#1b1918]/[0.02] z-0"></div>
-		<div class="absolute w-[840px] h-[840px] rounded-full border border-[#1b1918]/[0.015] z-0"></div>
-		<div class="absolute w-[1080px] h-[1080px] rounded-full border border-[#1b1918]/[0.015] z-0"></div>
-		<div class="absolute w-[1320px] h-[1320px] rounded-full border border-[#1b1918]/[0.01] z-0"></div>
-		<div class="absolute w-[1560px] h-[1560px] rounded-full border border-[#1b1918]/[0.008] z-0"></div>
+		<div class="absolute z-0 h-[360px] w-[360px] rounded-full border border-[#1b1918]/[0.02]"></div>
+		<div class="absolute z-0 h-[600px] w-[600px] rounded-full border border-[#1b1918]/[0.02]"></div>
+		<div
+			class="absolute z-0 h-[840px] w-[840px] rounded-full border border-[#1b1918]/[0.015]"
+		></div>
+		<div
+			class="absolute z-0 h-[1080px] w-[1080px] rounded-full border border-[#1b1918]/[0.015]"
+		></div>
+		<div
+			class="absolute z-0 h-[1320px] w-[1320px] rounded-full border border-[#1b1918]/[0.01]"
+		></div>
+		<div
+			class="absolute z-0 h-[1560px] w-[1560px] rounded-full border border-[#1b1918]/[0.008]"
+		></div>
 	</div>
 
 	<!-- Content Container -->
 	<div class="mx-auto max-w-4xl px-4 text-center">
 		<!-- Top Badge -->
-		<div class="hero-reveal mb-8 inline-flex items-center justify-center rounded-full border border-[#1b1918]/8 bg-white/70 px-4 py-1.5 backdrop-blur-sm shadow-[0_4px_12px_rgba(27,25,24,0.02)]">
-			<span class="mr-2 rounded-full bg-[#1b1918] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-white">3-IN-1</span>
-			<a href="/shop" class="text-xs font-semibold tracking-wide text-gray-700 hover:text-black transition-colors flex items-center">
+		<div
+			class="hero-reveal mb-8 inline-flex items-center justify-center rounded-full border border-[#1b1918]/8 bg-white/70 px-4 py-1.5 shadow-[0_4px_12px_rgba(27,25,24,0.02)] backdrop-blur-sm"
+		>
+			<span
+				class="mr-2 rounded-full bg-[#1b1918] px-2 py-0.5 text-[10px] font-black tracking-wider text-white uppercase"
+				>3-IN-1</span
+			>
+			<a
+				href="/shop"
+				class="flex items-center text-xs font-semibold tracking-wide text-gray-700 transition-colors hover:text-black"
+			>
 				Calligraphy. Wood panels. Wall art.
-				<svg class="ml-1 h-3 w-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+				<svg
+					class="ml-1 h-3 w-3 text-gray-500"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2.5"
+						d="M9 5l7 7-7 7"
+					/>
 				</svg>
 			</a>
 		</div>
 
 		<!-- Main Heading -->
-		<h1 class="hero-reveal font-serif text-4xl leading-[1.2] tracking-tight text-[#1b1918] sm:text-6xl md:text-[5.5rem] md:leading-[1.15]">
+		<h1
+			class="hero-reveal font-serif text-4xl leading-[1.2] tracking-tight text-[#1b1918] sm:text-6xl md:text-[5.5rem] md:leading-[1.15]"
+		>
 			Design. Decorate.<br />
-			<div class="flex items-center justify-center gap-2 sm:gap-3 md:gap-4 flex-wrap mt-2">
+			<div class="mt-2 flex flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-4">
 				<span>and</span>
 				<!-- Logo Card inline (fixed position, non-shifting, original styled) -->
-				<span class="inline-flex items-center justify-center align-middle transform -rotate-12 hover:rotate-0 transition-transform duration-300 shadow-[0_12px_24px_rgba(0,0,0,0.12)] border border-black/5 rounded-2xl bg-white p-2.5 w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 shrink-0">
-					<img src="/final logo bhai shb.png" alt="Zylowalls Logo" class="w-full h-full object-contain" />
+				<span
+					class="inline-flex h-14 w-14 shrink-0 -rotate-12 transform items-center justify-center rounded-2xl border border-black/5 bg-white p-2.5 align-middle shadow-[0_12px_24px_rgba(0,0,0,0.12)] transition-transform duration-300 hover:rotate-0 sm:h-16 sm:w-16 md:h-20 md:w-20"
+				>
+					<img
+						src="/final logo bhai shb.png"
+						alt="Zylowalls Logo"
+						class="h-full w-full object-contain"
+					/>
 				</span>
 				<!-- Sliding Word Container (fixed width, non-shifting, resized & aligned) -->
-				<span class="inline-block overflow-hidden h-[1.25em] w-[140px] sm:w-[225px] md:w-[325px] text-left relative align-middle shrink-0 text-[0.78em] sm:text-[0.8em] md:text-[0.82em]">
-					<span class="absolute left-0 top-0 flex flex-col transition-transform duration-700 ease-in-out text-[#7b6a3d] italic font-sans font-extrabold tracking-normal leading-[1.25]" style="transform: translateY(-{activeWordIndex * 25}%);">
-						<span class="h-[1.25em] flex items-center">Elevate.</span>
-						<span class="h-[1.25em] flex items-center">Decorate.</span>
-						<span class="h-[1.25em] flex items-center">Inspire.</span>
-						<span class="h-[1.25em] flex items-center">Wall Art.</span>
+				<span
+					class="relative inline-block h-[1.25em] w-[140px] shrink-0 overflow-hidden text-left align-middle text-[0.78em] sm:w-[225px] sm:text-[0.8em] md:w-[325px] md:text-[0.82em]"
+				>
+					<span
+						class="absolute top-0 left-0 flex flex-col font-sans leading-[1.25] font-extrabold tracking-normal text-[#7b6a3d] italic transition-transform duration-700 ease-in-out"
+						style="transform: translateY(-{activeWordIndex * 25}%);"
+					>
+						<span class="flex h-[1.25em] items-center">Elevate.</span>
+						<span class="flex h-[1.25em] items-center">Decorate.</span>
+						<span class="flex h-[1.25em] items-center">Inspire.</span>
+						<span class="flex h-[1.25em] items-center">Wall Art.</span>
 					</span>
 				</span>
 			</div>
 		</h1>
 
 		<!-- Subtitle -->
-		<p class="hero-reveal mx-auto mt-8 max-w-2xl font-serif text-lg italic text-[#596c62] sm:text-xl md:text-2xl">
+		<p
+			class="hero-reveal mx-auto mt-8 max-w-2xl font-serif text-lg text-[#596c62] italic sm:text-xl md:text-2xl"
+		>
 			Handcrafted acrylic calligraphy, wooden wall art, and premium panels to transform your walls.
 		</p>
 
 		<!-- Call to Action Buttons -->
-		<div class="hero-reveal mt-10 flex flex-col sm:flex-row justify-center items-center gap-4">
+		<div class="hero-reveal mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
 			<a
 				href="/collections"
-				class="w-64 sm:w-auto inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#1b1918] px-8 text-sm font-black tracking-wider text-white shadow-[0_16px_34px_rgba(27,25,24,0.2)] hover:bg-[#7b6a3d] transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1b1918]"
+				class="inline-flex min-h-12 w-64 items-center justify-center gap-2 rounded-full bg-[#1b1918] px-8 text-sm font-black tracking-wider text-white shadow-[0_16px_34px_rgba(27,25,24,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#7b6a3d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1b1918] sm:w-auto"
 			>
 				Explore Collections
 				<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2.5"
+						d="M14 5l7 7m0 0l-7 7m7-7H3"
+					/>
 				</svg>
 			</a>
 			<a
 				href="/shop"
-				class="w-64 sm:w-auto inline-flex min-h-12 items-center justify-center rounded-full border border-[#1b1918]/12 bg-white px-8 text-sm font-black tracking-wider text-[#1b1918] shadow-[0_12px_28px_rgba(27,25,24,0.06)] hover:bg-gray-50 transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1b1918]"
+				class="inline-flex min-h-12 w-64 items-center justify-center rounded-full border border-[#1b1918]/12 bg-white px-8 text-sm font-black tracking-wider text-[#1b1918] shadow-[0_12px_28px_rgba(27,25,24,0.06)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1b1918] sm:w-auto"
 			>
 				All Products
 			</a>
@@ -383,7 +461,12 @@
 							<div
 								class={`product-loop__item min-w-0 sm:w-[17.5rem] sm:shrink-0 lg:w-[18.25rem] ${itemIndex >= row.length ? 'product-loop__item--duplicate' : ''}`}
 							>
-								<ProductCard product={item} aspectRatio="aspect-[5/6]" isMostLoved={true} />
+								<ProductCard
+									product={item}
+									aspectRatio="aspect-[5/6]"
+									isMostLoved={true}
+									globalSalePercent={salePercent}
+								/>
 							</div>
 						{/each}
 					</div>
@@ -418,7 +501,8 @@
 			</div>
 			<div class="max-w-md space-y-4 sm:text-right">
 				<p class="text-sm leading-6 font-medium text-[#596c62]">
-					Refined designs for your home: calligraphy panels, wooden art, and premium acrylic wall decor.
+					Refined designs for your home: calligraphy panels, wooden art, and premium acrylic wall
+					decor.
 				</p>
 			</div>
 		</div>
@@ -427,7 +511,7 @@
 			class="grid grid-cols-2 items-stretch gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 xl:mx-auto xl:max-w-7xl"
 		>
 			{#each curatedEdits as edit}
-				<ProductCard product={edit} aspectRatio="aspect-[5/6]" />
+				<ProductCard product={edit} aspectRatio="aspect-[5/6]" globalSalePercent={salePercent} />
 			{/each}
 		</div>
 
@@ -450,66 +534,101 @@
 <!-- Features / Trust Banner -->
 <section class="bg-cream px-4 pt-4 pb-6 sm:px-6 lg:px-8">
 	<div class="mx-auto max-w-7xl">
-		<div class="flex flex-col lg:flex-row items-center justify-between gap-6 rounded-[2rem] bg-white border border-[#1b1918]/6 p-6 sm:p-8 lg:px-12 shadow-[0_12px_36px_rgba(27,25,24,0.02)]">
+		<div
+			class="flex flex-col items-center justify-between gap-6 rounded-[2rem] border border-[#1b1918]/6 bg-white p-6 shadow-[0_12px_36px_rgba(27,25,24,0.02)] sm:p-8 lg:flex-row lg:px-12"
+		>
 			<!-- Title -->
-			<div class="text-center lg:text-left shrink-0">
-				<h3 class="font-serif text-xl sm:text-2xl font-black tracking-wide text-[#1b1918]">
+			<div class="shrink-0 text-center lg:text-left">
+				<h3 class="font-serif text-xl font-black tracking-wide text-[#1b1918] sm:text-2xl">
 					Exceptional Quality <span class="text-red-600">Delivered</span>
 				</h3>
 			</div>
 
 			<!-- Grid of features -->
-			<div class="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8 w-full lg:w-auto items-center">
+			<div class="grid w-full grid-cols-2 items-center gap-6 md:grid-cols-4 lg:w-auto lg:gap-8">
 				<!-- Feature 1 -->
 				<div class="flex items-center gap-3">
-					<div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#1b1918]/5 text-[#1b1918]">
+					<div
+						class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#1b1918]/5 text-[#1b1918]"
+					>
 						<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10M21 16V10a2 2 0 00-2-2h-6v8m0-8V5a1 1 0 011-1h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 01.293.707V16" />
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="1.8"
+								d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"
+							/>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="1.8"
+								d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10M21 16V10a2 2 0 00-2-2h-6v8m0-8V5a1 1 0 011-1h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 01.293.707V16"
+							/>
 						</svg>
 					</div>
 					<div class="text-left leading-tight">
 						<span class="block text-xs font-black text-[#1b1918] uppercase">Rs. 200 Shipping</span>
-						<span class="block text-[0.62rem] text-gray-500 font-medium">Nationwide Delivery</span>
+						<span class="block text-[0.62rem] font-medium text-gray-500">Nationwide Delivery</span>
 					</div>
 				</div>
 
 				<!-- Feature 2 -->
 				<div class="flex items-center gap-3">
-					<div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#1b1918]/5 text-[#1b1918]">
+					<div
+						class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#1b1918]/5 text-[#1b1918]"
+					>
 						<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="1.8"
+								d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+							/>
 						</svg>
 					</div>
 					<div class="text-left leading-tight">
 						<span class="block text-xs font-black text-[#1b1918] uppercase">50K+ Happy</span>
-						<span class="block text-[0.62rem] text-gray-500 font-medium">Satisfied Customers</span>
+						<span class="block text-[0.62rem] font-medium text-gray-500">Satisfied Customers</span>
 					</div>
 				</div>
 
 				<!-- Feature 3 -->
 				<div class="flex items-center gap-3">
-					<div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#1b1918]/5 text-[#1b1918]">
+					<div
+						class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#1b1918]/5 text-[#1b1918]"
+					>
 						<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138z" />
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="1.8"
+								d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138z"
+							/>
 						</svg>
 					</div>
 					<div class="text-left leading-tight">
 						<span class="block text-xs font-black text-[#1b1918] uppercase">Wood & Acrylic</span>
-						<span class="block text-[0.62rem] text-gray-500 font-medium">Laser-Cut Precision</span>
+						<span class="block text-[0.62rem] font-medium text-gray-500">Laser-Cut Precision</span>
 					</div>
 				</div>
 
 				<!-- Feature 4 -->
 				<div class="flex items-center gap-3">
-					<div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#1b1918]/5 text-[#1b1918]">
+					<div
+						class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#1b1918]/5 text-[#1b1918]"
+					>
 						<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="1.8"
+								d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"
+							/>
 						</svg>
 					</div>
 					<div class="text-left leading-tight">
 						<span class="block text-xs font-black text-[#1b1918] uppercase">Cash On Delivery</span>
-						<span class="block text-[0.62rem] text-gray-500 font-medium">Pay at your Doorstep</span>
+						<span class="block text-[0.62rem] font-medium text-gray-500">Pay at your Doorstep</span>
 					</div>
 				</div>
 			</div>
@@ -529,7 +648,7 @@
 
 		<div class="grid grid-cols-2 items-stretch gap-3 sm:gap-6 lg:grid-cols-4">
 			{#each newArrivals as item}
-				<ProductCard product={item} aspectRatio="aspect-[1/1]" />
+				<ProductCard product={item} aspectRatio="aspect-[1/1]" globalSalePercent={salePercent} />
 			{/each}
 		</div>
 
