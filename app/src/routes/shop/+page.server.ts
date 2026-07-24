@@ -39,15 +39,9 @@ function filtersFrom(url: URL) {
 }
 
 function salePriceFor(product: any) {
-	const price = Number(product.price);
 	const salePrice = Number(product.salePrice);
 
-	return Number.isFinite(price) &&
-		Number.isFinite(salePrice) &&
-		salePrice > 0 &&
-		salePrice < price
-		? salePrice
-		: null;
+	return Number.isFinite(salePrice) && salePrice > 0 ? salePrice : null;
 }
 
 function isClockCategory(slug: string) {

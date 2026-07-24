@@ -52,19 +52,16 @@
 	let variant = $derived(primaryVariant(product));
 
 	function salePriceFor(item: any) {
-		const price = Number(item?.price);
 		const salePrice = Number(item?.salePrice);
 
-		return Number.isFinite(price) &&
-			Number.isFinite(salePrice) &&
-			salePrice > 0 &&
-			salePrice < price
-			? salePrice
-			: null;
+		return Number.isFinite(salePrice) && salePrice > 0 ? salePrice : null;
 	}
 
 	let validSalePrice = $derived(salePriceFor(product));
-	let hasDiscount = $derived(validSalePrice !== null);
+	let hasSalePrice = $derived(validSalePrice !== null);
+	let hasDiscount = $derived(
+		hasSalePrice && Number.isFinite(Number(product.price)) && Number(validSalePrice) < Number(product.price)
+	);
 
 	function productPrice(item: any) {
 		return Number(salePriceFor(item) ?? item.price);
@@ -149,9 +146,13 @@
 		</a>
 
 		<!-- Red Sale Badge on top-left of image -->
-		{#if hasDiscount}
+		{#if hasSalePrice}
 			<span class="absolute top-3 left-3 z-10 rounded bg-red-600 px-2 py-0.5 text-[0.55rem] font-bold tracking-[0.1em] text-white uppercase shadow-sm sm:text-[0.6rem]">
-				{discountPercent}% Off
+				{#if hasDiscount}
+					{discountPercent}% Off
+				{:else}
+					Sale
+				{/if}
 			</span>
 		{/if}
 
@@ -248,7 +249,7 @@
 					<span class="text-[0.68rem] sm:text-base font-extrabold text-[#14352d] tracking-tight">
 						{formatMoney(validSalePrice ?? product.price)}
 					</span>
-					{#if hasDiscount}
+					{#if hasSalePrice}
 						<span class="text-[0.5rem] sm:text-xs font-bold text-red-600 line-through">
 							{formatMoney(product.price)}
 						</span>

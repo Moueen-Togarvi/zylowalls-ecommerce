@@ -286,7 +286,7 @@
 							/>
 						</div>
 
-						<div class="border-t border-[#14352d]/10 pt-3">
+							<div class="border-t border-[#14352d]/10 pt-3">
 							<h3 class="mb-2 text-[0.68rem] font-black tracking-[0.14em] uppercase">Category</h3>
 							<div class="grid gap-1.5">
 								<label
@@ -326,7 +326,7 @@
 							</div>
 						</div>
 
-						<div class="border-t border-[#14352d]/10 pt-3">
+							<div class="border-t border-[#14352d]/10 pt-3">
 							<h3 class="mb-2 text-[0.68rem] font-black tracking-[0.14em] uppercase">Color</h3>
 							<div class="grid grid-cols-2 gap-1.5">
 								<label
@@ -375,7 +375,7 @@
 							</div>
 						</div>
 
-						<div class="border-t border-[#14352d]/10 pt-3">
+							<div class="hidden border-t border-[#14352d]/10 pt-3 md:block">
 							<h3 class="mb-2 text-[0.68rem] font-black tracking-[0.14em] uppercase">Size</h3>
 							<div class="flex flex-wrap gap-1.5">
 								<label
