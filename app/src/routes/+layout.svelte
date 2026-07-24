@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { dev } from '$app/environment';
 	import { navigating, page } from '$app/state';
 	import { env } from '$env/dynamic/public';
+	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 	import './layout.css';
 	import ZylowallsLoader from '$lib/components/ZylowallsLoader.svelte';
 	import ZylowallsWordmark from '$lib/components/ZylowallsWordmark.svelte';
@@ -28,6 +30,8 @@
 	let mobileMenuOpen = $state(false);
 	let whatsAppMenuOpen = $state(false);
 	let scrollY = $state(0);
+
+	injectAnalytics({ mode: dev ? 'development' : 'production' });
 
 	const primaryNavItems = [
 		{ href: '/', label: 'Home' },
@@ -173,12 +177,18 @@
 	<!-- ── TikTok Pixel ─────────────────────────────────────────────────────── -->
 	{#if tiktokPixelId && !isAdminRoute}
 		<!-- svelte-ignore element_invalid_self_closing_tag -->
-		{@html '<script>!function(w,d,t){w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script");n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};ttq.load("' + tiktokPixelId + '");ttq.page();}(window,document,"ttq");<\/script>'}
+		{@html '<script>!function(w,d,t){w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script");n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};ttq.load("' +
+			tiktokPixelId +
+			'");ttq.page();}(window,document,"ttq");<\/script>'}
 	{/if}
 
 	<!-- ── Meta (Facebook) Pixel ────────────────────────────────────────────── -->
 	{#if metaPixelId && !isAdminRoute}
-		{@html '<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init","' + metaPixelId + '");fbq("track","PageView");<\/script><noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=' + metaPixelId + '&ev=PageView&noscript=1"/><\/noscript>'}
+		{@html '<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init","' +
+			metaPixelId +
+			'");fbq("track","PageView");<\/script><noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=' +
+			metaPixelId +
+			'&ev=PageView&noscript=1"/><\/noscript>'}
 	{/if}
 </svelte:head>
 
@@ -187,7 +197,7 @@
 >
 	{#if !isAdminRoute}
 		<!-- Announcement Bar (above navbar) -->
-		<div class="announcement-bar bg-[#1b1918] sticky top-0 z-[51]">
+		<div class="announcement-bar sticky top-0 z-[51] bg-[#1b1918]">
 			<div class="announcement-bar__track">
 				{#each Array(20) as _}
 					<span class="announcement-item">🚚 Cash on Delivery Available</span>
@@ -400,16 +410,13 @@
 		</header>
 	{/if}
 
-
 	<!-- Main Content -->
 	<main class="flex-grow">
 		{@render children()}
 	</main>
 
 	{#if !isAdminRoute}
-		<div
-			class="fixed right-4 bottom-5 z-50 flex flex-col items-end gap-2 sm:right-6 sm:bottom-6"
-		>
+		<div class="fixed right-4 bottom-5 z-50 flex flex-col items-end gap-2 sm:right-6 sm:bottom-6">
 			<a
 				href={primaryWhatsAppHref}
 				target="_blank"
@@ -437,7 +444,8 @@
 					<div class="col-span-1 md:col-span-1">
 						<h3 class="mb-6 text-xl"><ZylowallsWordmark /></h3>
 						<p class="text-sm font-light text-gray-400">
-							Elevating home decor with premium wall art, acrylic calligraphy, and timeless craftsmanship.
+							Elevating home decor with premium wall art, acrylic calligraphy, and timeless
+							craftsmanship.
 						</p>
 					</div>
 					<div>
@@ -451,7 +459,9 @@
 								<a href="/search" class="transition-colors hover:text-gold">Search Catalog</a>
 							</li>
 							<li>
-								<a href="/track" class="transition-colors hover:text-gold font-semibold text-white">Track Order</a>
+								<a href="/track" class="font-semibold text-white transition-colors hover:text-gold"
+									>Track Order</a
+								>
 							</li>
 							<li>
 								<a href="/size-guide" class="transition-colors hover:text-gold">Size Guide</a>
@@ -459,31 +469,45 @@
 						</ul>
 					</div>
 					<div>
-						<h4 class="mb-6 text-sm font-medium tracking-widest text-gray-200 uppercase">Policies</h4>
+						<h4 class="mb-6 text-sm font-medium tracking-widest text-gray-200 uppercase">
+							Policies
+						</h4>
 						<ul class="space-y-4 text-sm font-light text-gray-400">
 							<li><a href="/contact" class="transition-colors hover:text-gold">Contact Us</a></li>
 							<li>
-								<a href="/policies/shipping" class="transition-colors hover:text-gold">Shipping Policy</a>
+								<a href="/policies/shipping" class="transition-colors hover:text-gold"
+									>Shipping Policy</a
+								>
 							</li>
 							<li>
-								<a href="/policies/returns" class="transition-colors hover:text-gold">Returns & Exchanges</a>
+								<a href="/policies/returns" class="transition-colors hover:text-gold"
+									>Returns & Exchanges</a
+								>
 							</li>
 							<li>
 								<a href="/faq" class="transition-colors hover:text-gold">Shipping & Returns FAQ</a>
 							</li>
 							<li>
-								<a href="/policies/terms" class="transition-colors hover:text-gold">Terms & Conditions</a>
+								<a href="/policies/terms" class="transition-colors hover:text-gold"
+									>Terms & Conditions</a
+								>
 							</li>
 							<li>
-								<a href="/policies/privacy" class="transition-colors hover:text-gold">Privacy Policy</a>
+								<a href="/policies/privacy" class="transition-colors hover:text-gold"
+									>Privacy Policy</a
+								>
 							</li>
 						</ul>
 					</div>
 					<div>
-						<h4 class="mb-6 text-sm font-medium tracking-widest text-gray-200 uppercase">Contact</h4>
+						<h4 class="mb-6 text-sm font-medium tracking-widest text-gray-200 uppercase">
+							Contact
+						</h4>
 						<ul class="space-y-4 text-sm font-light text-gray-400">
 							<li>
-								<span class="block text-xs font-medium tracking-wider text-gray-500 uppercase">Email</span>
+								<span class="block text-xs font-medium tracking-wider text-gray-500 uppercase"
+									>Email</span
+								>
 								<a
 									href="https://mail.google.com/mail/?view=cm&fs=1&to=Zylowalls@gmail.com"
 									target="_blank"
@@ -494,12 +518,19 @@
 								</a>
 							</li>
 							<li>
-								<span class="block text-xs font-medium tracking-wider text-gray-500 uppercase">Phone & WhatsApp</span>
+								<span class="block text-xs font-medium tracking-wider text-gray-500 uppercase"
+									>Phone & WhatsApp</span
+								>
 								<div class="mt-1 flex flex-col gap-1">
 									<a href="tel:+923703772463" class="transition-colors hover:text-gold">
 										📞 +92 370 3772463 (Call)
 									</a>
-									<a href={primaryWhatsAppHref} target="_blank" rel="noreferrer" class="transition-colors hover:text-gold">
+									<a
+										href={primaryWhatsAppHref}
+										target="_blank"
+										rel="noreferrer"
+										class="transition-colors hover:text-gold"
+									>
 										💬 Chat on WhatsApp
 									</a>
 								</div>
@@ -522,7 +553,9 @@
 							aria-label="Zylowalls Facebook"
 						>
 							<svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-								<path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+								<path
+									d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+								/>
 							</svg>
 						</a>
 						<a
@@ -533,7 +566,9 @@
 							aria-label="Zylowalls Instagram"
 						>
 							<svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-								<path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+								<path
+									d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+								/>
 							</svg>
 						</a>
 						<a
@@ -544,7 +579,9 @@
 							aria-label="Zylowalls Pinterest"
 						>
 							<svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-								<path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.668.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.367 18.604 0 12.017 0z"/>
+								<path
+									d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.668.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.367 18.604 0 12.017 0z"
+								/>
 							</svg>
 						</a>
 						<a
