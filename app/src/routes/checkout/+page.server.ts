@@ -144,7 +144,7 @@ export const actions: Actions = {
 		}
 
 		const subtotal = validatedItems.reduce((total, item) => total + item.price * item.quantity, 0);
-		const shippingCost = shippingMethod === 'EXPRESS' ? 1200 : 0;
+		const shippingCost = shippingMethod === 'EXPRESS' ? 1200 : 200;
 		const discountTotal = 0;
 		const totalAmount = subtotal + shippingCost - discountTotal;
 		const orderNumber = await createOrderNumber();

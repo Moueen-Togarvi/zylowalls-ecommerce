@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import { cart } from '$lib/client/cart.svelte';
+	import { trackViewContent } from '$lib/client/pixel';
 	import WishlistButton from '$lib/components/WishlistButton.svelte';
 	import ProductCard from '$lib/components/ProductCard.svelte';
 	import { formatMoney } from '$lib/shared/money';
@@ -174,6 +175,15 @@
 	function productImage(item: any) {
 		return item.images?.[0]?.url || '/image.png';
 	}
+
+	$effect(() => {
+		if (!product?.id) return;
+		trackViewContent({
+			id: product.id,
+			name: product.name,
+			price: Number(product.salePrice || product.price)
+		});
+	});
 
 	$effect(() => {
 		if (product.variants?.length) {

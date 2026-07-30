@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { cart } from '$lib/client/cart.svelte';
+	import { trackInitiateCheckout } from '$lib/client/pixel';
 	import { formatMoney } from '$lib/shared/money';
 
 	type PaymentMethod = 'COD';
@@ -20,9 +22,10 @@
 	let shippingMethod = $state<ShippingMethod>('STANDARD');
 	let paymentMethod = $state<PaymentMethod>('COD');
 
+	const standardShipping = 200;
 	const expressShipping = 1200;
 	const cartJson = $derived(JSON.stringify(cart.items));
-	const shippingTotal = $derived(shippingMethod === 'EXPRESS' ? expressShipping : 0);
+	const shippingTotal = $derived(shippingMethod === 'EXPRESS' ? expressShipping : standardShipping);
 	const orderTotal = $derived(cart.subtotal + shippingTotal);
 
 	const validateRequiredDetails = () => {
@@ -63,6 +66,14 @@
 			event.preventDefault();
 		}
 	};
+
+	onMount(() => {
+		if (cart.items.length === 0) return;
+		trackInitiateCheckout(
+			cart.items.map((item) => ({ id: item.productId, name: item.name, price: item.price, quantity: item.quantity })),
+			cart.subtotal
+		);
+	});
 </script>
 
 <svelte:head>
@@ -322,7 +333,7 @@
 								/>
 								<span class="ml-3 text-sm">Standard Shipping (Pakistan — 5-7 Business Days)</span>
 							</div>
-							<span class="text-sm font-medium">Free</span>
+							<span class="text-sm font-medium">{formatMoney(standardShipping)}</span>
 						</label>
 					</div>
 

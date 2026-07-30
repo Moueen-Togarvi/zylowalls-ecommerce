@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cart } from '$lib/client/cart.svelte';
+	import { trackPurchase } from '$lib/client/pixel';
 	import { formatMoney } from '$lib/shared/money';
 	import { onMount } from 'svelte';
 
@@ -17,7 +18,23 @@
 		});
 
 	onMount(() => {
-		if (order) cart.clear();
+		if (!order) return;
+		cart.clear();
+
+		const trackedKey = `zylowalls_purchase_tracked_${order.id}`;
+		if (sessionStorage.getItem(trackedKey)) return;
+		sessionStorage.setItem(trackedKey, '1');
+
+		trackPurchase(
+			order.id,
+			order.totalAmount,
+			order.items.map((item: any) => ({
+				id: item.productId,
+				name: item.productName,
+				price: item.priceAtPurchase,
+				quantity: item.quantity
+			}))
+		);
 	});
 </script>
 

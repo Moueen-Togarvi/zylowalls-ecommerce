@@ -1,3 +1,5 @@
+import { trackAddToCart } from './pixel';
+
 export type CartItem = {
 	id: string; // Can be a combination of productId and variantId
 	productId: string;
@@ -47,6 +49,12 @@ export function createCart() {
 				items.push(newItem);
 			}
 			save();
+			trackAddToCart({
+				id: newItem.productId,
+				name: newItem.name,
+				price: newItem.price,
+				quantity: newItem.quantity
+			});
 		},
 		removeItem(id: string) {
 			items = items.filter((item) => item.id !== id);
