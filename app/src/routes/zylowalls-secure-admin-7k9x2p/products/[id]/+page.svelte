@@ -126,7 +126,7 @@
 					<div class="space-y-5">
 						<TextInput label="Title" name="name" value={product.name} required />
 						<TextInput label="Slug" name="slug" value={product.slug} />
-						<Textarea label="Description" name="description" rows={5}>{product.description}</Textarea>
+						<Textarea label="Description" name="description" rows={5} value={product.description} />
 					</div>
 				</Card>
 

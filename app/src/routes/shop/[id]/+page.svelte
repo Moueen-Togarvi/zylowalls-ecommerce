@@ -238,8 +238,11 @@
 	function buyNow() {
 		if (selectedVariantOutOfStock) return;
 
-		addToCart();
-		goto('/checkout');
+		try {
+			addToCart();
+		} finally {
+			goto('/checkout');
+		}
 	}
 </script>
 
@@ -399,7 +402,7 @@
 				</div>
 			{/if}
 
-			{#if availableSizes.length > 0}
+			{#if availableSizes.length > 1}
 				<div class="mb-8">
 					<div class="mb-3 flex items-end justify-between">
 						<span class="text-sm font-medium tracking-widest uppercase">
@@ -486,14 +489,15 @@
 
 			<button
 				type="button"
-				class="animate-heartbeat mb-10 flex h-14 w-full items-center justify-center gap-3 rounded-lg bg-[#ef4444] px-4 text-sm font-bold tracking-widest text-white uppercase transition-colors hover:bg-red-600"
+				disabled={selectedVariantOutOfStock}
+				class="animate-heartbeat mb-10 flex h-14 w-full items-center justify-center gap-3 rounded-lg bg-[#ef4444] px-4 text-sm font-bold tracking-widest text-white uppercase transition-colors hover:bg-red-600 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
 				onclick={buyNow}
 			>
 				<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
 				</svg>
-				Buy with Cash on Delivery
+				{selectedVariantOutOfStock ? 'Out of Stock' : 'Buy with Cash on Delivery'}
 			</button>
 
 			<div class="mb-10 flex items-center justify-between border border-gray-100 bg-gray-50 p-4 rounded-xl">

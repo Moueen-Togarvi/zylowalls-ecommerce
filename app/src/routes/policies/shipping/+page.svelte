@@ -2,19 +2,19 @@
 	<title>Shipping Information | Zylowalls</title>
 	<meta
 		name="description"
-		content="Read Zylowalls shipping options, delivery timelines, domestic and international shipping details, and free delivery rules."
+		content="Read Zylowalls shipping options, delivery timelines, and domestic and international shipping details."
 	/>
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content="Shipping Information | Zylowalls" />
 	<meta
 		property="og:description"
-		content="Read Zylowalls shipping options, delivery timelines, domestic and international shipping details, and free delivery rules."
+		content="Read Zylowalls shipping options, delivery timelines, and domestic and international shipping details."
 	/>
 	<meta property="og:image" content="/image.png" />
 	<meta name="twitter:title" content="Shipping Information | Zylowalls" />
 	<meta
 		name="twitter:description"
-		content="Read Zylowalls shipping options, delivery timelines, domestic and international shipping details, and free delivery rules."
+		content="Read Zylowalls shipping options, delivery timelines, and domestic and international shipping details."
 	/>
 	<meta name="twitter:image" content="/image.png" />
 </svelte:head>
@@ -63,12 +63,11 @@
 		</section>
 
 		<section class="border-t border-gray-100 pt-8">
-			<h2 class="mb-4 font-serif text-lg tracking-widest text-black uppercase">Free Shipping</h2>
+			<h2 class="mb-4 font-serif text-lg tracking-widest text-black uppercase">Delivery Charges</h2>
 			<p>
-				Enjoy complimentary standard shipping on all orders over <strong
-					class="font-medium text-black">Rs. 15,000 PKR</strong
-				>. This offer applies automatically at checkout. Free shipping is valid on domestic orders
-				only.
+				Standard shipping within Pakistan is a flat <strong class="font-medium text-black"
+					>Rs. 200</strong
+				>, applied to every order regardless of order size. We do not offer free shipping.
 			</p>
 		</section>
 

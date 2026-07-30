@@ -500,9 +500,7 @@
 				</div>
 				<div class="flex justify-between">
 					<span class="text-gray-600">Shipping</span>
-					<span class="text-xs text-gray-500"
-						>{step >= 2 ? formatMoney(shippingTotal) : 'Calculated at next step'}</span
-					>
+					<span class="text-xs text-gray-500">{formatMoney(shippingTotal)}</span>
 				</div>
 			</div>
 
