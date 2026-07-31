@@ -15,7 +15,6 @@
 	let firstName = $state('');
 	let lastName = $state('');
 	let addressLine1 = $state('');
-	let addressLine2 = $state('');
 	let city = $state('');
 	let postalCode = $state('');
 	let phone = $state('');
@@ -29,9 +28,9 @@
 	const shippingTotal = $derived(shippingMethod === 'EXPRESS' ? expressShipping : standardShipping);
 	const orderTotal = $derived(cart.subtotal + shippingTotal);
 
-	const validateContact = () => {
-		if (!firstName.trim() || !lastName.trim() || !phone.trim()) {
-			checkoutError = 'Please fill your name and mobile number to continue.';
+	const validateDetails = () => {
+		if (!firstName.trim() || !lastName.trim() || !phone.trim() || !addressLine1.trim() || !city.trim()) {
+			checkoutError = 'Please fill your name, mobile number, address, and city to continue.';
 			return false;
 		}
 
@@ -39,31 +38,21 @@
 		return true;
 	};
 
-	const validateShippingAndPayment = () => {
-		if (!addressLine1.trim() || !city.trim()) {
-			checkoutError = 'Please fill your address and city to continue.';
-			return false;
-		}
-
-		checkoutError = '';
-		return true;
-	};
-
-	const continueToShipping = () => {
-		if (!validateContact()) return;
+	const continueToPayment = () => {
+		if (!validateDetails()) return;
 		step = 2;
 		if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
 	};
 
-	const backToContact = () => {
+	const backToDetails = () => {
 		step = 1;
 		if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
 	};
 
 	const handlePlaceOrder = (event: SubmitEvent) => {
-		if (!validateContact() || !validateShippingAndPayment()) {
+		if (!validateDetails()) {
 			event.preventDefault();
-			step = !validateContact() ? 1 : 2;
+			step = 1;
 			return;
 		}
 
@@ -95,7 +84,7 @@
 			<nav class="mb-6 flex items-center gap-2 text-xs font-medium tracking-widest uppercase sm:mb-8">
 				<a href="/cart" class="text-gray-400 hover:text-black">Cart</a>
 				<span class="text-gray-300">/</span>
-				<span class={step === 1 ? 'text-black' : 'text-gray-400'}>Contact</span>
+				<span class={step === 1 ? 'text-black' : 'text-gray-400'}>Details</span>
 				<span class="text-gray-300">/</span>
 				<span class={step === 2 ? 'text-black' : 'text-gray-400'}>Shipping &amp; Payment</span>
 			</nav>
@@ -112,7 +101,6 @@
 				<input type="hidden" name="firstName" value={firstName} />
 				<input type="hidden" name="lastName" value={lastName} />
 				<input type="hidden" name="addressLine1" value={addressLine1} />
-				<input type="hidden" name="addressLine2" value={addressLine2} />
 				<input type="hidden" name="city" value={city} />
 				<input type="hidden" name="postalCode" value={postalCode} />
 				<input type="hidden" name="phone" value={phone} />
@@ -120,9 +108,9 @@
 				<input type="hidden" name="paymentMethod" value={paymentMethod} />
 
 				<div class:hidden={step !== 1}>
-					<h2 class="mb-1 font-serif text-lg sm:text-xl">Contact Information</h2>
+					<h2 class="mb-1 font-serif text-lg sm:text-xl">Contact &amp; Shipping Address</h2>
 					<p class="mb-6 text-sm font-light text-gray-500">
-						We'll use this to reach you about your order.
+						Where should we deliver your order?
 					</p>
 
 					<div class="mb-5">
@@ -180,7 +168,7 @@
 						</div>
 					</div>
 
-					<div class="mb-8">
+					<div class="mb-5">
 						<label
 							for="checkout-phone"
 							class="mb-1.5 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase"
@@ -197,51 +185,7 @@
 							inputmode="tel"
 							class="w-full rounded border border-gray-300 p-3.5 text-base focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
 						/>
-						<p class="mt-1.5 text-xs text-gray-400">We'll only call for delivery updates.</p>
 					</div>
-
-					<div class="flex flex-col-reverse items-stretch gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
-						<a
-							href="/cart"
-							class="flex items-center justify-center text-sm text-gray-500 hover:text-black sm:justify-start"
-						>
-							<svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									d="M15 19l-7-7 7-7"
-								/>
-							</svg>
-							Return to cart
-						</a>
-						<button
-							type="button"
-							class="w-full bg-black px-8 py-4 text-sm tracking-widest text-white uppercase transition-colors hover:bg-gold sm:w-auto"
-							onclick={continueToShipping}
-						>
-							Continue to shipping
-						</button>
-					</div>
-				</div>
-
-				<div class:hidden={step !== 2}>
-					<div class="mb-6 flex items-center justify-between rounded border border-gray-200 bg-gray-50 p-4 text-sm">
-						<div class="min-w-0">
-							<p class="text-gray-500">Contact</p>
-							<p class="truncate font-medium">{[email, phone].filter(Boolean).join(' · ')}</p>
-						</div>
-						<button
-							type="button"
-							class="shrink-0 text-xs text-gray-500 underline hover:text-black"
-							onclick={backToContact}
-						>
-							Edit
-						</button>
-					</div>
-
-					<h2 class="mb-1 font-serif text-lg sm:text-xl">Shipping Address</h2>
-					<p class="mb-6 text-sm font-light text-gray-500">Where should we deliver your order?</p>
 
 					<div class="mb-5">
 						<label
@@ -257,23 +201,6 @@
 							bind:value={addressLine1}
 							required
 							autocomplete="address-line1"
-							class="w-full rounded border border-gray-300 p-3.5 text-base focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
-						/>
-					</div>
-
-					<div class="mb-5">
-						<label
-							for="checkout-address2"
-							class="mb-1.5 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase"
-						>
-							Apartment / suite <span class="text-gray-400 normal-case">(optional)</span>
-						</label>
-						<input
-							id="checkout-address2"
-							type="text"
-							placeholder="Apartment, suite, etc."
-							bind:value={addressLine2}
-							autocomplete="address-line2"
 							class="w-full rounded border border-gray-300 p-3.5 text-base focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
 						/>
 					</div>
@@ -313,6 +240,46 @@
 								class="w-full rounded border border-gray-300 p-3.5 text-base focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
 							/>
 						</div>
+					</div>
+
+					<div class="flex flex-col-reverse items-stretch gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
+						<a
+							href="/cart"
+							class="flex items-center justify-center text-sm text-gray-500 hover:text-black sm:justify-start"
+						>
+							<svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M15 19l-7-7 7-7"
+								/>
+							</svg>
+							Return to cart
+						</a>
+						<button
+							type="button"
+							class="w-full bg-black px-8 py-4 text-sm tracking-widest text-white uppercase transition-colors hover:bg-gold sm:w-auto"
+							onclick={continueToPayment}
+						>
+							Continue to shipping
+						</button>
+					</div>
+				</div>
+
+				<div class:hidden={step !== 2}>
+					<div class="mb-6 flex items-center justify-between rounded border border-gray-200 bg-gray-50 p-4 text-sm">
+						<div class="min-w-0">
+							<p class="text-gray-500">Deliver to</p>
+							<p class="truncate font-medium">{addressLine1}, {city}</p>
+						</div>
+						<button
+							type="button"
+							class="shrink-0 text-xs text-gray-500 underline hover:text-black"
+							onclick={backToDetails}
+						>
+							Edit
+						</button>
 					</div>
 
 					<h2 class="mb-4 font-serif text-lg sm:text-xl">Shipping Method</h2>
@@ -392,7 +359,7 @@
 						<button
 							type="button"
 							class="flex items-center justify-center text-sm text-gray-500 hover:text-black sm:justify-start"
-							onclick={backToContact}
+							onclick={backToDetails}
 						>
 							<svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path
@@ -402,7 +369,7 @@
 									d="M15 19l-7-7 7-7"
 								/>
 							</svg>
-							Return to contact info
+							Return to details
 						</button>
 						<button
 							type="submit"

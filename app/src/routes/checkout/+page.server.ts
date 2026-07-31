@@ -81,7 +81,6 @@ export const actions: Actions = {
 		const firstName = getText(data, 'firstName');
 		const lastName = getText(data, 'lastName');
 		const addressLine1 = getText(data, 'addressLine1');
-		const addressLine2 = getText(data, 'addressLine2');
 		const city = getText(data, 'city');
 		const postalCode = getText(data, 'postalCode');
 		const phone = getText(data, 'phone');
@@ -152,7 +151,6 @@ export const actions: Actions = {
 			firstName,
 			lastName,
 			addressLine1,
-			addressLine2,
 			city,
 			postalCode,
 			phone,
