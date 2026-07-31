@@ -88,10 +88,9 @@ export const actions: Actions = {
 		const shippingMethod = getText(data, 'shippingMethod') === 'EXPRESS' ? 'EXPRESS' : 'STANDARD';
 		const paymentMethod = 'COD';
 
-		if (!email || !firstName || !lastName || !addressLine1 || !city || !postalCode || !phone) {
+		if (!firstName || !lastName || !addressLine1 || !city || !phone) {
 			return fail(400, {
-				error:
-					'Please complete all required fields: email, address, city, postal code, and mobile number.'
+				error: 'Please complete all required fields: name, address, city, and mobile number.'
 			});
 		}
 
@@ -183,7 +182,7 @@ export const actions: Actions = {
 				return tx.order.create({
 					data: {
 						orderNumber,
-						guestEmail: email,
+						guestEmail: email || null,
 						status: 'PENDING',
 						paymentMethod,
 						isPaid: false,
