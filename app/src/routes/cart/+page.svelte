@@ -1,6 +1,12 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { cart } from '$lib/client/cart.svelte';
 	import { formatMoney } from '$lib/shared/money';
+
+	// Drop items whose product no longer exists and refresh prices from the database.
+	onMount(() => {
+		cart.sync();
+	});
 
 	let shipping = 200;
 	let giftWrapPrice = 500;

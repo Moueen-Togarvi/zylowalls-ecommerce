@@ -52,7 +52,11 @@
 		submitting = true;
 	};
 
-	onMount(() => {
+	onMount(async () => {
+		// Refresh names/prices from the database first, so what is shown here is
+		// exactly what the server will charge.
+		await cart.sync();
+
 		if (cart.items.length === 0) return;
 		trackInitiateCheckout(
 			cart.items.map((item) => ({

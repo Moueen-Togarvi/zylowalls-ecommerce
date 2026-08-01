@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { formatMoney } from '$lib/shared/money';
+	import { discountPercent, formatMoney, salePriceOf, unitPrice } from '$lib/shared/money';
 
 	let { products = [], onAddToCart } = $props<{
 		products?: any[];
@@ -17,7 +17,8 @@
 				name: 'Ayat-ul-Kursi Royal – Circle Acrylic Art',
 				price: 2149,
 				salePrice: null,
-				description: 'A majestic circular wall hanging displaying the sacred Ayat-ul-Kursi. Crafted from high-gloss premium acrylic.',
+				description:
+					'A majestic circular wall hanging displaying the sacred Ayat-ul-Kursi. Crafted from high-gloss premium acrylic.',
 				images: [{ url: '/new-products/IMG-20260718-WA0018.jpg.jpeg' }]
 			}
 	);
@@ -33,11 +34,13 @@
 	<div class="mx-auto max-w-6xl">
 		<!-- Section Header -->
 		<div class="mb-12 text-center">
-			<p class="mb-2 text-xs font-bold tracking-[0.25em] text-[#8a7444] uppercase">Special Offers</p>
-			<h2 class="font-serif text-3xl font-black leading-tight text-[#14352d] uppercase sm:text-4xl">
+			<p class="mb-2 text-xs font-bold tracking-[0.25em] text-[#8a7444] uppercase">
+				Special Offers
+			</p>
+			<h2 class="font-serif text-3xl leading-tight font-black text-[#14352d] uppercase sm:text-4xl">
 				Exclusive Deals & Edits
 			</h2>
-			<div class="h-[3px] w-12 mt-3.5 rounded bg-[#e4b43d] mx-auto"></div>
+			<div class="mx-auto mt-3.5 h-[3px] w-12 rounded bg-[#e4b43d]"></div>
 		</div>
 
 		<div class="grid grid-cols-1 items-stretch gap-8 lg:grid-cols-12">
@@ -46,7 +49,9 @@
 				class="group relative flex flex-col justify-center overflow-hidden rounded-3xl border border-[#14352d]/6 bg-white p-6 shadow-[0_12px_36px_rgba(20,53,45,0.015)] sm:p-8 lg:col-span-7"
 			>
 				<!-- Subtle radial gradient glow behind model -->
-				<div class="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_70%_50%,rgba(228,180,61,0.08),transparent_55%)]"></div>
+				<div
+					class="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_70%_50%,rgba(228,180,61,0.08),transparent_55%)]"
+				></div>
 
 				<div class="z-10 grid w-full grid-cols-1 items-center gap-6 md:grid-cols-12">
 					<!-- Left Half: Content & Actions (5 cols) -->
@@ -60,21 +65,21 @@
 								New Arrival Offer
 							</p>
 							<h3
-								class="mt-1 font-serif text-xl font-black leading-snug text-[#14352d] uppercase sm:text-2xl"
+								class="mt-1 font-serif text-xl leading-snug font-black text-[#14352d] uppercase sm:text-2xl"
 							>
 								{spotlightProduct.name}
 							</h3>
 						</div>
 
 						<div class="flex items-baseline justify-center gap-2.5 md:justify-start">
-							<span class="text-2xl sm:text-3xl font-black text-[#14352d] tracking-tight">
-								{spotlightProduct.salePrice
-									? formatMoney(spotlightProduct.salePrice)
-									: formatMoney(spotlightProduct.price * 0.7)}
+							<span class="text-2xl font-black tracking-tight text-[#14352d] sm:text-3xl">
+								{formatMoney(unitPrice(spotlightProduct))}
 							</span>
-							<span class="text-sm font-semibold text-red-600 line-through">
-								{formatMoney(spotlightProduct.price)}
-							</span>
+							{#if salePriceOf(spotlightProduct) !== null}
+								<span class="text-sm font-semibold text-red-600 line-through">
+									{formatMoney(spotlightProduct.price)}
+								</span>
+							{/if}
 						</div>
 
 						<!-- Color Selector -->
@@ -87,7 +92,10 @@
 								{#each ['Gold', 'Black', 'Silver'] as color}
 									<button
 										onclick={() => (selectedColor = color)}
-										class="relative flex h-6.5 w-6.5 items-center justify-center rounded-full border transition-all duration-300 {selectedColor === color ? 'border-[#e4b43d] ring-2 ring-[#e4b43d]/30' : 'border-gray-200'}"
+										class="relative flex h-6.5 w-6.5 items-center justify-center rounded-full border transition-all duration-300 {selectedColor ===
+										color
+											? 'border-[#e4b43d] ring-2 ring-[#e4b43d]/30'
+											: 'border-gray-200'}"
 										aria-label={color}
 									>
 										<span
@@ -113,7 +121,10 @@
 								{#each ['12x18\"', '18x24\"', '24x36\"'] as size}
 									<button
 										onclick={() => (selectedSize = size)}
-										class="rounded-xl border px-3.5 py-1.5 text-[0.62rem] font-black transition-all duration-300 {selectedSize === size ? 'border-[#14352d] bg-[#14352d] text-white' : 'border-gray-200 bg-[#fbf9f2] text-[#596c62] hover:border-gray-400'}"
+										class="rounded-xl border px-3.5 py-1.5 text-[0.62rem] font-black transition-all duration-300 {selectedSize ===
+										size
+											? 'border-[#14352d] bg-[#14352d] text-white'
+											: 'border-gray-200 bg-[#fbf9f2] text-[#596c62] hover:border-gray-400'}"
 									>
 										{size}
 									</button>
@@ -158,13 +169,17 @@
 						</div>
 
 						<!-- Luxury Seal Badge -->
-						<div
-							class="absolute top-2 right-4 z-20 flex h-16 w-16 rotate-12 flex-col items-center justify-center rounded-full bg-[#e4b43d] text-[#14352d] shadow-lg outline outline-1 outline-offset-2 outline-[#e4b43d]/30 transition-transform duration-500 group-hover:scale-110 md:h-18 md:w-18"
-						>
-							<span class="text-[0.55rem] font-bold uppercase">Save</span>
-							<span class="text-base font-black leading-none md:text-lg">30%</span>
-							<span class="text-[0.45rem] font-bold uppercase">Off</span>
-						</div>
+						{#if discountPercent(spotlightProduct) > 0}
+							<div
+								class="absolute top-2 right-4 z-20 flex h-16 w-16 rotate-12 flex-col items-center justify-center rounded-full bg-[#e4b43d] text-[#14352d] shadow-lg outline outline-1 outline-offset-2 outline-[#e4b43d]/30 transition-transform duration-500 group-hover:scale-110 md:h-18 md:w-18"
+							>
+								<span class="text-[0.55rem] font-bold uppercase">Save</span>
+								<span class="text-base leading-none font-black md:text-lg"
+									>{discountPercent(spotlightProduct)}%</span
+								>
+								<span class="text-[0.45rem] font-bold uppercase">Off</span>
+							</div>
+						{/if}
 
 						<div
 							class="absolute bottom-4 left-4 z-20 rounded bg-[#14352d] px-3 py-1 text-[0.55rem] font-bold tracking-wider text-white uppercase shadow-md"
@@ -185,7 +200,7 @@
 					<div class="flex items-center gap-4 pr-2">
 						<!-- Rounded Square Thumbnail -->
 						<div
-							class="h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-[#14352d]/6 bg-[#e4eee9] sm:h-24 sm:w-24 relative shadow-inner"
+							class="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-[#14352d]/6 bg-[#e4eee9] shadow-inner sm:h-24 sm:w-24"
 						>
 							<img
 								src="/new-products/IMG-20260718-WA0014.jpg.jpeg"
@@ -201,17 +216,19 @@
 							>
 								Essential Match
 							</span>
-							<h4 class="font-serif text-sm sm:text-base font-black text-[#14352d] uppercase">
+							<h4 class="font-serif text-sm font-black text-[#14352d] uppercase sm:text-base">
 								Acrylic Calligraphy
 							</h4>
-							<p class="mt-0.5 text-[0.68rem] font-medium text-[#596c62] leading-tight">
+							<p class="mt-0.5 text-[0.68rem] leading-tight font-medium text-[#596c62]">
 								Luxurious 3D multi-layered acrylic script wall art.
 							</p>
-							<span class="mt-2 block text-xs font-black text-[#8a7444]">From {formatMoney(1299)}</span>
+							<span class="mt-2 block text-xs font-black text-[#8a7444]"
+								>From {formatMoney(1299)}</span
+							>
 						</div>
 					</div>
 					<div
-						class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#14352d]/5 text-[#14352d] transition-all duration-300 group-hover:bg-[#14352d] group-hover:text-white group-hover:translate-x-1"
+						class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#14352d]/5 text-[#14352d] transition-all duration-300 group-hover:translate-x-1 group-hover:bg-[#14352d] group-hover:text-white"
 					>
 						<svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path
@@ -232,7 +249,7 @@
 					<div class="flex items-center gap-4 pr-2">
 						<!-- Rounded Square Thumbnail -->
 						<div
-							class="h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-[#14352d]/6 bg-[#e4eee9] sm:h-24 sm:w-24 relative shadow-inner"
+							class="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-[#14352d]/6 bg-[#e4eee9] shadow-inner sm:h-24 sm:w-24"
 						>
 							<img
 								src="/new-products/IMG-20260718-WA0031.jpg.jpeg"
@@ -248,17 +265,19 @@
 							>
 								Rs. 200 Delivery
 							</span>
-							<h4 class="font-serif text-sm sm:text-base font-black text-[#14352d] uppercase">
+							<h4 class="font-serif text-sm font-black text-[#14352d] uppercase sm:text-base">
 								Wooden Wall Art
 							</h4>
-							<p class="mt-0.5 text-[0.68rem] font-medium text-[#596c62] leading-tight">
+							<p class="mt-0.5 text-[0.68rem] leading-tight font-medium text-[#596c62]">
 								Precision laser-cut wooden panels and mandalas.
 							</p>
-							<span class="mt-2 block text-xs font-black text-[#8a7444]">From {formatMoney(1799)}</span>
+							<span class="mt-2 block text-xs font-black text-[#8a7444]"
+								>From {formatMoney(1799)}</span
+							>
 						</div>
 					</div>
 					<div
-						class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#14352d]/5 text-[#14352d] transition-all duration-300 group-hover:bg-[#14352d] group-hover:text-white group-hover:translate-x-1"
+						class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#14352d]/5 text-[#14352d] transition-all duration-300 group-hover:translate-x-1 group-hover:bg-[#14352d] group-hover:text-white"
 					>
 						<svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path
@@ -279,7 +298,7 @@
 					<div class="flex items-center gap-4 pr-2">
 						<!-- Rounded Square Thumbnail -->
 						<div
-							class="h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-[#14352d]/6 bg-[#e4eee9] sm:h-24 sm:w-24 relative shadow-inner"
+							class="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-[#14352d]/6 bg-[#e4eee9] shadow-inner sm:h-24 sm:w-24"
 						>
 							<img
 								src="/acrylic_calligraphy.png"
@@ -295,17 +314,19 @@
 							>
 								Premium Choice
 							</span>
-							<h4 class="font-serif text-sm sm:text-base font-black text-[#14352d] uppercase">
+							<h4 class="font-serif text-sm font-black text-[#14352d] uppercase sm:text-base">
 								Islamic Art Decor
 							</h4>
-							<p class="mt-0.5 text-[0.68rem] font-medium text-[#596c62] leading-tight">
+							<p class="mt-0.5 text-[0.68rem] leading-tight font-medium text-[#596c62]">
 								Elegant spiritual calligraphy and sacred motifs.
 							</p>
-							<span class="mt-2 block text-xs font-black text-[#8a7444]">From {formatMoney(1999)}</span>
+							<span class="mt-2 block text-xs font-black text-[#8a7444]"
+								>From {formatMoney(1999)}</span
+							>
 						</div>
 					</div>
 					<div
-						class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#14352d]/5 text-[#14352d] transition-all duration-300 group-hover:bg-[#14352d] group-hover:text-white group-hover:translate-x-1"
+						class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#14352d]/5 text-[#14352d] transition-all duration-300 group-hover:translate-x-1 group-hover:bg-[#14352d] group-hover:text-white"
 					>
 						<svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path

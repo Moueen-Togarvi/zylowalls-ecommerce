@@ -54,7 +54,6 @@
 		(data.filters || { q: '', category: '', color: '', size: '', onSale: false }) as ShopFilters
 	);
 	let totalProducts = $derived(Number(data.totalProducts || products.length));
-	let salePercent = $derived(Number(data.salePercent || 0));
 	let visiblePages = $derived(
 		buildVisiblePages(Number(pagination.page), Number(pagination.totalPages))
 	);
@@ -442,7 +441,6 @@
 								product={item}
 								layout={isGridView ? 'grid' : 'list'}
 								aspectRatio="aspect-[5/6]"
-								globalSalePercent={salePercent}
 							/>
 						{/each}
 					</div>

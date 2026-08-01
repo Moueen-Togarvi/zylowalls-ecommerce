@@ -5,7 +5,7 @@
 	import { trackViewContent } from '$lib/client/pixel';
 	import WishlistButton from '$lib/components/WishlistButton.svelte';
 	import ProductCard from '$lib/components/ProductCard.svelte';
-	import { formatMoney } from '$lib/shared/money';
+	import { formatMoney, salePriceOf, unitPrice } from '$lib/shared/money';
 	import { SITE_NAME, absoluteUrl, jsonLdScript, metaDescription } from '$lib/shared/seo';
 
 	let { data } = $props();
@@ -26,12 +26,39 @@
 
 	let fakeReviews = $state([
 		{ name: 'Fahad hussain', text: 'very good quality wall art.', image: '/reviews/rev1.png' },
-		{ name: 'Sabeela', title: 'Very good', text: 'Nice clock wall decor, this is my 3rd order. Really nice finish.', image: '/reviews/rev2.png' },
-		{ name: 'Alisha Batool', title: 'Ayat-ul-Kursi Calligraphy', text: 'This 3D acrylic calligraphy is actually very beautiful and I loved it. Quality is top notch!', image: '/reviews/rev1.png' },
-		{ name: 'Hamza Ali', text: 'Excellent wall art piece, totally worth the price. Will order again.', image: '/reviews/rev1.png' },
-		{ name: 'Ayesha Khan', text: 'The finishing is really premium, highly recommended.', image: '/reviews/rev2.png' },
-		{ name: 'Usman Ghani', text: 'Delivered on time and packaging was great.', image: '/reviews/rev3.png' },
-		{ name: 'Zara', title: 'Amazing', text: 'Looks beautiful in my living room.', image: '/reviews/rev1.png' },
+		{
+			name: 'Sabeela',
+			title: 'Very good',
+			text: 'Nice clock wall decor, this is my 3rd order. Really nice finish.',
+			image: '/reviews/rev2.png'
+		},
+		{
+			name: 'Alisha Batool',
+			title: 'Ayat-ul-Kursi Calligraphy',
+			text: 'This 3D acrylic calligraphy is actually very beautiful and I loved it. Quality is top notch!',
+			image: '/reviews/rev1.png'
+		},
+		{
+			name: 'Hamza Ali',
+			text: 'Excellent wall art piece, totally worth the price. Will order again.',
+			image: '/reviews/rev1.png'
+		},
+		{
+			name: 'Ayesha Khan',
+			text: 'The finishing is really premium, highly recommended.',
+			image: '/reviews/rev2.png'
+		},
+		{
+			name: 'Usman Ghani',
+			text: 'Delivered on time and packaging was great.',
+			image: '/reviews/rev3.png'
+		},
+		{
+			name: 'Zara',
+			title: 'Amazing',
+			text: 'Looks beautiful in my living room.',
+			image: '/reviews/rev1.png'
+		},
 		{ name: 'Bilal', text: 'Good customer service and nice wall art.', image: '/reviews/rev2.png' }
 	]);
 
@@ -126,7 +153,7 @@
 					'@type': 'Offer',
 					url: productUrl,
 					priceCurrency: 'PKR',
-					price: String(Number(product.salePrice || product.price)),
+					price: String(unitPrice(product)),
 					availability: productOutOfStock
 						? 'https://schema.org/OutOfStock'
 						: 'https://schema.org/InStock',
@@ -181,7 +208,7 @@
 		trackViewContent({
 			id: product.id,
 			name: product.name,
-			price: Number(product.salePrice || product.price)
+			price: unitPrice(product)
 		});
 	});
 
@@ -199,20 +226,24 @@
 		if (quantity < 1) quantity = 1;
 	});
 
-	function addToCart() {
-		if (selectedVariantOutOfStock) return;
-
-		cart.addItem({
+	function currentCartItem() {
+		return {
 			id: selectedVariant?.id || product.id,
 			productId: product.id,
 			variantId: selectedVariant?.id,
 			name: product.name,
-			price: Number(product.salePrice || product.price),
+			price: unitPrice(product),
 			quantity,
 			image: images[0] || '',
 			color: selectedColor,
 			size: selectedSize
-		});
+		};
+	}
+
+	function addToCart() {
+		if (selectedVariantOutOfStock) return;
+
+		cart.addItem(currentCartItem());
 	}
 
 	let countdown = $state({ h: 8, m: 56, s: 47 });
@@ -238,11 +269,11 @@
 	function buyNow() {
 		if (selectedVariantOutOfStock) return;
 
-		try {
-			addToCart();
-		} finally {
-			goto('/checkout');
-		}
+		// "Buy Now" checks out this product only. Appending to the existing cart
+		// meant checkout could open showing whatever was added in an earlier
+		// session instead of the product just clicked.
+		cart.buyNow(currentCartItem());
+		goto('/checkout');
 	}
 </script>
 
@@ -253,10 +284,7 @@
 	<meta property="og:title" content={productTitle} />
 	<meta property="og:description" content={productDescription} />
 	<meta property="og:image" content={productSocialImage} />
-	<meta
-		property="product:price:amount"
-		content={String(Number(product.salePrice || product.price))}
-	/>
+	<meta property="product:price:amount" content={String(unitPrice(product))} />
 	<meta property="product:price:currency" content="PKR" />
 	<meta name="twitter:title" content={productTitle} />
 	<meta name="twitter:description" content={productDescription} />
@@ -309,17 +337,19 @@
 				{/each}
 			</div>
 
-			<div class="relative flex-grow flex items-center justify-center overflow-hidden bg-gray-50/50 rounded-xl p-2">
-				{#if product.salePrice}
+			<div
+				class="relative flex flex-grow items-center justify-center overflow-hidden rounded-xl bg-gray-50/50 p-2"
+			>
+				{#if salePriceOf(product) !== null}
 					<div
-						class="absolute top-4 left-4 z-10 bg-white/90 px-3 py-1.5 text-xs font-bold tracking-widest text-black uppercase backdrop-blur rounded-md shadow-sm"
+						class="absolute top-4 left-4 z-10 rounded-md bg-white/90 px-3 py-1.5 text-xs font-bold tracking-widest text-black uppercase shadow-sm backdrop-blur"
 					>
 						Sale
 					</div>
 				{/if}
 				{#if productOutOfStock}
 					<div
-						class="absolute top-4 right-4 z-10 bg-red-600 px-3 py-1.5 text-xs font-bold tracking-widest text-white uppercase rounded-md shadow-sm"
+						class="absolute top-4 right-4 z-10 rounded-md bg-red-600 px-3 py-1.5 text-xs font-bold tracking-widest text-white uppercase shadow-sm"
 					>
 						Out of Stock
 					</div>
@@ -327,7 +357,7 @@
 				<img
 					src={images[activeImage] || productImage(product)}
 					alt={product.name}
-					class="w-full h-auto max-h-[600px] object-contain rounded-lg shadow-sm"
+					class="h-auto max-h-[600px] w-full rounded-lg object-contain shadow-sm"
 				/>
 			</div>
 		</div>
@@ -335,43 +365,71 @@
 		<div class="flex w-full flex-col lg:w-1/2">
 			<div class="mb-8">
 				<p class="mb-3 text-xs font-bold tracking-[0.18em] text-gold uppercase">
-					{product.collections?.map((collection: any) => collection.name).join(' / ') || 'Zylowalls'}
+					{product.collections?.map((collection: any) => collection.name).join(' / ') ||
+						'Zylowalls'}
 				</p>
 				<h1 class="mb-2 font-serif text-3xl tracking-wide text-black md:text-4xl">
 					{product.name}
 				</h1>
 				<div class="mb-4 flex items-center space-x-4">
 					<p class="text-2xl font-light text-black">
-						{formatMoney(product.salePrice || product.price)}
+						{formatMoney(unitPrice(product))}
 					</p>
-					{#if product.salePrice}
+					{#if salePriceOf(product) !== null}
 						<p class="text-xl font-light text-red-600 line-through">{formatMoney(product.price)}</p>
 					{/if}
 				</div>
 
 				<div class="mb-3 flex items-center gap-1 text-[0.95rem] font-medium text-gray-800">
 					<svg class="h-4 w-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" />
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"
+						/>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"
+						/>
 					</svg>
 					14 sold in last 1 hour
 				</div>
 
-				<div class="mb-4 flex max-w-[340px] items-center justify-between rounded-xl bg-[#ef4444] px-4 py-2.5 text-white shadow-sm">
+				<div
+					class="mb-4 flex max-w-[340px] items-center justify-between rounded-xl bg-[#ef4444] px-4 py-2.5 text-white shadow-sm"
+				>
 					<span class="text-sm font-semibold tracking-wide">Hurry up! Offer ends in</span>
 					<div class="flex items-center gap-1.5 text-center text-sm font-bold">
-						<div class="flex flex-col"><span class="text-[1.1rem] leading-none">00</span><span class="text-[0.6rem] font-normal leading-tight">Days</span></div>
+						<div class="flex flex-col">
+							<span class="text-[1.1rem] leading-none">00</span><span
+								class="text-[0.6rem] leading-tight font-normal">Days</span
+							>
+						</div>
 						<span class="mb-3 text-lg font-normal">:</span>
-						<div class="flex flex-col"><span class="text-[1.1rem] leading-none">{countdown.h.toString().padStart(2, '0')}</span><span class="text-[0.6rem] font-normal leading-tight">Hrs</span></div>
+						<div class="flex flex-col">
+							<span class="text-[1.1rem] leading-none"
+								>{countdown.h.toString().padStart(2, '0')}</span
+							><span class="text-[0.6rem] leading-tight font-normal">Hrs</span>
+						</div>
 						<span class="mb-3 text-lg font-normal">:</span>
-						<div class="flex flex-col"><span class="text-[1.1rem] leading-none">{countdown.m.toString().padStart(2, '0')}</span><span class="text-[0.6rem] font-normal leading-tight">Mins</span></div>
+						<div class="flex flex-col">
+							<span class="text-[1.1rem] leading-none"
+								>{countdown.m.toString().padStart(2, '0')}</span
+							><span class="text-[0.6rem] leading-tight font-normal">Mins</span>
+						</div>
 						<span class="mb-3 text-lg font-normal">:</span>
-						<div class="flex flex-col"><span class="text-[1.1rem] leading-none">{countdown.s.toString().padStart(2, '0')}</span><span class="text-[0.6rem] font-normal leading-tight">Secs</span></div>
+						<div class="flex flex-col">
+							<span class="text-[1.1rem] leading-none"
+								>{countdown.s.toString().padStart(2, '0')}</span
+							><span class="text-[0.6rem] leading-tight font-normal">Secs</span>
+						</div>
 					</div>
 				</div>
 
-
-				<div class="text-sm leading-relaxed text-gray-700 text-justify">
+				<div class="text-justify text-sm leading-relaxed text-gray-700">
 					{product.description}
 				</div>
 			</div>
@@ -494,16 +552,32 @@
 				onclick={buyNow}
 			>
 				<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"
+					/>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"
+					/>
 				</svg>
 				{selectedVariantOutOfStock ? 'Out of Stock' : 'Buy with Cash on Delivery'}
 			</button>
 
-			<div class="mb-10 flex items-center justify-between border border-gray-100 bg-gray-50 p-4 rounded-xl">
+			<div
+				class="mb-10 flex items-center justify-between rounded-xl border border-gray-100 bg-gray-50 p-4"
+			>
 				<div>
-					<p class="mb-0.5 text-xs font-bold text-gray-900 uppercase">💵 Cash on Delivery Available</p>
-					<p class="text-xs font-light text-gray-500">Pay at your doorstep with Rs. 200 standard shipping</p>
+					<p class="mb-0.5 text-xs font-bold text-gray-900 uppercase">
+						💵 Cash on Delivery Available
+					</p>
+					<p class="text-xs font-light text-gray-500">
+						Pay at your doorstep with Rs. 200 standard shipping
+					</p>
 				</div>
 				<a
 					href={`https://wa.me/923703772463?text=${encodeURIComponent(`Hi, I am interested in ordering: ${product.name}`)}`}
@@ -578,13 +652,17 @@
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div class="mb-12">
 			<h2 class="mb-8 text-center font-serif text-2xl text-gray-800">Customer Reviews</h2>
-			
+
 			<div class="flex flex-col items-center justify-center gap-8 md:flex-row md:gap-16">
-				<div class="flex flex-col items-center md:items-start text-center md:text-left">
-					<div class="flex items-center gap-2 mb-1">
+				<div class="flex flex-col items-center text-center md:items-start md:text-left">
+					<div class="mb-1 flex items-center gap-2">
 						<div class="flex text-[#b1df57]">
 							{#each Array(5) as _}
-								<svg class="h-5 w-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+								<svg class="h-5 w-5 fill-current" viewBox="0 0 20 20"
+									><path
+										d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+									/></svg
+								>
 							{/each}
 						</div>
 						<span class="text-sm text-gray-600">5.00 out of 5</span>
@@ -592,18 +670,29 @@
 					<span class="text-sm text-gray-500">Based on {fakeReviews.length} reviews</span>
 				</div>
 
-				<div class="flex flex-col gap-2 border-y border-gray-100 py-4 md:border-y-0 md:border-x md:px-16 md:py-0">
-					{#each [5,4,3,2,1] as star}
+				<div
+					class="flex flex-col gap-2 border-y border-gray-100 py-4 md:border-x md:border-y-0 md:px-16 md:py-0"
+				>
+					{#each [5, 4, 3, 2, 1] as star}
 						<div class="flex items-center gap-3">
 							<div class="flex text-[#b1df57]">
 								{#each Array(5) as _, i}
-									<svg class="h-4 w-4 {i < star ? 'fill-current' : 'text-gray-200 stroke-current fill-none'}" viewBox="0 0 20 20" stroke-width="1.5"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+									<svg
+										class="h-4 w-4 {i < star
+											? 'fill-current'
+											: 'fill-none stroke-current text-gray-200'}"
+										viewBox="0 0 20 20"
+										stroke-width="1.5"
+										><path
+											d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+										/></svg
+									>
 								{/each}
 							</div>
-							<div class="h-2.5 w-32 bg-gray-100 rounded-sm overflow-hidden">
+							<div class="h-2.5 w-32 overflow-hidden rounded-sm bg-gray-100">
 								<div class="h-full bg-[#b1df57]" style="width: {star === 5 ? '100%' : '0%'}"></div>
 							</div>
-							<span class="text-xs text-gray-500 w-2">{star === 5 ? fakeReviews.length : 0}</span>
+							<span class="w-2 text-xs text-gray-500">{star === 5 ? fakeReviews.length : 0}</span>
 						</div>
 					{/each}
 				</div>
@@ -612,7 +701,7 @@
 					<button
 						type="button"
 						onclick={() => (showReviewModal = true)}
-						class="bg-[#b1df57] px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#9ccb3d] shadow-sm rounded-lg"
+						class="rounded-lg bg-[#b1df57] px-6 py-2.5 text-sm font-bold text-white shadow-sm transition-colors hover:bg-[#9ccb3d]"
 					>
 						Write a review
 					</button>
@@ -622,27 +711,31 @@
 
 		<div
 			bind:this={reviewsScrollContainer}
-			class="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8"
+			class="flex snap-x snap-mandatory gap-6 overflow-x-auto pb-8"
 			style="scrollbar-width: none; -ms-overflow-style: none;"
 		>
 			{#each fakeReviews as review}
-				<div class="flex w-[320px] shrink-0 snap-start flex-col gap-4 rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+				<div
+					class="flex w-[320px] shrink-0 snap-start flex-col gap-4 rounded-xl border border-gray-100 bg-white p-4 shadow-sm"
+				>
 					<div class="flex gap-4">
-						<div class="h-[88px] w-[88px] shrink-0 overflow-hidden bg-gray-50 rounded">
+						<div class="h-[88px] w-[88px] shrink-0 overflow-hidden rounded bg-gray-50">
 							<img src={review.image} alt={review.name} class="h-full w-full object-cover" />
 						</div>
 						<div class="flex flex-col">
-							<div class="flex text-[#84cc16] mb-1.5">
+							<div class="mb-1.5 flex text-[#84cc16]">
 								{#each Array(5) as _}
 									<svg class="h-4 w-4 fill-current" viewBox="0 0 20 20">
-										<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+										<path
+											d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+										/>
 									</svg>
 								{/each}
 							</div>
 							{#if review.title}
-								<h4 class="font-bold text-sm text-gray-800 mb-0.5">{review.title}</h4>
+								<h4 class="mb-0.5 text-sm font-bold text-gray-800">{review.title}</h4>
 							{/if}
-							<p class="text-xs text-gray-500 line-clamp-3 leading-relaxed">{review.text}</p>
+							<p class="line-clamp-3 text-xs leading-relaxed text-gray-500">{review.text}</p>
 						</div>
 					</div>
 					<div class="mt-auto">
@@ -651,7 +744,7 @@
 				</div>
 			{/each}
 		</div>
-		
+
 		<div class="flex items-center justify-center gap-6 text-[#84cc16]">
 			<button
 				type="button"
@@ -659,7 +752,14 @@
 				class="flex h-10 w-10 items-center justify-center rounded-full border border-[#84cc16] transition-transform hover:scale-110 active:scale-95"
 				aria-label="Previous review"
 			>
-				<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" /></svg>
+				<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+					><path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2.5"
+						d="M15 19l-7-7 7-7"
+					/></svg
+				>
 			</button>
 			<button
 				type="button"
@@ -667,13 +767,18 @@
 				class="flex h-10 w-10 items-center justify-center rounded-full border border-[#84cc16] transition-transform hover:scale-110 active:scale-95"
 				aria-label="Next review"
 			>
-				<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" /></svg>
+				<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+					><path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2.5"
+						d="M9 5l7 7-7 7"
+					/></svg
+				>
 			</button>
 		</div>
 	</div>
 </div>
-
-
 
 {#if relatedProducts.length}
 	<div class="border-t border-gray-100 bg-white py-20">
@@ -699,9 +804,16 @@
 		<div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
 			{#if reviewSubmittedSuccess}
 				<div class="py-8 text-center">
-					<div class="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-[#84cc16]">
+					<div
+						class="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-[#84cc16]"
+					>
 						<svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2.5"
+								d="M5 13l4 4L19 7"
+							/>
 						</svg>
 					</div>
 					<h3 class="font-serif text-xl font-bold text-gray-900">Thank You!</h3>
@@ -720,7 +832,7 @@
 				</div>
 				<form onsubmit={submitReview} class="space-y-4">
 					<div>
-						<label class="block text-xs font-bold uppercase text-gray-700">Your Rating</label>
+						<label class="block text-xs font-bold text-gray-700 uppercase">Your Rating</label>
 						<div class="mt-1 flex gap-1 text-[#84cc16]">
 							{#each [1, 2, 3, 4, 5] as star}
 								<button
@@ -734,7 +846,7 @@
 						</div>
 					</div>
 					<div>
-						<label class="block text-xs font-bold uppercase text-gray-700">Your Name *</label>
+						<label class="block text-xs font-bold text-gray-700 uppercase">Your Name *</label>
 						<input
 							type="text"
 							required
@@ -744,7 +856,7 @@
 						/>
 					</div>
 					<div>
-						<label class="block text-xs font-bold uppercase text-gray-700">Title</label>
+						<label class="block text-xs font-bold text-gray-700 uppercase">Title</label>
 						<input
 							type="text"
 							bind:value={newReviewTitle}
@@ -753,7 +865,7 @@
 						/>
 					</div>
 					<div>
-						<label class="block text-xs font-bold uppercase text-gray-700">Review *</label>
+						<label class="block text-xs font-bold text-gray-700 uppercase">Review *</label>
 						<textarea
 							required
 							rows="3"

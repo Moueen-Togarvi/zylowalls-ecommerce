@@ -81,11 +81,7 @@ function productLooksLikeClock(product: any) {
 	return /\b(clock|clocks|timepiece|timepieces|watch|watches)\b/.test(searchable);
 }
 
-function productMatchesFilters(
-	product: any,
-	filters: ReturnType<typeof filtersFrom>,
-	globalSalePercent = 0
-) {
+function productMatchesFilters(product: any, filters: ReturnType<typeof filtersFrom>) {
 	const query = filters.q.toLowerCase();
 	const matchesQuery =
 		!query ||
@@ -100,7 +96,7 @@ function productMatchesFilters(
 		!filters.color || product.variants?.some((variant: any) => variant.color === filters.color);
 	const matchesSize =
 		!filters.size || product.variants?.some((variant: any) => variant.size === filters.size);
-	const matchesSale = !filters.onSale || salePriceFor(product) !== null || globalSalePercent > 0;
+	const matchesSale = !filters.onSale || salePriceFor(product) !== null;
 
 	return matchesQuery && matchesCategory && matchesColor && matchesSize && matchesSale;
 }
@@ -170,7 +166,7 @@ export const load: PageServerLoad = async ({ url }) => {
 		const salePercent = salePercentFromSettings(storefrontSettings);
 		const serializedProducts = allProducts.map(serializeStorefrontProduct);
 		const products = serializedProducts.filter((product: any) =>
-			productMatchesFilters(product, filters, salePercent)
+			productMatchesFilters(product, filters)
 		);
 		const options = buildOptions(serializedProducts);
 		const pagedProducts = pageSlice(products, requestedPage);
@@ -196,9 +192,7 @@ export const load: PageServerLoad = async ({ url }) => {
 		const storefrontSettings = publicStorefrontSettingsFromValues(defaultStorefrontSettings);
 		const salePercent = salePercentFromSettings(storefrontSettings);
 		const allProducts = getFallbackProducts();
-		const products = allProducts.filter((product) =>
-			productMatchesFilters(product, filters, salePercent)
-		);
+		const products = allProducts.filter((product) => productMatchesFilters(product, filters));
 		const options = buildOptions(allProducts);
 		const pagedProducts = pageSlice(products, requestedPage);
 

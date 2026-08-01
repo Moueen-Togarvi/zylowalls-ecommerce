@@ -428,65 +428,6 @@
 <!-- Categories -->
 <CategoryCircleCards {collections} />
 
-<!-- Bestsellers / Most Loved -->
-<section class="overflow-hidden bg-cream py-14">
-	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<div class="mb-8 flex flex-col gap-6">
-			<div class="text-center">
-				<h2 class="font-serif text-3xl tracking-widest text-[#1b1918] uppercase">Most Loved</h2>
-			</div>
-
-			<div class="category-ribbon" aria-label="Bestseller categories">
-				<div class="category-ribbon__track">
-					{#each bestsellerCategoryTags as tag}
-						<a
-							href="/collections"
-							class="inline-flex min-h-8 shrink-0 items-center justify-center rounded-full border border-[#1b1918]/10 bg-[#fffaf0] px-4 text-[0.68rem] font-black tracking-[0.12em] text-[#1b1918] uppercase shadow-[0_10px_22px_rgba(27,25,24,0.08)] transition-all hover:bg-[#1b1918] hover:text-white"
-						>
-							{tag}
-						</a>
-					{/each}
-				</div>
-			</div>
-		</div>
-
-		<div class="product-loop-stack">
-			{#each bestsellerRows as row, rowIndex}
-				<div
-					class="product-loop {rowIndex === 1 ? 'product-loop--second' : ''}"
-					aria-label={`Most loved products row ${rowIndex + 1}`}
-				>
-					<div class="product-loop__track">
-						{#each [...row, ...row] as item, itemIndex}
-							<div
-								class={`product-loop__item min-w-0 sm:w-[17.5rem] sm:shrink-0 lg:w-[18.25rem] ${itemIndex >= row.length ? 'product-loop__item--duplicate' : ''}`}
-							>
-								<ProductCard
-									product={item}
-									aspectRatio="aspect-[5/6]"
-									isMostLoved={true}
-									globalSalePercent={salePercent}
-								/>
-							</div>
-						{/each}
-					</div>
-				</div>
-			{/each}
-		</div>
-
-		{#if hasViewAll(mostLovedSection)}
-			<div class="mt-8 text-center">
-				<a
-					href={mostLovedSection.viewAllHref}
-					class="inline-flex min-h-11 items-center justify-center rounded-full border border-[#1b1918]/12 bg-white px-6 text-xs font-black tracking-[0.12em] text-[#1b1918] uppercase shadow-[0_12px_28px_rgba(27,25,24,0.08)] transition-colors hover:border-[#e4b43d] hover:bg-[#e4b43d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1b1918]"
-				>
-					View All
-				</a>
-			</div>
-		{/if}
-	</div>
-</section>
-
 <!-- Featured / Signature Collections -->
 <section class="border-t border-[#1b1918]/8 bg-[#fbf9f2] px-4 py-16 sm:px-6 lg:px-8">
 	<div class="mx-auto max-w-6xl">
@@ -511,7 +452,7 @@
 			class="grid grid-cols-2 items-stretch gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 xl:mx-auto xl:max-w-7xl"
 		>
 			{#each curatedEdits as edit}
-				<ProductCard product={edit} aspectRatio="aspect-[5/6]" globalSalePercent={salePercent} />
+				<ProductCard product={edit} aspectRatio="aspect-[5/6]" />
 			{/each}
 		</div>
 
@@ -530,6 +471,35 @@
 
 <!-- Wall Art Low-Height Sliding Banner -->
 <WallArtSlidingBanner settings={storefrontSettings} />
+
+<!-- New Arrivals (Horizontal Scroll / Grid) -->
+<section class="bg-cream px-4 py-16 sm:px-6 lg:px-8">
+	<div class="mx-auto max-w-6xl">
+		<div class="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+			<div>
+				<h2 class="mb-2 font-serif text-3xl tracking-widest text-black uppercase">New Arrivals</h2>
+				<p class="font-light text-gray-500">The latest additions to our collection</p>
+			</div>
+		</div>
+
+		<div class="grid grid-cols-2 items-stretch gap-3 sm:gap-6 lg:grid-cols-4">
+			{#each newArrivals as item}
+				<ProductCard product={item} aspectRatio="aspect-[1/1]" />
+			{/each}
+		</div>
+
+		{#if hasViewAll(newArrivalsSection)}
+			<div class="mt-8 text-center">
+				<a
+					href={newArrivalsSection.viewAllHref}
+					class="inline-flex min-h-11 items-center justify-center rounded-full border border-[#1b1918]/12 bg-white px-6 text-xs font-black tracking-[0.12em] text-[#1b1918] uppercase shadow-[0_12px_28px_rgba(27,25,24,0.08)] transition-colors hover:border-[#e4b43d] hover:bg-[#e4b43d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1b1918]"
+				>
+					View All
+				</a>
+			</div>
+		{/if}
+	</div>
+</section>
 
 <!-- Features / Trust Banner -->
 <section class="bg-cream px-4 pt-4 pb-6 sm:px-6 lg:px-8">
@@ -636,26 +606,54 @@
 	</div>
 </section>
 
-<!-- New Arrivals (Horizontal Scroll / Grid) -->
-<section class="bg-cream px-4 py-16 sm:px-6 lg:px-8">
-	<div class="mx-auto max-w-6xl">
-		<div class="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-			<div>
-				<h2 class="mb-2 font-serif text-3xl tracking-widest text-black uppercase">New Arrivals</h2>
-				<p class="font-light text-gray-500">The latest additions to our collection</p>
+<!-- Special Promo Offers Section (Exclusive Deals & Offers) -->
+<ProOfferGrid {products} onAddToCart={addProductToCart} />
+
+<!-- Bestsellers / Most Loved -->
+<section class="overflow-hidden bg-cream py-14">
+	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+		<div class="mb-8 flex flex-col gap-6">
+			<div class="text-center">
+				<h2 class="font-serif text-3xl tracking-widest text-[#1b1918] uppercase">Most Loved</h2>
+			</div>
+
+			<div class="category-ribbon" aria-label="Bestseller categories">
+				<div class="category-ribbon__track">
+					{#each bestsellerCategoryTags as tag}
+						<a
+							href="/collections"
+							class="inline-flex min-h-8 shrink-0 items-center justify-center rounded-full border border-[#1b1918]/10 bg-[#fffaf0] px-4 text-[0.68rem] font-black tracking-[0.12em] text-[#1b1918] uppercase shadow-[0_10px_22px_rgba(27,25,24,0.08)] transition-all hover:bg-[#1b1918] hover:text-white"
+						>
+							{tag}
+						</a>
+					{/each}
+				</div>
 			</div>
 		</div>
 
-		<div class="grid grid-cols-2 items-stretch gap-3 sm:gap-6 lg:grid-cols-4">
-			{#each newArrivals as item}
-				<ProductCard product={item} aspectRatio="aspect-[1/1]" globalSalePercent={salePercent} />
+		<div class="product-loop-stack">
+			{#each bestsellerRows as row, rowIndex}
+				<div
+					class="product-loop {rowIndex === 1 ? 'product-loop--second' : ''}"
+					aria-label={`Most loved products row ${rowIndex + 1}`}
+				>
+					<div class="product-loop__track">
+						{#each [...row, ...row] as item, itemIndex}
+							<div
+								class={`product-loop__item min-w-0 sm:w-[17.5rem] sm:shrink-0 lg:w-[18.25rem] ${itemIndex >= row.length ? 'product-loop__item--duplicate' : ''}`}
+							>
+								<ProductCard product={item} aspectRatio="aspect-[5/6]" isMostLoved={true} />
+							</div>
+						{/each}
+					</div>
+				</div>
 			{/each}
 		</div>
 
-		{#if hasViewAll(newArrivalsSection)}
+		{#if hasViewAll(mostLovedSection)}
 			<div class="mt-8 text-center">
 				<a
-					href={newArrivalsSection.viewAllHref}
+					href={mostLovedSection.viewAllHref}
 					class="inline-flex min-h-11 items-center justify-center rounded-full border border-[#1b1918]/12 bg-white px-6 text-xs font-black tracking-[0.12em] text-[#1b1918] uppercase shadow-[0_12px_28px_rgba(27,25,24,0.08)] transition-colors hover:border-[#e4b43d] hover:bg-[#e4b43d] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1b1918]"
 				>
 					View All
@@ -664,9 +662,6 @@
 		{/if}
 	</div>
 </section>
-
-<!-- Special Promo Offers Section (Exclusive Deals & Offers) -->
-<ProOfferGrid {products} onAddToCart={addProductToCart} />
 
 {#if reviewPhotos.length}
 	<!-- Review Photos -->

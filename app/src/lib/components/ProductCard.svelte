@@ -1,21 +1,19 @@
 <script lang="ts">
 	import { cart } from '$lib/client/cart.svelte';
 	import WishlistButton from '$lib/components/WishlistButton.svelte';
-	import { formatMoney } from '$lib/shared/money';
+	import { discountPercent, formatMoney, salePriceOf, unitPrice } from '$lib/shared/money';
 
 	let {
 		product,
 		layout = 'grid',
 		aspectRatio = 'aspect-[3/4]',
 		isMostLoved = false,
-		globalSalePercent = 0,
 		class: className = ''
 	} = $props<{
 		product: any;
 		layout?: 'grid' | 'list';
 		aspectRatio?: string;
 		isMostLoved?: boolean;
-		globalSalePercent?: number;
 		class?: string;
 	}>();
 
@@ -51,45 +49,9 @@
 
 	let variant = $derived(primaryVariant(product));
 
-	function salePriceFor(item: any) {
-		const price = Number(item?.price);
-		const percent = Number(globalSalePercent);
-
-		if (Number.isFinite(price) && price > 0 && Number.isFinite(percent) && percent > 0) {
-			return Math.round(price * (1 - Math.min(percent, 95) / 100));
-		}
-
-		const directSalePrice = Number(
-			item?.salePrice ?? item?.discountPrice ?? item?.discountedPrice ?? item?.offerPrice
-		);
-
-		if (Number.isFinite(directSalePrice) && directSalePrice > 0) {
-			return directSalePrice;
-		}
-
-		return null;
-	}
-
-	let validSalePrice = $derived(salePriceFor(product));
+	let validSalePrice = $derived(salePriceOf(product));
 	let hasSalePrice = $derived(validSalePrice !== null);
-	let hasDiscount = $derived(
-		hasSalePrice &&
-			Number.isFinite(Number(product.price)) &&
-			Number(validSalePrice) < Number(product.price)
-	);
-	let displayDiscountPercent = $derived(
-		Number(globalSalePercent) > 0
-			? Math.round(Number(globalSalePercent))
-			: hasDiscount
-				? Math.round(
-						((Number(product.price) - Number(validSalePrice)) / Number(product.price)) * 100
-					)
-				: Math.round(Number(globalSalePercent) || 0)
-	);
-
-	function productPrice(item: any) {
-		return Number(salePriceFor(item) ?? item.price);
-	}
+	let displayDiscountPercent = $derived(discountPercent(product));
 
 	function handleAddToCart(event: MouseEvent) {
 		event.preventDefault();
@@ -102,7 +64,7 @@
 			productId: product.id,
 			variantId: variant?.id,
 			name: product.name,
-			price: productPrice(product),
+			price: unitPrice(product),
 			quantity: 1,
 			image: image,
 			color: variant?.color,
@@ -118,10 +80,10 @@
 		)
 	] as string[]);
 
-	let discountPercent = $derived(hasDiscount ? displayDiscountPercent : 0);
-
 	let marqueeText = $derived(
-		discountPercent > 0 ? `${discountPercent}% OFF * SALE` : 'NEW COLLECTION * BESTSELLER'
+		displayDiscountPercent > 0
+			? `${displayDiscountPercent}% OFF * SALE`
+			: 'NEW COLLECTION * BESTSELLER'
 	);
 
 	function getColorHex(colorName: string) {
