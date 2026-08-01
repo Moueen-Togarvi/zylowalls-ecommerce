@@ -9,7 +9,6 @@
 
 	let { form } = $props();
 
-	let step = $state(1);
 	let checkoutError = $state('');
 	let email = $state('');
 	let firstName = $state('');
@@ -29,7 +28,13 @@
 	const orderTotal = $derived(cart.subtotal + shippingTotal);
 
 	const validateDetails = () => {
-		if (!firstName.trim() || !lastName.trim() || !phone.trim() || !addressLine1.trim() || !city.trim()) {
+		if (
+			!firstName.trim() ||
+			!lastName.trim() ||
+			!phone.trim() ||
+			!addressLine1.trim() ||
+			!city.trim()
+		) {
 			checkoutError = 'Please fill your name, mobile number, address, and city to continue.';
 			return false;
 		}
@@ -38,21 +43,9 @@
 		return true;
 	};
 
-	const continueToPayment = () => {
-		if (!validateDetails()) return;
-		step = 2;
-		if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
-	};
-
-	const backToDetails = () => {
-		step = 1;
-		if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
-	};
-
 	const handlePlaceOrder = (event: SubmitEvent) => {
 		if (!validateDetails()) {
 			event.preventDefault();
-			step = 1;
 			return;
 		}
 
@@ -62,7 +55,12 @@
 	onMount(() => {
 		if (cart.items.length === 0) return;
 		trackInitiateCheckout(
-			cart.items.map((item) => ({ id: item.productId, name: item.name, price: item.price, quantity: item.quantity })),
+			cart.items.map((item) => ({
+				id: item.productId,
+				name: item.name,
+				price: item.price,
+				quantity: item.quantity
+			})),
 			cart.subtotal
 		);
 	});
@@ -81,12 +79,12 @@
 
 	<div class="mx-auto flex max-w-4xl flex-col gap-8 px-4 py-6 sm:py-10 md:flex-row md:gap-12">
 		<div class="w-full md:w-3/5">
-			<nav class="mb-6 flex items-center gap-2 text-xs font-medium tracking-widest uppercase sm:mb-8">
+			<nav
+				class="mb-6 flex items-center gap-2 text-xs font-medium tracking-widest uppercase sm:mb-8"
+			>
 				<a href="/cart" class="text-gray-400 hover:text-black">Cart</a>
 				<span class="text-gray-300">/</span>
-				<span class={step === 1 ? 'text-black' : 'text-gray-400'}>Details</span>
-				<span class="text-gray-300">/</span>
-				<span class={step === 2 ? 'text-black' : 'text-gray-400'}>Shipping &amp; Payment</span>
+				<span class="text-black">Checkout</span>
 			</nav>
 
 			{#if form?.error || checkoutError}
@@ -107,142 +105,233 @@
 				<input type="hidden" name="shippingMethod" value={shippingMethod} />
 				<input type="hidden" name="paymentMethod" value={paymentMethod} />
 
-				<div class:hidden={step !== 1}>
-					<h2 class="mb-1 font-serif text-lg sm:text-xl">Contact &amp; Shipping Address</h2>
-					<p class="mb-6 text-sm font-light text-gray-500">
-						Where should we deliver your order?
-					</p>
+				<div class="space-y-8">
+					<section>
+						<h2 class="mb-1 font-serif text-lg sm:text-xl">Contact &amp; Shipping Address</h2>
+						<p class="mb-6 text-sm font-light text-gray-500">Where should we deliver your order?</p>
 
-					<div class="mb-5">
-						<label
-							for="checkout-email"
-							class="mb-1.5 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase"
-						>
-							Email <span class="text-gray-400 normal-case">(optional)</span>
-						</label>
-						<input
-							id="checkout-email"
-							type="email"
-							placeholder="you@example.com"
-							bind:value={email}
-							autocomplete="email"
-							inputmode="email"
-							class="w-full rounded border border-gray-300 p-3.5 text-base focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
-						/>
-					</div>
-
-					<div class="mb-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
-						<div>
+						<div class="mb-5">
 							<label
-								for="checkout-first-name"
+								for="checkout-email"
 								class="mb-1.5 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase"
 							>
-								First name <span class="text-red-600">*</span>
+								Email <span class="text-gray-400 normal-case">(optional)</span>
 							</label>
 							<input
-								id="checkout-first-name"
-								type="text"
-								placeholder="First name"
-								bind:value={firstName}
+								id="checkout-email"
+								type="email"
+								placeholder="you@example.com"
+								bind:value={email}
+								autocomplete="email"
+								inputmode="email"
+								class="w-full rounded border border-gray-300 p-3.5 text-base focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
+							/>
+						</div>
+
+						<div class="mb-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+							<div>
+								<label
+									for="checkout-first-name"
+									class="mb-1.5 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase"
+								>
+									First name <span class="text-red-600">*</span>
+								</label>
+								<input
+									id="checkout-first-name"
+									type="text"
+									placeholder="First name"
+									bind:value={firstName}
+									required
+									autocomplete="given-name"
+									class="w-full rounded border border-gray-300 p-3.5 text-base focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
+								/>
+							</div>
+							<div>
+								<label
+									for="checkout-last-name"
+									class="mb-1.5 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase"
+								>
+									Last name <span class="text-red-600">*</span>
+								</label>
+								<input
+									id="checkout-last-name"
+									type="text"
+									placeholder="Last name"
+									bind:value={lastName}
+									required
+									autocomplete="family-name"
+									class="w-full rounded border border-gray-300 p-3.5 text-base focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
+								/>
+							</div>
+						</div>
+
+						<div class="mb-5">
+							<label
+								for="checkout-phone"
+								class="mb-1.5 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase"
+							>
+								Mobile number <span class="text-red-600">*</span>
+							</label>
+							<input
+								id="checkout-phone"
+								type="tel"
+								placeholder="03XX-XXXXXXX"
+								bind:value={phone}
 								required
-								autocomplete="given-name"
+								autocomplete="tel"
+								inputmode="tel"
 								class="w-full rounded border border-gray-300 p-3.5 text-base focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
 							/>
 						</div>
-						<div>
+
+						<div class="mb-5">
 							<label
-								for="checkout-last-name"
+								for="checkout-address"
 								class="mb-1.5 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase"
 							>
-								Last name <span class="text-red-600">*</span>
+								Address <span class="text-red-600">*</span>
 							</label>
 							<input
-								id="checkout-last-name"
+								id="checkout-address"
 								type="text"
-								placeholder="Last name"
-								bind:value={lastName}
+								placeholder="House, street, area"
+								bind:value={addressLine1}
 								required
-								autocomplete="family-name"
+								autocomplete="address-line1"
 								class="w-full rounded border border-gray-300 p-3.5 text-base focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
 							/>
 						</div>
-					</div>
 
-					<div class="mb-5">
-						<label
-							for="checkout-phone"
-							class="mb-1.5 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase"
+						<div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+							<div>
+								<label
+									for="checkout-city"
+									class="mb-1.5 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase"
+								>
+									City <span class="text-red-600">*</span>
+								</label>
+								<input
+									id="checkout-city"
+									type="text"
+									placeholder="City"
+									bind:value={city}
+									required
+									autocomplete="address-level2"
+									class="w-full rounded border border-gray-300 p-3.5 text-base focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
+								/>
+							</div>
+							<div>
+								<label
+									for="checkout-postal-code"
+									class="mb-1.5 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase"
+								>
+									Postal code <span class="text-gray-400 normal-case">(optional)</span>
+								</label>
+								<input
+									id="checkout-postal-code"
+									type="text"
+									placeholder="Postal code"
+									bind:value={postalCode}
+									autocomplete="postal-code"
+									inputmode="numeric"
+									class="w-full rounded border border-gray-300 p-3.5 text-base focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
+								/>
+							</div>
+						</div>
+					</section>
+
+					<section>
+						<h2 class="mb-4 font-serif text-lg sm:text-xl">Shipping Method</h2>
+						<div
+							class="divide-y divide-gray-100 overflow-hidden rounded border border-gray-200 bg-white"
 						>
-							Mobile number <span class="text-red-600">*</span>
-						</label>
-						<input
-							id="checkout-phone"
-							type="tel"
-							placeholder="03XX-XXXXXXX"
-							bind:value={phone}
-							required
-							autocomplete="tel"
-							inputmode="tel"
-							class="w-full rounded border border-gray-300 p-3.5 text-base focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
-						/>
-					</div>
-
-					<div class="mb-5">
-						<label
-							for="checkout-address"
-							class="mb-1.5 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase"
-						>
-							Address <span class="text-red-600">*</span>
-						</label>
-						<input
-							id="checkout-address"
-							type="text"
-							placeholder="House, street, area"
-							bind:value={addressLine1}
-							required
-							autocomplete="address-line1"
-							class="w-full rounded border border-gray-300 p-3.5 text-base focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
-						/>
-					</div>
-
-					<div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-						<div>
 							<label
-								for="checkout-city"
-								class="mb-1.5 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase"
+								class="flex cursor-pointer items-center justify-between gap-3 p-4 hover:bg-gray-50"
 							>
-								City <span class="text-red-600">*</span>
+								<div class="flex items-center gap-3">
+									<input
+										type="radio"
+										bind:group={shippingMethod}
+										value="STANDARD"
+										class="h-4 w-4 shrink-0 border-gray-300 text-black focus:ring-black"
+									/>
+									<span class="text-sm"
+										>Standard Shipping <span class="text-gray-400">(5-7 days)</span></span
+									>
+								</div>
+								<span class="shrink-0 text-sm font-medium">{formatMoney(standardShipping)}</span>
 							</label>
-							<input
-								id="checkout-city"
-								type="text"
-								placeholder="City"
-								bind:value={city}
-								required
-								autocomplete="address-level2"
-								class="w-full rounded border border-gray-300 p-3.5 text-base focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
-							/>
-						</div>
-						<div>
 							<label
-								for="checkout-postal-code"
-								class="mb-1.5 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase"
+								class="flex cursor-pointer items-center justify-between gap-3 p-4 hover:bg-gray-50"
 							>
-								Postal code <span class="text-gray-400 normal-case">(optional)</span>
+								<div class="flex items-center gap-3">
+									<input
+										type="radio"
+										bind:group={shippingMethod}
+										value="EXPRESS"
+										class="h-4 w-4 shrink-0 border-gray-300 text-black focus:ring-black"
+									/>
+									<span class="text-sm"
+										>Express Shipping <span class="text-gray-400">(1-2 days)</span></span
+									>
+								</div>
+								<span class="shrink-0 text-sm font-medium">{formatMoney(expressShipping)}</span>
 							</label>
-							<input
-								id="checkout-postal-code"
-								type="text"
-								placeholder="Postal code"
-								bind:value={postalCode}
-								autocomplete="postal-code"
-								inputmode="numeric"
-								class="w-full rounded border border-gray-300 p-3.5 text-base focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
-							/>
 						</div>
-					</div>
+					</section>
 
-					<div class="flex flex-col-reverse items-stretch gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
+					<section>
+						<h2 class="mb-1 font-serif text-lg sm:text-xl">Payment</h2>
+						<p class="mb-4 text-sm font-light text-gray-500">
+							All transactions are secure and encrypted.
+						</p>
+
+						<div class="overflow-hidden rounded border border-gray-200 bg-white">
+							<label class="flex cursor-pointer items-center justify-between gap-3 bg-gray-50 p-4">
+								<div class="flex items-center gap-3">
+									<input
+										type="radio"
+										name="paymentMethodChoice"
+										value="COD"
+										bind:group={paymentMethod}
+										class="h-4 w-4 shrink-0 border-gray-300 text-black focus:ring-black"
+									/>
+									<span class="text-sm font-medium">Cash on Delivery (COD)</span>
+								</div>
+							</label>
+
+							<div class="border-t border-gray-100">
+								<label
+									class="flex cursor-not-allowed items-center justify-between gap-3 p-4 opacity-55"
+								>
+									<div class="flex items-center gap-3">
+										<input
+											type="radio"
+											value="JAZZCASH"
+											disabled
+											class="h-4 w-4 shrink-0 border-gray-300 text-black focus:ring-black"
+										/>
+										<span class="text-sm font-medium">JazzCash</span>
+									</div>
+									<div
+										class="shrink-0 rounded-sm bg-gray-200 px-2 py-1 text-xs font-bold text-gray-600"
+									>
+										Coming soon
+									</div>
+								</label>
+							</div>
+
+							<div
+								class="border-t border-gray-100 bg-white p-4 text-center text-sm font-light text-gray-500"
+							>
+								Pay with cash upon delivery.
+							</div>
+						</div>
+					</section>
+
+					<div
+						class="flex flex-col-reverse items-stretch gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between"
+					>
 						<a
 							href="/cart"
 							class="flex items-center justify-center text-sm text-gray-500 hover:text-black sm:justify-start"
@@ -257,120 +346,6 @@
 							</svg>
 							Return to cart
 						</a>
-						<button
-							type="button"
-							class="w-full bg-black px-8 py-4 text-sm tracking-widest text-white uppercase transition-colors hover:bg-gold sm:w-auto"
-							onclick={continueToPayment}
-						>
-							Continue to shipping
-						</button>
-					</div>
-				</div>
-
-				<div class:hidden={step !== 2}>
-					<div class="mb-6 flex items-center justify-between rounded border border-gray-200 bg-gray-50 p-4 text-sm">
-						<div class="min-w-0">
-							<p class="text-gray-500">Deliver to</p>
-							<p class="truncate font-medium">{addressLine1}, {city}</p>
-						</div>
-						<button
-							type="button"
-							class="shrink-0 text-xs text-gray-500 underline hover:text-black"
-							onclick={backToDetails}
-						>
-							Edit
-						</button>
-					</div>
-
-					<h2 class="mb-4 font-serif text-lg sm:text-xl">Shipping Method</h2>
-					<div class="mb-8 divide-y divide-gray-100 overflow-hidden rounded border border-gray-200">
-						<label class="flex cursor-pointer items-center justify-between gap-3 p-4 hover:bg-gray-50">
-							<div class="flex items-center gap-3">
-								<input
-									type="radio"
-									bind:group={shippingMethod}
-									value="STANDARD"
-									class="h-4 w-4 shrink-0 border-gray-300 text-black focus:ring-black"
-								/>
-								<span class="text-sm">Standard Shipping <span class="text-gray-400">(5-7 days)</span></span>
-							</div>
-							<span class="shrink-0 text-sm font-medium">{formatMoney(standardShipping)}</span>
-						</label>
-						<label class="flex cursor-pointer items-center justify-between gap-3 p-4 hover:bg-gray-50">
-							<div class="flex items-center gap-3">
-								<input
-									type="radio"
-									bind:group={shippingMethod}
-									value="EXPRESS"
-									class="h-4 w-4 shrink-0 border-gray-300 text-black focus:ring-black"
-								/>
-								<span class="text-sm">Express Shipping <span class="text-gray-400">(1-2 days)</span></span>
-							</div>
-							<span class="shrink-0 text-sm font-medium">{formatMoney(expressShipping)}</span>
-						</label>
-					</div>
-
-					<h2 class="mb-1 font-serif text-lg sm:text-xl">Payment</h2>
-					<p class="mb-4 text-sm font-light text-gray-500">
-						All transactions are secure and encrypted.
-					</p>
-
-					<div class="mb-8 overflow-hidden rounded border border-gray-200">
-						<label
-							class="flex cursor-pointer items-center justify-between gap-3 bg-gray-50 p-4"
-						>
-							<div class="flex items-center gap-3">
-								<input
-									type="radio"
-									name="paymentMethodChoice"
-									value="COD"
-									bind:group={paymentMethod}
-									class="h-4 w-4 shrink-0 border-gray-300 text-black focus:ring-black"
-								/>
-								<span class="text-sm font-medium">Cash on Delivery (COD)</span>
-							</div>
-						</label>
-
-						<div class="border-t border-gray-100">
-							<label class="flex cursor-not-allowed items-center justify-between gap-3 p-4 opacity-55">
-								<div class="flex items-center gap-3">
-									<input
-										type="radio"
-										value="JAZZCASH"
-										disabled
-										class="h-4 w-4 shrink-0 border-gray-300 text-black focus:ring-black"
-									/>
-									<span class="text-sm font-medium">JazzCash</span>
-								</div>
-								<div class="shrink-0 rounded-sm bg-gray-200 px-2 py-1 text-xs font-bold text-gray-600">
-									Coming soon
-								</div>
-							</label>
-						</div>
-
-						<div
-							class="border-t border-gray-100 bg-white p-4 text-center text-sm font-light text-gray-500"
-						>
-							Pay with cash upon delivery.
-						</div>
-					</div>
-
-					<div class="flex flex-col-reverse items-stretch gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
-						<button
-							type="button"
-							class="flex items-center justify-center text-sm text-gray-500 hover:text-black sm:justify-start"
-							onclick={backToDetails}
-						>
-							<svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									d="M15 19l-7-7 7-7"
-								/>
-							</svg>
-							Return to details
-						</button>
 						<button
 							type="submit"
 							disabled={cart.items.length === 0 || submitting}
@@ -389,7 +364,9 @@
 					class="flex cursor-pointer items-center justify-between border-y border-gray-200 py-3 text-sm font-medium tracking-widest uppercase"
 				>
 					<span>Order summary</span>
-					<span class="text-base font-serif normal-case tracking-normal">{formatMoney(orderTotal)}</span>
+					<span class="font-serif text-base tracking-normal normal-case"
+						>{formatMoney(orderTotal)}</span
+					>
 				</summary>
 
 				<div class="pt-4">
