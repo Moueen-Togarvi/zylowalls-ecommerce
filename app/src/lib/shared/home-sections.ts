@@ -6,7 +6,7 @@ export const HOME_SECTION_CONFIGS = [
 	{
 		key: 'signature-collections',
 		eyebrow: 'Curated Edits',
-		title: 'Signature Collections',
+		title: 'Most Loved',
 		description:
 			'Refined edits for the pieces you reach for most: daily essentials, occasion layers, and timeless black wall art pieces.',
 		homepageLimit: 4

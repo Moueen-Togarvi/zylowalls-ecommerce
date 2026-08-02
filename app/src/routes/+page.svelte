@@ -428,7 +428,7 @@
 <!-- Categories -->
 <CategoryCircleCards {collections} />
 
-<!-- Featured / Signature Collections -->
+<!-- Featured / Most Loved -->
 <section class="border-t border-[#1b1918]/8 bg-[#fbf9f2] px-4 py-16 sm:px-6 lg:px-8">
 	<div class="mx-auto max-w-6xl">
 		<div class="mb-10 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
@@ -437,7 +437,7 @@
 					Curated Edits
 				</p>
 				<h2 class="font-serif text-3xl leading-tight text-[#1b1918] uppercase sm:text-4xl">
-					Signature Collections
+					Most Loved
 				</h2>
 			</div>
 			<div class="max-w-md space-y-4 sm:text-right">
