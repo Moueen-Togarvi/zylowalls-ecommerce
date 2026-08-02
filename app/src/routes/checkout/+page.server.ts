@@ -1,5 +1,6 @@
 import prisma from '$lib/server/prisma';
 import { sendOrderNotifications } from '$lib/server/order-notifications';
+import { isValidEmail } from '$lib/shared/validation';
 import { fail, redirect } from '@sveltejs/kit';
 import { randomBytes } from 'node:crypto';
 import type { Actions } from './$types';
@@ -90,6 +91,13 @@ export const actions: Actions = {
 		if (!firstName || !lastName || !addressLine1 || !city || !phone) {
 			return fail(400, {
 				error: 'Please complete all required fields: name, address, city, and mobile number.'
+			});
+		}
+
+		// The order confirmation email is sent to this address, so it is required.
+		if (!isValidEmail(email)) {
+			return fail(400, {
+				error: 'Please enter a valid email address so we can send your order confirmation.'
 			});
 		}
 

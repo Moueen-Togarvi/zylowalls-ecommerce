@@ -3,6 +3,7 @@
 	import { cart } from '$lib/client/cart.svelte';
 	import { trackInitiateCheckout } from '$lib/client/pixel';
 	import { formatMoney } from '$lib/shared/money';
+	import { isValidEmail } from '$lib/shared/validation';
 
 	type PaymentMethod = 'COD';
 	type ShippingMethod = 'STANDARD' | 'EXPRESS';
@@ -36,6 +37,12 @@
 			!city.trim()
 		) {
 			checkoutError = 'Please fill your name, mobile number, address, and city to continue.';
+			return false;
+		}
+
+		// Required: the order confirmation email is sent to this address.
+		if (!isValidEmail(email)) {
+			checkoutError = 'Please enter a valid email address so we can send your order confirmation.';
 			return false;
 		}
 
@@ -119,17 +126,21 @@
 								for="checkout-email"
 								class="mb-1.5 block text-xs font-bold tracking-[0.08em] text-gray-700 uppercase"
 							>
-								Email <span class="text-gray-400 normal-case">(optional)</span>
+								Email <span class="text-red-600">*</span>
 							</label>
 							<input
 								id="checkout-email"
 								type="email"
 								placeholder="you@example.com"
 								bind:value={email}
+								required
 								autocomplete="email"
 								inputmode="email"
 								class="w-full rounded border border-gray-300 p-3.5 text-base focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
 							/>
+							<p class="mt-1.5 text-xs font-light text-gray-500">
+								We'll send your order confirmation here.
+							</p>
 						</div>
 
 						<div class="mb-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
