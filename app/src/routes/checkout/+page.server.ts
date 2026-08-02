@@ -24,6 +24,7 @@ type ValidatedCheckoutItem = {
 	quantity: number;
 	color: string | null;
 	size: string | null;
+	imageUrl: string | null;
 };
 
 const getText = (data: FormData, key: string) => String(data.get(key) ?? '').trim();
@@ -106,7 +107,8 @@ export const actions: Actions = {
 			? await prisma.product.findMany({
 					where: { id: { in: productIds } },
 					include: {
-						variants: true
+						variants: true,
+						images: { orderBy: { displayOrder: 'asc' }, take: 1 }
 					}
 				})
 			: [];
@@ -145,7 +147,8 @@ export const actions: Actions = {
 				price: Number(product.salePrice ?? product.price),
 				quantity: item.quantity,
 				color: variant.color,
-				size: variant.size
+				size: variant.size,
+				imageUrl: product.images[0]?.url ?? null
 			});
 		}
 
@@ -234,12 +237,15 @@ export const actions: Actions = {
 			paymentMethod,
 			shippingAddress,
 			siteUrl: url.origin,
+			trackingNumber: null,
+			createdAt: new Date(),
 			items: validatedItems.map((item) => ({
 				productName: item.name,
 				variantColor: item.color,
 				variantSize: item.size,
 				quantity: item.quantity,
-				priceAtPurchase: item.price
+				priceAtPurchase: item.price,
+				imageUrl: item.imageUrl
 			}))
 		});
 
