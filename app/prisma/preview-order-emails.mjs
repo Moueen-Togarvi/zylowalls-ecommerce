@@ -8,32 +8,30 @@
  *   node prisma/preview-order-emails.mjs                       # write files only
  *   RESEND_API_KEY=re_x node prisma/preview-order-emails.mjs you@example.com
  */
-import { execFileSync } from 'node:child_process';
-import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
 const outDir = path.resolve('build/email-preview');
 mkdirSync(outDir, { recursive: true });
 
-// order-emails.ts is TypeScript using the $lib alias, so bundle it before import.
-const bundlePath = path.join(outDir, '_order-emails.mjs');
-execFileSync(
-	'npx',
-	[
-		'esbuild',
-		'src/lib/server/order-emails.ts',
-		'--bundle',
-		'--format=esm',
-		'--platform=node',
-		'--alias:$lib=./src/lib',
-		`--outfile=${bundlePath}`,
-		'--log-level=error'
-	],
-	{ stdio: 'inherit' }
+// Node strips TypeScript natively, but it cannot resolve SvelteKit's $lib alias.
+// Copy the module next to its real dependency with the import rewritten.
+const source = readFileSync('src/lib/server/order-emails.ts', 'utf-8').replace(
+	"from '$lib/shared/money'",
+	"from '../shared/money.ts'"
 );
+const shimPath = path.resolve('src/lib/server/_preview-order-emails.ts');
+writeFileSync(shimPath, source, 'utf-8');
+
+let templatesModule;
+try {
+	templatesModule = await import(`file://${shimPath}`);
+} finally {
+	rmSync(shimPath, { force: true });
+}
 
 const { renderCustomerEmail, renderAdminEmail, customerEmailSubject, adminEmailSubject } =
-	await import(`file://${bundlePath}`);
+	templatesModule;
 
 const storeName = 'Zylowalls';
 const origin = 'https://zylowalls.com';
@@ -132,8 +130,6 @@ for (const template of templates) {
 	writeFileSync(path.join(outDir, `${template.name}.html`), template.html, 'utf-8');
 	console.log(`wrote ${path.relative(process.cwd(), path.join(outDir, `${template.name}.html`))}`);
 }
-
-rmSync(bundlePath, { force: true });
 
 const to = process.argv[2];
 if (!to) {
