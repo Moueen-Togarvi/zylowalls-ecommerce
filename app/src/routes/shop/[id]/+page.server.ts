@@ -6,6 +6,7 @@ import {
 	serializeStorefrontProduct,
 	warnStorefrontFallback
 } from '$lib/server/storefront-fallback';
+import { defaultStoreSettings, getShippingRates } from '$lib/server/store-settings';
 import type { PageServerLoad } from './$types';
 import { error } from '@sveltejs/kit';
 
@@ -44,7 +45,8 @@ export const load: PageServerLoad = async ({ params }) => {
 
 		return {
 			product: serializeStorefrontProduct(product),
-			relatedProducts: relatedProducts.map(serializeStorefrontProduct)
+			relatedProducts: relatedProducts.map(serializeStorefrontProduct),
+			shippingRates: await getShippingRates()
 		};
 	} catch (error_) {
 		if (!isDatabaseUnavailable(error_)) {
@@ -65,7 +67,11 @@ export const load: PageServerLoad = async ({ params }) => {
 				excludeId: product.id,
 				matchingCollectionIds: product.collections.map((collection) => collection.id),
 				take: 4
-			})
+			}),
+			shippingRates: {
+				standardShippingCost: Number(defaultStoreSettings.standard_shipping_cost),
+				expressShippingCost: Number(defaultStoreSettings.express_shipping_cost)
+			}
 		};
 	}
 };

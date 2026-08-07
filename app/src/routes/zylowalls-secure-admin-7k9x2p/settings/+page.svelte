@@ -265,6 +265,32 @@
 						/>
 					</div>
 					<div>
+						<label for="standard_shipping_cost" class="mb-1 block text-sm font-bold text-gray-700"
+							>Standard shipping cost</label
+						>
+						<input
+							id="standard_shipping_cost"
+							name="standard_shipping_cost"
+							type="number"
+							min="0"
+							value={settings.standard_shipping_cost}
+							class="w-full rounded-md border-gray-300 text-sm focus:border-black focus:ring-black"
+						/>
+					</div>
+					<div>
+						<label for="express_shipping_cost" class="mb-1 block text-sm font-bold text-gray-700"
+							>Express shipping cost</label
+						>
+						<input
+							id="express_shipping_cost"
+							name="express_shipping_cost"
+							type="number"
+							min="0"
+							value={settings.express_shipping_cost}
+							class="w-full rounded-md border-gray-300 text-sm focus:border-black focus:ring-black"
+						/>
+					</div>
+					<div>
 						<label for="return_policy_days" class="mb-1 block text-sm font-bold text-gray-700"
 							>Return policy days</label
 						>

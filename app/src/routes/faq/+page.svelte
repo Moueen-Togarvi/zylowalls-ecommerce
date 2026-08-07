@@ -1,14 +1,16 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { SITE_NAME, absoluteUrl, breadcrumbJsonLd, jsonLdScript } from '$lib/shared/seo';
+	import { formatMoney } from '$lib/shared/money';
+
+	let { data } = $props();
 
 	let openFaq = $state<number | null>(0);
 
-	const faqs = [
+	let faqs = $derived([
 		{
 			question: 'What is your shipping time and delivery charges?',
-			answer:
-				'Standard shipping within Pakistan costs Rs. 200 and takes 3-5 business days. Orders are dispatched after confirmation.'
+			answer: `Standard shipping within Pakistan costs ${formatMoney(data.shippingRates.standardShippingCost)} and takes 3-5 business days. Orders are dispatched after confirmation.`
 		},
 		{
 			question: 'What is your return and exchange policy?',
@@ -30,7 +32,7 @@
 			answer:
 				'No, currently we only deliver within Pakistan. All orders are shipped with Cash on Delivery nationwide.'
 		}
-	];
+	]);
 
 	let faqBreadcrumbs = $derived(
 		breadcrumbJsonLd(
@@ -71,7 +73,9 @@
 					Shipping Policy &rarr;
 				</h2>
 				<p class="text-xs font-light text-gray-600">
-					View complete details about Rs. 200 nationwide delivery, international shipping, and dispatch times.
+					View complete details about {formatMoney(
+						data.shippingRates.standardShippingCost
+					)} nationwide delivery, international shipping, and dispatch times.
 				</p>
 			</div>
 		</a>

@@ -16,6 +16,8 @@ export const defaultStoreSettings: SettingValues = {
 	store_currency: 'PKR',
 	default_country: 'Pakistan',
 	free_shipping_threshold: '15000',
+	standard_shipping_cost: '200',
+	express_shipping_cost: '1200',
 	cod_enabled: 'true',
 	jazzcash_status: 'coming_soon',
 	return_policy_days: '7',
@@ -100,6 +102,8 @@ const descriptions: Record<string, string> = {
 	store_currency: 'Store currency',
 	default_country: 'Default checkout country',
 	free_shipping_threshold: 'Free shipping threshold',
+	standard_shipping_cost: 'Standard shipping cost',
+	express_shipping_cost: 'Express shipping cost',
 	cod_enabled: 'Cash on delivery status',
 	jazzcash_status: 'JazzCash availability status',
 	return_policy_days: 'Return policy window in days',
@@ -283,4 +287,15 @@ export const getPublicStorefrontSettings = async () => {
 	const settings = await getSettings(defaultStorefrontSettings);
 
 	return publicStorefrontSettingsFromValues(settings);
+};
+
+export const getShippingRates = async () => {
+	const settings = await getSettings(defaultStoreSettings);
+
+	return {
+		standardShippingCost:
+			Number(settings.standard_shipping_cost) || Number(defaultStoreSettings.standard_shipping_cost),
+		expressShippingCost:
+			Number(settings.express_shipping_cost) || Number(defaultStoreSettings.express_shipping_cost)
+	};
 };

@@ -8,7 +8,7 @@
 	type PaymentMethod = 'COD';
 	type ShippingMethod = 'STANDARD' | 'EXPRESS';
 
-	let { form } = $props();
+	let { data, form } = $props();
 
 	let checkoutError = $state('');
 	let email = $state('');
@@ -22,8 +22,8 @@
 	let paymentMethod = $state<PaymentMethod>('COD');
 	let submitting = $state(false);
 
-	const standardShipping = 200;
-	const expressShipping = 1200;
+	const standardShipping = data.shippingRates.standardShippingCost;
+	const expressShipping = data.shippingRates.expressShippingCost;
 	const cartJson = $derived(JSON.stringify(cart.items));
 	const shippingTotal = $derived(shippingMethod === 'EXPRESS' ? expressShipping : standardShipping);
 	const orderTotal = $derived(cart.subtotal + shippingTotal);

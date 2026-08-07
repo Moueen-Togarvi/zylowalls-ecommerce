@@ -576,7 +576,8 @@
 						💵 Cash on Delivery Available
 					</p>
 					<p class="text-xs font-light text-gray-500">
-						Pay at your doorstep with Rs. 200 standard shipping
+						Pay at your doorstep with {formatMoney(data.shippingRates.standardShippingCost)} standard
+						shipping
 					</p>
 				</div>
 				<a

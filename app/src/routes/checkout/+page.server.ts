@@ -1,9 +1,14 @@
 import prisma from '$lib/server/prisma';
 import { sendOrderNotifications } from '$lib/server/order-notifications';
+import { getShippingRates } from '$lib/server/store-settings';
 import { isValidEmail } from '$lib/shared/validation';
 import { fail, redirect } from '@sveltejs/kit';
 import { randomBytes } from 'node:crypto';
-import type { Actions } from './$types';
+import type { Actions, PageServerLoad } from './$types';
+
+export const load: PageServerLoad = async () => ({
+	shippingRates: await getShippingRates()
+});
 
 type CheckoutCartItem = {
 	id?: string;
@@ -153,7 +158,8 @@ export const actions: Actions = {
 		}
 
 		const subtotal = validatedItems.reduce((total, item) => total + item.price * item.quantity, 0);
-		const shippingCost = shippingMethod === 'EXPRESS' ? 1200 : 200;
+		const { standardShippingCost, expressShippingCost } = await getShippingRates();
+		const shippingCost = shippingMethod === 'EXPRESS' ? expressShippingCost : standardShippingCost;
 		const discountTotal = 0;
 		const totalAmount = subtotal + shippingCost - discountTotal;
 		const orderNumber = await createOrderNumber();

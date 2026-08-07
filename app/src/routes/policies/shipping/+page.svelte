@@ -1,3 +1,25 @@
+<script lang="ts">
+	import { formatMoney } from '$lib/shared/money';
+
+	let { data } = $props();
+
+	let shippingRows = $derived([
+		{
+			method: 'Standard Shipping',
+			time: '3-5 Business Days',
+			cost: `${formatMoney(data.shippingRates.standardShippingCost)} (Standard Delivery)`
+		},
+		{ method: 'DHL Express', time: '2-3 Business Days', cost: formatMoney(data.shippingRates.expressShippingCost) },
+		{ method: 'Overnight (Domestic)', time: '1 Business Day', cost: 'Confirmed on WhatsApp' },
+		{
+			method: 'International Standard',
+			time: '10–15 Business Days',
+			cost: 'Calculated at checkout'
+		},
+		{ method: 'International Express', time: '5–7 Business Days', cost: 'Calculated at checkout' }
+	]);
+</script>
+
 <svelte:head>
 	<title>Shipping Information | Zylowalls</title>
 	<meta
@@ -46,7 +68,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						{#each [{ method: 'Standard Shipping', time: '3-5 Business Days', cost: 'Rs. 200 (Standard Delivery)' }, { method: 'DHL Express', time: '2-3 Business Days', cost: 'Rs. 1,200' }, { method: 'Overnight (Domestic)', time: '1 Business Day', cost: 'Confirmed on WhatsApp' }, { method: 'International Standard', time: '10–15 Business Days', cost: 'Calculated at checkout' }, { method: 'International Express', time: '5–7 Business Days', cost: 'Calculated at checkout' }] as row, i}
+						{#each shippingRows as row, i}
 							<tr class="{i % 2 === 0 ? 'bg-white' : 'bg-gray-50'} border-b border-gray-100">
 								<td class="px-5 py-4 font-medium text-black">{row.method}</td>
 								<td class="px-5 py-4 text-gray-600">{row.time}</td>
@@ -66,7 +88,7 @@
 			<h2 class="mb-4 font-serif text-lg tracking-widest text-black uppercase">Delivery Charges</h2>
 			<p>
 				Standard shipping within Pakistan is a flat <strong class="font-medium text-black"
-					>Rs. 200</strong
+					>{formatMoney(data.shippingRates.standardShippingCost)}</strong
 				>, applied to every order regardless of order size. We do not offer free shipping.
 			</p>
 		</section>
