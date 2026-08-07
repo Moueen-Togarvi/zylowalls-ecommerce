@@ -9,7 +9,11 @@
 			time: '3-5 Business Days',
 			cost: `${formatMoney(data.shippingRates.standardShippingCost)} (Standard Delivery)`
 		},
-		{ method: 'DHL Express', time: '2-3 Business Days', cost: formatMoney(data.shippingRates.expressShippingCost) },
+		{
+			method: 'DHL Express',
+			time: '2-3 Business Days',
+			cost: formatMoney(data.shippingRates.expressShippingCost)
+		},
 		{ method: 'Overnight (Domestic)', time: '1 Business Day', cost: 'Confirmed on WhatsApp' },
 		{
 			method: 'International Standard',

@@ -294,7 +294,8 @@ export const getShippingRates = async () => {
 
 	return {
 		standardShippingCost:
-			Number(settings.standard_shipping_cost) || Number(defaultStoreSettings.standard_shipping_cost),
+			Number(settings.standard_shipping_cost) ||
+			Number(defaultStoreSettings.standard_shipping_cost),
 		expressShippingCost:
 			Number(settings.express_shipping_cost) || Number(defaultStoreSettings.express_shipping_cost)
 	};

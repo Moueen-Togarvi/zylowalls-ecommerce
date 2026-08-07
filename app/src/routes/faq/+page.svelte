@@ -24,8 +24,7 @@
 		},
 		{
 			question: 'Do you offer Cash on Delivery (COD)?',
-			answer:
-				'Yes, Cash on Delivery is available across Pakistan.'
+			answer: 'Yes, Cash on Delivery is available across Pakistan.'
 		},
 		{
 			question: 'Do you ship internationally?',
@@ -36,7 +35,10 @@
 
 	let faqBreadcrumbs = $derived(
 		breadcrumbJsonLd(
-			[{ name: 'Home', url: '/' }, { name: 'Shipping & Returns FAQ', url: '/faq' }],
+			[
+				{ name: 'Home', url: '/' },
+				{ name: 'Shipping & Returns FAQ', url: '/faq' }
+			],
 			page.url.origin
 		)
 	);
@@ -73,9 +75,8 @@
 					Shipping Policy &rarr;
 				</h2>
 				<p class="text-xs font-light text-gray-600">
-					View complete details about {formatMoney(
-						data.shippingRates.standardShippingCost
-					)} nationwide delivery, international shipping, and dispatch times.
+					View complete details about {formatMoney(data.shippingRates.standardShippingCost)} nationwide
+					delivery, international shipping, and dispatch times.
 				</p>
 			</div>
 		</a>
@@ -89,7 +90,8 @@
 					Returns & Exchanges &rarr;
 				</h2>
 				<p class="text-xs font-light text-gray-600">
-					Learn about our 7-day return window, exchange eligibility, and step-by-step return process.
+					Learn about our 7-day return window, exchange eligibility, and step-by-step return
+					process.
 				</p>
 			</div>
 		</a>
@@ -101,7 +103,7 @@
 			Frequently Asked Questions
 		</h2>
 		{#each faqs as faq, index}
-			<div class="rounded-xl border border-gray-200 bg-white overflow-hidden">
+			<div class="overflow-hidden rounded-xl border border-gray-200 bg-white">
 				<button
 					type="button"
 					onclick={() => (openFaq = openFaq === index ? null : index)}
@@ -113,7 +115,9 @@
 					</span>
 				</button>
 				{#if openFaq === index}
-					<div class="border-t border-gray-100 bg-gray-50/50 p-5 text-sm font-light leading-relaxed text-gray-600">
+					<div
+						class="border-t border-gray-100 bg-gray-50/50 p-5 text-sm leading-relaxed font-light text-gray-600"
+					>
 						{faq.answer}
 					</div>
 				{/if}

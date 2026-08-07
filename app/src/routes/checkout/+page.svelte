@@ -22,8 +22,8 @@
 	let paymentMethod = $state<PaymentMethod>('COD');
 	let submitting = $state(false);
 
-	const standardShipping = data.shippingRates.standardShippingCost;
-	const expressShipping = data.shippingRates.expressShippingCost;
+	const standardShipping = $derived(data.shippingRates.standardShippingCost);
+	const expressShipping = $derived(data.shippingRates.expressShippingCost);
 	const cartJson = $derived(JSON.stringify(cart.items));
 	const shippingTotal = $derived(shippingMethod === 'EXPRESS' ? expressShipping : standardShipping);
 	const orderTotal = $derived(cart.subtotal + shippingTotal);
